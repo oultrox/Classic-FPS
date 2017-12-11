@@ -4,10 +4,10 @@ using System.Collections;
 public class HeadBobbing : MonoBehaviour
 {
 
-    public float bobbingSpeed = 0.18f;
-    public float bobbingHeight = 0.2f;
-    public float midpoint = 1.8f;
-
+    [SerializeField] private float bobbingSpeed = 0.18f;
+    [SerializeField] private float bobbingHeight = 0.2f;
+    [SerializeField] private float midpoint = 1.8f;
+    [SerializeField] private bool isHeadBobbing = true;
     private float timer = 0.0f;
 
     void Update()
@@ -15,7 +15,6 @@ public class HeadBobbing : MonoBehaviour
         float waveslice = 0.0f;
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-
         Vector3 cSharpConversion = transform.localPosition;
 
         if (Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
@@ -31,17 +30,24 @@ public class HeadBobbing : MonoBehaviour
                 timer = timer - (Mathf.PI * 2);
             }
         }
+
         if (waveslice != 0)
         {
             float translateChange = waveslice * bobbingHeight;
             float totalAxes = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
             totalAxes = Mathf.Clamp(totalAxes, 0.0f, 1.0f);
             translateChange = totalAxes * translateChange;
-            cSharpConversion.y = midpoint + translateChange;
+            if (isHeadBobbing)
+                cSharpConversion.y = midpoint + translateChange;
+            else
+                cSharpConversion.x = translateChange;
         }
         else
         {
-            cSharpConversion.y = midpoint;
+            if (isHeadBobbing)
+                cSharpConversion.y = midpoint;
+            else
+                cSharpConversion.x = 0;
         }
 
         transform.localPosition = cSharpConversion;
