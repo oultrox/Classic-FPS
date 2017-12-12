@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pistol : MonoBehaviour {
@@ -20,18 +19,21 @@ public class Pistol : MonoBehaviour {
     [SerializeField] private float reloadTime;
 
     private SpriteRenderer spriteRenderer;
+    private Vector3 firePosition;
     private int ammoLeft;
     private int ammoClipLeft;
     private bool isReloading = false;
-
+    
     // ------------------------------------------------------
     // API Methods
     // ------------------------------------------------------
+
     private void Awake()
     {
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         ammoClipLeft = ammoClipSize;
         ammoLeft = ammoAmount;
+        firePosition = new Vector3(Screen.width/2, Screen.height/2, 0);
     }
 
     private void Update()
@@ -50,7 +52,7 @@ public class Pistol : MonoBehaviour {
     // Custom methods
     // ------------------------------------------------------
 
-    //If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
+    // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
     private void ShootRay()
     {
         if (ammoClipLeft <= 0)
@@ -61,7 +63,7 @@ public class Pistol : MonoBehaviour {
 
         StartCoroutine(AnimateShot());
         ammoClipLeft -= 1;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(firePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, range))
         {
@@ -86,11 +88,13 @@ public class Pistol : MonoBehaviour {
     private IEnumerator ReloadWeapon()
     {
         int bulletsToReload = ammoClipSize - ammoClipLeft;
-        if (bulletsToReload != 0)
+        // If there's something to reload - activate coroutine for the delay. 
+        if (bulletsToReload > 0)
         {
             isReloading = true;
             yield return new WaitForSeconds(reloadTime);
         }
+        
         if (isReloading)
         {
             isReloading = false;

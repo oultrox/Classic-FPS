@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour {
         verticalRotation = Mathf.Clamp(verticalRotation, -verticalRotationLimit, verticalRotationLimit);
         Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation,0, 0);
   
-        //Calculating the movement based on input
+        // Calculating the movement based on input
         if (Input.GetKey(KeyCode.LeftShift))
         {
             forwardMovement = Input.GetAxis("Vertical") * playerRunningSpeed;
@@ -47,15 +47,15 @@ public class PlayerMovement : MonoBehaviour {
             sideAwaysMovement = Input.GetAxis("Horizontal") * playerWalkingSpeed;
         }
 
-        //Gravity
+        // Gravity
         verticalVelocity += Physics.gravity.y * Time.deltaTime;
-        //Jump
+        // Jump
         if (Input.GetButton("Jump") && controller.isGrounded)
         {
             verticalVelocity = jumpStrength;
         }
 
-        //Applying the movement
+        // Applying the movement
         playerMovement.x = sideAwaysMovement;
         playerMovement.y = verticalVelocity;
         playerMovement.z = forwardMovement;
