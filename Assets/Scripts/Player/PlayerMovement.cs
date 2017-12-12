@@ -15,9 +15,8 @@ public class PlayerMovement : MonoBehaviour {
     private Vector3 playerMovement;
     private float verticalVelocity;
 
-
     // Use this for initialization
-	void Awake ()
+    private void Awake ()
     {
         controller = this.GetComponent<CharacterController>();
         Cursor.visible = false;
@@ -28,6 +27,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Update()
     {
+
         float horizontalRotation = Input.GetAxis("Mouse X");
         transform.Rotate(0, horizontalRotation, 0);
 
@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour {
         verticalRotation = Mathf.Clamp(verticalRotation, -verticalRotationLimit, verticalRotationLimit);
         Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation,0, 0);
   
-        //Movement
+        //Calculating the movement based on input
         if (Input.GetKey(KeyCode.LeftShift))
         {
             forwardMovement = Input.GetAxis("Vertical") * playerRunningSpeed;
@@ -47,12 +47,15 @@ public class PlayerMovement : MonoBehaviour {
             sideAwaysMovement = Input.GetAxis("Horizontal") * playerWalkingSpeed;
         }
 
+        //Gravity
         verticalVelocity += Physics.gravity.y * Time.deltaTime;
+        //Jump
         if (Input.GetButton("Jump") && controller.isGrounded)
         {
             verticalVelocity = jumpStrength;
         }
 
+        //Applying the movement
         playerMovement.x = sideAwaysMovement;
         playerMovement.y = verticalVelocity;
         playerMovement.z = forwardMovement;

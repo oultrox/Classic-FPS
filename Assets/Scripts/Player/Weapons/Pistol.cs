@@ -12,14 +12,17 @@ public class Pistol : MonoBehaviour {
     [Header("Damage")]
     [SerializeField] private float damage;
     [SerializeField] private float range;
+    [SerializeField] private GameObject bulletHolePrefab;
 
     [Header("Ammunation")]
     [SerializeField] private int ammoAmount;
     [SerializeField] private int ammoClipSize;
+    [SerializeField] private float reloadTime;
 
     private SpriteRenderer spriteRenderer;
     private int ammoLeft;
     private int ammoClipLeft;
+    private bool isReloading = false;
 
     // ------------------------------------------------------
     // API Methods
@@ -33,22 +36,19 @@ public class Pistol : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && isReloading == false)
         {
             ShootRay();
-            
+        }
+        if (Input.GetKeyDown(KeyCode.R)  && isReloading == false)
+        {
+            Reload();
         }
     }
 
     // ------------------------------------------------------
     // Custom methods
     // ------------------------------------------------------
-    private IEnumerator AnimateShot()
-    {
-        spriteRenderer.sprite = shotPistol;
-        yield return new WaitForSeconds(0.1f);
-        spriteRenderer.sprite = idlePistol;
-    }
 
     //If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
     private void ShootRay()
@@ -67,25 +67,47 @@ public class Pistol : MonoBehaviour {
         {
             Debug.Log("Pew pew!" + hit.collider.gameObject.name);
             hit.collider.gameObject.SendMessage("PistolHit", damage, SendMessageOptions.DontRequireReceiver);
+            Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal));
         }
     }
 
     private void Reload()
     {
+        StartCoroutine(ReloadWeapon());
+    }
+    
+    private IEnumerator AnimateShot()
+    {
+        spriteRenderer.sprite = shotPistol;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.sprite = idlePistol;
+    }
+
+    private IEnumerator ReloadWeapon()
+    {
         int bulletsToReload = ammoClipSize - ammoClipLeft;
-        if (ammoLeft > bulletsToReload)
+        if (bulletsToReload != 0)
         {
-            ammoLeft -= bulletsToReload;
-            ammoClipLeft = bulletsToReload;
+            isReloading = true;
+            yield return new WaitForSeconds(reloadTime);
         }
-        else if(ammoLeft > 0 && ammoLeft < bulletsToReload)
+        if (isReloading)
         {
-            ammoClipLeft = ammoLeft;
-            ammoLeft = 0;
-        }
-        else if (ammoLeft <= 0)
-        {
-            Debug.Log("Can't reload!");
+            isReloading = false;
+            if (ammoLeft >= bulletsToReload)
+            {
+                ammoLeft -= bulletsToReload;
+                ammoClipLeft = ammoClipSize;
+            }
+            else if(ammoLeft > 0 && ammoLeft < bulletsToReload)
+            {
+                ammoClipLeft += ammoLeft;
+                ammoLeft = 0;
+            }
+            else if (ammoLeft <= 0)
+            {
+                Debug.Log("Can't reload!");
+            }
         }
     }
 }
