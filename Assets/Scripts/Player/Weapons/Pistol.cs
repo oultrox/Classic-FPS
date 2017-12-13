@@ -40,7 +40,7 @@ public class Pistol : MonoBehaviour {
     {
         if (Input.GetButtonDown("Fire1") && isReloading == false)
         {
-            ShootRay();
+            Shoot();
         }
         if (Input.GetKeyDown(KeyCode.R)  && isReloading == false)
         {
@@ -53,7 +53,7 @@ public class Pistol : MonoBehaviour {
     // ------------------------------------------------------
 
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
-    private void ShootRay()
+    private void Shoot()
     {
         if (ammoClipLeft <= 0)
         {
@@ -63,6 +63,7 @@ public class Pistol : MonoBehaviour {
 
         StartCoroutine(AnimateShot());
         ammoClipLeft -= 1;
+        
         Ray ray = Camera.main.ScreenPointToRay(firePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, range))
@@ -71,6 +72,7 @@ public class Pistol : MonoBehaviour {
             hit.collider.gameObject.SendMessage("PistolHit", damage, SendMessageOptions.DontRequireReceiver);
             Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal));
         }
+        DynamicCrosshair.instance.ExpansionTimer = 0.02f;
     }
 
     private void Reload()
@@ -89,12 +91,16 @@ public class Pistol : MonoBehaviour {
     {
         int bulletsToReload = ammoClipSize - ammoClipLeft;
         // If there's something to reload - activate coroutine for the delay. 
-        if (bulletsToReload > 0)
+        if (bulletsToReload > 0 && ammoLeft > 0)
         {
             isReloading = true;
             yield return new WaitForSeconds(reloadTime);
         }
-        
+        else
+        {
+            Debug.Log("No tengo ammo!");
+        }
+
         if (isReloading)
         {
             isReloading = false;
@@ -107,10 +113,6 @@ public class Pistol : MonoBehaviour {
             {
                 ammoClipLeft += ammoLeft;
                 ammoLeft = 0;
-            }
-            else if (ammoLeft <= 0)
-            {
-                Debug.Log("Can't reload!");
             }
         }
     }
