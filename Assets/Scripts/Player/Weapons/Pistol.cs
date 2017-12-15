@@ -68,8 +68,7 @@ public class Pistol : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, range))
         {
-            Debug.Log("Pew pew!" + hit.collider.gameObject.name);
-            hit.collider.gameObject.SendMessage("PistolHit", damage, SendMessageOptions.DontRequireReceiver);
+            hit.collider.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
             Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal));
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;

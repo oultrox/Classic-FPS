@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4fef6761331da34f8e57d0d46f294a8, type: 3}
+  m_Name: Ranged_ActiveWalk
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: 087320e1dedc52d429d3aa1fbdc7d99f, type: 2}
+  - {fileID: 11400000, guid: 932b21e717ddf0744900563c3ad51c4b, type: 2}
+  transitions:
+  - decision: {fileID: 11400000, guid: b97d9a5b64dac2445bdbf40e965973fb, type: 2}
+    trueState: {fileID: 11400000, guid: c8f1759c9e7dfcb42af8579e39734d9c, type: 2}
+    falseState: {fileID: 11400000, guid: 3e725d8599496514cbf8d2a0708842bc, type: 2}
+  sceneGizmoColor: {r: 0.8391185, g: 0.41176468, b: 1, a: 1}
