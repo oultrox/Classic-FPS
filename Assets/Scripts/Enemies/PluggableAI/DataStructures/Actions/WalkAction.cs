@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PluggableAI/Actions/Walk")]
-public class WalkAction : Action
+[CreateAssetMenu(menuName = "PluggableAI/SM_Actions/Walk")]
+public class WalkAction : SM_Action
 {
     public override void Act(EnemyStateMachine stateController)
     {

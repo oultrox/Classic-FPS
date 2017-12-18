@@ -4,7 +4,7 @@
 public class State : ScriptableObject
 {
 
-    public Action[] actions;
+    public SM_Action[] actions;
     public Transition[] transitions;
     public Color sceneGizmoColor = Color.grey;
 
@@ -12,20 +12,20 @@ public class State : ScriptableObject
 
     public void UpdateState(EnemyStateMachine stateController)
     {
-        DoAction(stateController, Action.UpdateType.Update);
+        DoAction(stateController, SM_Action.UpdateType.Update);
     }
 
     public void FixedUpdateState(EnemyStateMachine stateController)
     {
-        DoAction(stateController, Action.UpdateType.FixedUpdate);
+        DoAction(stateController, SM_Action.UpdateType.FixedUpdate);
     }
 
     public void LateUpdateState(EnemyStateMachine stateController)
     {
-        DoAction(stateController, Action.UpdateType.LateUpdate);
+        DoAction(stateController, SM_Action.UpdateType.LateUpdate);
     }
 
-    private void DoAction(EnemyStateMachine stateController, Action.UpdateType updateType)
+    private void DoAction(EnemyStateMachine stateController, SM_Action.UpdateType updateType)
     {
         for (int i = 0; i < actions.Length; i++)
         {

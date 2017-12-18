@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Action: ScriptableObject
+public abstract class SM_Action: ScriptableObject
 {
     public enum UpdateType
     {
