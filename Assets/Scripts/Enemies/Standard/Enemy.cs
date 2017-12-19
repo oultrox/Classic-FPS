@@ -8,6 +8,7 @@ public abstract class Enemy : MonoBehaviour {
     [Header("Movimiento")]
     [SerializeField] protected float movementSpeed = 5;
     [SerializeField] protected float accelerationStep = 2f;
+    [SerializeField] protected float minDistanceChase = 3f;
 
     [Header("Vida del enemigo")]
     [SerializeField] protected int enemyHP = 100;

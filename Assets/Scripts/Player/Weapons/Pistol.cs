@@ -72,6 +72,7 @@ public class Pistol : MonoBehaviour {
             Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal));
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
+        CameraShake.shakeDuration = 0.07f;
     }
 
     private void Reload()

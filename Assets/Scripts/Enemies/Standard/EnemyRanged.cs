@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class EnemyRanged : Enemy
 {
-
+    [Header("Proyectil")]
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private int bulletDamage;
-    [SerializeField] private float bulletSpeed;
-    [SerializeField] private float shootRange;
+    [SerializeField] private int bulletDamage = 20;
+    [SerializeField] private float bulletSpeed = 10;
+
+    [Header("Attack")]
     [SerializeField] private float attackRate = 1;
+
+    [Header("Patrol")]
     [SerializeField] private Transform[] patrolWayPoints;
   
     private GameObject bulletObj;
@@ -26,7 +29,7 @@ public class EnemyRanged : Enemy
 
     public override bool IsLooking()
     {
-        return Vector3.Distance(enemyTransform.position, playerTransform.position) < shootRange;
+        return (playerTransform.position - enemyTransform.position).sqrMagnitude < minDistanceChase;
     }
 
     public override void Walk()
@@ -41,6 +44,15 @@ public class EnemyRanged : Enemy
 
     public override void Chase()
     {
+        if (!navMesh.pathPending && (playerTransform.position - enemyTransform.position).sqrMagnitude > minDistanceChase)
+        {
+            navMesh.destination = playerTransform.position;
+            navMesh.isStopped = false;
+        }
+        if (navMesh.remainingDistance < minDistanceChase)
+        {
+           navMesh.isStopped = true;
+        }
     } 
 
     public override void Attack()

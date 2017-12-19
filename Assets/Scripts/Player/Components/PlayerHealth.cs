@@ -17,8 +17,8 @@ public class PlayerHealth : MonoBehaviour {
 	
     public void TakeDamage(int damage)
     {
-		Debug.Log("me daño! " + currentHealth);
         currentHealth -= damage;
+        Debug.Log("Me daño! : " + currentHealth + " HP restante.");
         //Si tiene menor que 0 su vida murió
         if (currentHealth <= 0)
         {
@@ -29,6 +29,7 @@ public class PlayerHealth : MonoBehaviour {
 
     private void Dead()
     {
+        isDead = true;
         this.GetComponent<PlayerMovement>().enabled = false;
         this.GetComponentInChildren<SpriteRenderer>().enabled = false;
     }
