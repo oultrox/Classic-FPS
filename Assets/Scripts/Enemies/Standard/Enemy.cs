@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.AI;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour {
@@ -17,11 +18,13 @@ public abstract class Enemy : MonoBehaviour {
     [SerializeField] protected float idleDuration = 1.5f;
     [SerializeField] protected float walkDuration = 4;
 
+    protected NavMeshAgent navMesh;
     protected Transform enemyTransform;
 
     public virtual void Awake()
     {
         enemyTransform = this.GetComponent<Transform>();
+        navMesh = this.GetComponent<NavMeshAgent>();
     }
     public abstract bool IsLooking();
     public abstract void Walk();

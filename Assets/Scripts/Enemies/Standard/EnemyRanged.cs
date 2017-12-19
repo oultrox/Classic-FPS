@@ -11,10 +11,12 @@ public class EnemyRanged : Enemy
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float shootRange;
     [SerializeField] private float attackRate = 1;
-
+    [SerializeField] private Transform[] patrolWayPoints;
+  
     private GameObject bulletObj;
     private Transform playerTransform;
     private float attackTimer;
+    private int nextWaypoint = 0;
 
     public override void Awake()
     {
@@ -24,17 +26,21 @@ public class EnemyRanged : Enemy
 
     public override bool IsLooking()
     {
-        return false;
+        return Vector3.Distance(enemyTransform.position, playerTransform.position) < shootRange;
     }
 
     public override void Walk()
     {
-
+        navMesh.destination = patrolWayPoints[nextWaypoint].position;
+        navMesh.isStopped = false;
+        if (navMesh.remainingDistance <= navMesh.stoppingDistance && !navMesh.pathPending)
+        {
+            nextWaypoint = (nextWaypoint + 1) % patrolWayPoints.Length;
+        }
     }
 
     public override void Chase()
     {
-
     } 
 
     public override void Attack()
