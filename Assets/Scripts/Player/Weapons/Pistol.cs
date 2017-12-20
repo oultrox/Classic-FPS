@@ -16,7 +16,7 @@ public class Pistol : MonoBehaviour {
     [Header("Ammunation")]
     [SerializeField] private int ammoAmount = 200;
     [SerializeField] private int ammoClipSize = 12;
-    [SerializeField] private float reloadTime = 0.8f;
+    [SerializeField] private float reloadTime = 1;
 
     private SpriteRenderer spriteRenderer;
     private Vector3 firePosition;
