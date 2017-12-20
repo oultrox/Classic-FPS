@@ -21,7 +21,7 @@ public class BulletEnemy : MonoBehaviour {
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            col.gameObject.SendMessage("TakeDamage",damage, SendMessageOptions.DontRequireReceiver);
+            col.GetComponent<PlayerHealth>().TakeDamage(damage);
             Destroy(this.gameObject);
         }
         else if (col.gameObject.CompareTag("Wall"))

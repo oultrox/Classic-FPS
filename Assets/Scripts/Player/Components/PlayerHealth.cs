@@ -18,7 +18,6 @@ public class PlayerHealth : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log("Me daño! : " + currentHealth + " HP restante.");
         //Si tiene menor que 0 su vida murió
         if (currentHealth <= 0)
         {

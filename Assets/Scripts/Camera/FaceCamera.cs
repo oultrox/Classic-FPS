@@ -6,11 +6,13 @@ public class FaceCamera : MonoBehaviour {
 
     private Vector3 cameraDirection;
     private Transform cameraTransform;
+    private Transform selfTransform;
 	
     // Use this for initialization
 	void Awake ()
     {
         cameraTransform = Camera.main.transform;
+        selfTransform = this.transform;
     }
 	
 	// Update is called once per frame
@@ -18,6 +20,6 @@ public class FaceCamera : MonoBehaviour {
     {
         cameraDirection = cameraTransform.forward;
         cameraDirection.y = 0;
-        transform.rotation = Quaternion.LookRotation(cameraDirection);
+        selfTransform.rotation = Quaternion.LookRotation(cameraDirection);
 	}
 }

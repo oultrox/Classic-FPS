@@ -9,14 +9,14 @@ public class Pistol : MonoBehaviour {
     [SerializeField] private Sprite shotPistol;
 
     [Header("Damage")]
-    [SerializeField] private float damage;
-    [SerializeField] private float range;
+    [SerializeField] private int damage = 20;
+    [SerializeField] private float range = 100;
     [SerializeField] private GameObject bulletHolePrefab;
 
     [Header("Ammunation")]
-    [SerializeField] private int ammoAmount;
-    [SerializeField] private int ammoClipSize;
-    [SerializeField] private float reloadTime;
+    [SerializeField] private int ammoAmount = 200;
+    [SerializeField] private int ammoClipSize = 12;
+    [SerializeField] private float reloadTime = 0.8f;
 
     private SpriteRenderer spriteRenderer;
     private Vector3 firePosition;
@@ -68,8 +68,11 @@ public class Pistol : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, range))
         {
-            hit.collider.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
-            Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal));
+            if (hit.collider.gameObject.CompareTag("Enemy"))
+            {
+                hit.collider.GetComponent<Enemy>().TakeDamage(damage);
+            }
+            Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal)).transform.parent = hit.transform;
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
         CameraShake.shakeDuration = 0.07f;
@@ -98,7 +101,7 @@ public class Pistol : MonoBehaviour {
         }
         else
         {
-            Debug.Log("No tengo ammo!");
+            //no ammo.
         }
 
         if (isReloading)
