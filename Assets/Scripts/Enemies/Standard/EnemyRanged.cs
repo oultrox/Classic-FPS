@@ -29,7 +29,7 @@ public class EnemyRanged : Enemy
 
     public override bool IsLooking()
     {
-        return (playerTransform.position - enemyTransform.position).sqrMagnitude < minDistanceChase;
+        return (playerTransform.position - enemyTransform.position).sqrMagnitude < minDistanceChase * minDistanceChase;
     }
 
     public override void Walk()
@@ -44,7 +44,7 @@ public class EnemyRanged : Enemy
 
     public override void Chase()
     {
-        if (!navMesh.pathPending && (playerTransform.position - enemyTransform.position).sqrMagnitude > minDistanceChase)
+        if (!navMesh.pathPending && (playerTransform.position - enemyTransform.position).sqrMagnitude > minDistanceChase * minDistanceChase)
         {
             navMesh.destination = playerTransform.position;
             navMesh.isStopped = false;
