@@ -14,16 +14,18 @@ public class PlayerHealth : MonoBehaviour {
 		currentHealth = startingHealth;
 		isDead = false;
 	}
-	
+
     public void TakeDamage(int damage)
     {
+        
         currentHealth -= damage;
         //Si tiene menor que 0 su vida murió
         if (currentHealth <= 0)
         {
-			
             Dead();
         }
+        CameraShake.shakeDuration = 0.09f; 
+        ManagerGUI.instance.HurtBlink();
     }
 
     private void Dead()
