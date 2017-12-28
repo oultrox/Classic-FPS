@@ -19,16 +19,6 @@ public class CameraShake : MonoBehaviour
     }
 
     /// <summary>
-    /// Shakes the camera moving it's transform's position.
-    /// </summary>
-    public void StartShake(float _duration, float _magnitude)
-    {
-        StopAllCoroutines();
-        originalPos = originalTransform.localPosition;
-        StartCoroutine(ShakeRotation(_duration, _magnitude, damper));
-    }
-
-    /// <summary>
     /// Shakes the camera rotating it's transform.
     /// </summary>
     public void StartShakeRotating(float _duration, float _magnitude)
@@ -36,21 +26,6 @@ public class CameraShake : MonoBehaviour
         StopAllCoroutines();
         originalRot = originalTransform.localRotation;
         StartCoroutine(ShakeRotation(_duration, _magnitude, damper));
-    }
-
-    IEnumerator ShakePosition(float duration, float magnitude, AnimationCurve damper = null)
-    {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float damperedMag = (damper != null) ? (damper.Evaluate(elapsed / duration) * magnitude) : magnitude;
-            float x = (Mathf.PerlinNoise(Time.time * speed, 0f) * damperedMag) - (damperedMag / 2f);
-            float y = (Mathf.PerlinNoise(0f, Time.time * speed) * damperedMag) - (damperedMag / 2f);
-            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
-            yield return null;
-        }
-        transform.localPosition = originalPos;
     }
 
     IEnumerator ShakeRotation(float duration, float magnitude, AnimationCurve damper = null)
