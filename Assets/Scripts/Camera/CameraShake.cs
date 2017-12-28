@@ -1,49 +1,73 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// based on http://unitytipsandtricks.blogspot.com/2013/05/camera-shake.html
 public class CameraShake : MonoBehaviour
 {
+    public static CameraShake instance;
+    [SerializeField] private float speed = 20f;
+    [SerializeField] private AnimationCurve damper = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.9f, .33f, -2f, -2f), new Keyframe(1f, 0f, -5.65f, -5.65f));
 
-    // How long the object should shake for.
-    public static float shakeDuration = 0f;
-
-    // Amplitude of the shake. A larger value shakes the camera harder.
-    public  float shakeAmount = 0.4f;
-    public  float decreaseFactor = 1.0f;
-
-    // Transform of the camera to shake. Grabs the gameObject's transform
-    // if null.
-    private Transform camTransform;
+    private Transform originalTransform;
     private Vector3 originalPos;
-    private bool isActive = false;
+    private Quaternion originalRot;
 
-    void Awake()
+    private void Awake()
     {
-        if (camTransform == null)
-        {
-            camTransform = GetComponent(typeof(Transform)) as Transform;
-        }
+        instance = this;
+        originalTransform = this.transform;
     }
 
-    void OnEnable()
+    /// <summary>
+    /// Shakes the camera moving it's transform's position.
+    /// </summary>
+    public void StartShake(float _duration, float _magnitude)
     {
-        originalPos = camTransform.localPosition;
+        StopAllCoroutines();
+        originalPos = originalTransform.localPosition;
+        StartCoroutine(ShakeRotation(_duration, _magnitude, damper));
     }
 
-    void Update()
+    /// <summary>
+    /// Shakes the camera rotating it's transform.
+    /// </summary>
+    public void StartShakeRotating(float _duration, float _magnitude)
     {
-        if (shakeDuration > 0)
-        {
-            camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
-
-            shakeDuration -= Time.deltaTime * decreaseFactor;
-            isActive = true;
-        }
-        else if(isActive)
-        {
-            shakeDuration = 0f;
-            camTransform.localPosition = originalPos;
-            isActive = false;
-        }
+        StopAllCoroutines();
+        originalRot = originalTransform.localRotation;
+        StartCoroutine(ShakeRotation(_duration, _magnitude, damper));
     }
+
+    IEnumerator ShakePosition(float duration, float magnitude, AnimationCurve damper = null)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float damperedMag = (damper != null) ? (damper.Evaluate(elapsed / duration) * magnitude) : magnitude;
+            float x = (Mathf.PerlinNoise(Time.time * speed, 0f) * damperedMag) - (damperedMag / 2f);
+            float y = (Mathf.PerlinNoise(0f, Time.time * speed) * damperedMag) - (damperedMag / 2f);
+            transform.localPosition = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
+            yield return null;
+        }
+        transform.localPosition = originalPos;
+    }
+
+    IEnumerator ShakeRotation(float duration, float magnitude, AnimationCurve damper = null)
+    {
+        Vector3 originalEuler = originalRot.eulerAngles;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float damperedMag = (damper != null) ? (damper.Evaluate(elapsed / duration) * magnitude) : magnitude;
+            float x = (Mathf.PerlinNoise(Time.time * speed, 0f) * damperedMag) - (damperedMag / 2f);
+            float y = (Mathf.PerlinNoise(0f, Time.time * speed) * damperedMag) - (damperedMag / 2f);
+            float z = (Mathf.PerlinNoise(0.5f, Time.time * speed * 0.5f) * damperedMag) - (damperedMag / 2f);
+            originalTransform.localRotation = Quaternion.Euler(new Vector3(originalEuler.x + x, originalEuler.y + y, originalEuler.z + z));
+            yield return null;
+        }
+        originalTransform.localRotation = originalRot;
+    }
+
 }

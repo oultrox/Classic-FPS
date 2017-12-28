@@ -24,7 +24,7 @@ public class PlayerHealth : MonoBehaviour {
         {
             Dead();
         }
-        CameraShake.shakeDuration = 0.09f; 
+        CameraShake.instance.StartShakeRotating(0.09f, 5f);
         ManagerGUI.instance.HurtBlink();
     }
 

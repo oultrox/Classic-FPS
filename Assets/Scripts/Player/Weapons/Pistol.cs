@@ -17,7 +17,10 @@ public class Pistol : MonoBehaviour {
     [SerializeField] private int ammoAmount = 200;
     [SerializeField] private int ammoClipSize = 12;
     [SerializeField] private float reloadTime = 1;
-    [SerializeField] private float shakeDuration = 0.15f;
+
+    [Header("Shake")]
+    [SerializeField] private float shakeDuration = 0.08f;
+    [SerializeField] private float shakeMagnitude = 4;
 
     private SpriteRenderer spriteRenderer;
     private Vector3 firePosition;
@@ -76,7 +79,7 @@ public class Pistol : MonoBehaviour {
             Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal)).transform.parent = hit.transform;
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
-        CameraShake.shakeDuration = shakeDuration;
+        CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
     }
 
     private void Reload()
