@@ -19,6 +19,7 @@ public abstract class Enemy : MonoBehaviour {
     [Header("Transiciones (0 lo deja continuo)")]
     [SerializeField] protected float idleDuration = 1.5f;
     [SerializeField] protected float walkDuration = 4;
+    [SerializeField] private float searchTime = 10f;
 
     protected NavMeshAgent navMesh;
     protected Transform enemyTransform;
@@ -126,6 +127,19 @@ public abstract class Enemy : MonoBehaviour {
         set
         {
             walkDuration = value;
+        }
+    }
+
+    public float SearchTime
+    {
+        get
+        {
+            return searchTime;
+        }
+
+        set
+        {
+            searchTime = value;
         }
     }
     #endregion

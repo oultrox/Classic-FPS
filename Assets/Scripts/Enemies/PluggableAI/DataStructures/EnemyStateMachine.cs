@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 //State machine que será usada por los enemigos para llamar los estados.
 public class EnemyStateMachine : MonoBehaviour {
@@ -9,7 +6,6 @@ public class EnemyStateMachine : MonoBehaviour {
     [SerializeField] private State currentState;
     [SerializeField] private State remainState;
     private Enemy enemy;
-    private bool aiActive;
     private float stateTimeElapsed;
 
     //-------------------------------------------------
@@ -18,25 +14,16 @@ public class EnemyStateMachine : MonoBehaviour {
     private void Awake()
     {
         enemy = this.GetComponent<Enemy>();
-        aiActive = true;
         stateTimeElapsed = 0;
     }
 
     void Update ()
     {
-        if (!aiActive)
-        {
-            return;
-        }
         currentState.UpdateState(this);
 	}
 
     void FixedUpdate()
     {
-        if (!aiActive)
-        {
-            return;
-        }
         currentState.FixedUpdateState(this);
     }
 
@@ -82,19 +69,6 @@ public class EnemyStateMachine : MonoBehaviour {
 
 
     #region Properties
-    public bool AiActive
-    {
-        get
-        {
-            return aiActive;
-        }
-
-        set
-        {
-            aiActive = value;
-        }
-    }
-
     public Enemy Enemy
     {
         get

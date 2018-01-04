@@ -16,7 +16,7 @@ public class EnemyRanged : Enemy
 
     [Header("Patrol")]
     [SerializeField] private Transform[] patrolWayPoints;
-  
+
     private GameObject bulletObj;
     private Transform playerTransform;
     private float attackTimer;
@@ -82,6 +82,18 @@ public class EnemyRanged : Enemy
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(Alert());
+        }
+        
+    }
+
+    private IEnumerator Alert()
+    {
+        sightDistance *= 4;
+        yield return new WaitForSeconds(0.1f);
+        sightDistance /= 4;
     }
 
     public override void Die()
