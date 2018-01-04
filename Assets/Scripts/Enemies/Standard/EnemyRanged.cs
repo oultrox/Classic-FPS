@@ -12,6 +12,7 @@ public class EnemyRanged : Enemy
 
     [Header("Attack")]
     [SerializeField] private float attackRate = 1;
+    [SerializeField] private float sightDistance = 10f;
 
     [Header("Patrol")]
     [SerializeField] private Transform[] patrolWayPoints;
@@ -29,7 +30,7 @@ public class EnemyRanged : Enemy
 
     public override bool IsLooking()
     {
-        return (playerTransform.position - enemyTransform.position).sqrMagnitude < minDistanceChase * minDistanceChase;
+        return (playerTransform.position - enemyTransform.position).sqrMagnitude < sightDistance * sightDistance;
     }
 
     public override void Walk()
@@ -85,6 +86,11 @@ public class EnemyRanged : Enemy
 
     public override void Die()
     {
+        //Checking for testing purposes.
+        if (corpse)
+        {
+            Instantiate(corpse, enemyTransform.position, enemyTransform.rotation);
+        }
         Destroy(gameObject);
     }
 

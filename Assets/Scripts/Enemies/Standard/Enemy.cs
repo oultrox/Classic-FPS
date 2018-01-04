@@ -14,6 +14,7 @@ public abstract class Enemy : MonoBehaviour {
     [SerializeField] protected int enemyHP = 100;
     [SerializeField] protected int maxEnemyHP = 150;
     [SerializeField] protected int scoreValue = 10;
+    [SerializeField] protected GameObject corpse;
 
     [Header("Transiciones (0 lo deja continuo)")]
     [SerializeField] protected float idleDuration = 1.5f;
