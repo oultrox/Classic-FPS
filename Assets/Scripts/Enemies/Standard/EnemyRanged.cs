@@ -34,12 +34,14 @@ public class EnemyRanged : Enemy
 
     public override void Walk()
     {
+        
         navMesh.destination = patrolWayPoints[nextWaypoint].position;
         navMesh.isStopped = false;
         if (navMesh.remainingDistance <= navMesh.stoppingDistance && !navMesh.pathPending)
         {
             nextWaypoint = (nextWaypoint + 1) % patrolWayPoints.Length;
         }
+        animator.SetBool("isMoving", true);
     }
 
     public override void Chase()
@@ -48,10 +50,12 @@ public class EnemyRanged : Enemy
         {
             navMesh.destination = playerTransform.position;
             navMesh.isStopped = false;
+            animator.SetBool("isMoving", true);
         }
         if (navMesh.remainingDistance < minDistanceChase)
         {
            navMesh.isStopped = true;
+            animator.SetBool("isMoving", false);
         }
     } 
 

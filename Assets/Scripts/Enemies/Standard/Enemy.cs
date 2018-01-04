@@ -21,11 +21,13 @@ public abstract class Enemy : MonoBehaviour {
 
     protected NavMeshAgent navMesh;
     protected Transform enemyTransform;
+    protected Animator animator;
 
     public virtual void Awake()
     {
         enemyTransform = this.GetComponent<Transform>();
         navMesh = this.GetComponent<NavMeshAgent>();
+        animator = this.GetComponent<Animator>();
     }
     public abstract bool IsLooking();
     public abstract void Walk();
