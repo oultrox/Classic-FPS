@@ -72,11 +72,14 @@ public class Pistol : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, range))
         {
-            if (hit.collider.gameObject.CompareTag("Enemy"))
+            if (hit.collider.CompareTag("Enemy"))
             {
                 hit.collider.GetComponent<Enemy>().TakeDamage(damage);
             }
-            Instantiate(bulletHolePrefab,hit.point,Quaternion.FromToRotation(Vector3.up,hit.normal)).transform.parent = hit.transform;
+            if (hit.collider.CompareTag("Projectile") == false)
+            {
+                Instantiate(bulletHolePrefab, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)).transform.parent = hit.transform;
+            }
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);

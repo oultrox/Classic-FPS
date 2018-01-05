@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour {
 
 	[SerializeField] private int startingHealth;
-	private static int currentHealth;
+	private int currentHealth;
     private static bool isDead;
 	
 	// Use this for initialization
@@ -17,10 +17,8 @@ public class PlayerHealth : MonoBehaviour {
 
     public void TakeDamage(int damage)
     {
-        
         currentHealth -= damage;
-        //Si tiene menor que 0 su vida murió
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 || isDead)
         {
             Dead();
         }
