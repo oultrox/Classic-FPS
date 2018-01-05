@@ -76,7 +76,7 @@ public class Pistol : MonoBehaviour {
             {
                 hit.collider.GetComponent<Enemy>().TakeDamage(damage);
             }
-            if (hit.collider.CompareTag("Projectile") == false)
+            if (!hit.collider.CompareTag("Projectile"))
             {
                 Instantiate(bulletHolePrefab, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)).transform.parent = hit.transform;
             }
