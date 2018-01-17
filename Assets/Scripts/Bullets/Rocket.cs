@@ -5,20 +5,33 @@ using UnityEngine;
 
 public class Rocket : MonoBehaviour {
 
-    [SerializeField] private GameObject explosionPrefab;
-
-    [SerializeField] private float radius;
-    [SerializeField] private int damage;
-    [SerializeField] private float lifeTime;
-    [SerializeField] private LayerMask layerMask;
-
+    [SerializeField] private float shakeDuration = 0.1f;
+    [SerializeField] private float shakeMagnitude = 5f;
+    private GameObject explosionPrefab;
+    private LayerMask layerMask;
+    private float radius;
+    private int damage;
+    private float lifeTime;
     private float lifeCounter;
 
-	void Start () {
+   	void Start () {
         lifeCounter = 0;
 	}
-	
-	void Update ()
+
+    public void Init(int _damage, float _radius, LayerMask _explosionLayer, GameObject _explosionPrefab)
+    {
+        this.damage = _damage;
+        this.radius = _radius;
+        this.layerMask = _explosionLayer;
+        this.explosionPrefab = _explosionPrefab;
+    }
+
+    private void Explode()
+    {
+        Destroy(this.gameObject);
+    }
+
+    void Update ()
     {
         lifeTime += Time.deltaTime;
         if (lifeCounter >= lifeTime)
@@ -26,11 +39,6 @@ public class Rocket : MonoBehaviour {
             Explode();
         }
 	}
-
-    private void Explode()
-    {
-        Destroy(this.gameObject);
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -47,5 +55,7 @@ public class Rocket : MonoBehaviour {
             hitColliders[i].GetComponent<Enemy>().TakeDamage(damage);
         }
         Destroy(this.gameObject);
+        CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
     }
+
 }

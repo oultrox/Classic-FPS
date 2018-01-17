@@ -83,7 +83,7 @@ public class Pistol : MonoBehaviour {
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
-        CameraKnockBack.instance.StartShake(shakeDuration, 0.1f);
+        WeaponShake.instance.StartShake(shakeDuration, 0.1f);
     }
 
     private void Reload()

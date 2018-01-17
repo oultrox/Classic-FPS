@@ -24,16 +24,17 @@ public class CameraShake : MonoBehaviour
     public void StartShakeRotating(float _duration, float _magnitude)
     {
         StopAllCoroutines();
-        originalRot = originalTransform.localRotation;
         StartCoroutine(ShakeRotation(_duration, _magnitude, damper));
     }
 
     IEnumerator ShakeRotation(float duration, float magnitude, AnimationCurve damper = null)
     {
-        Vector3 originalEuler = originalRot.eulerAngles;
+        Vector3 originalEuler;
         float elapsed = 0f;
         while (elapsed < duration)
         {
+            originalRot = originalTransform.localRotation;
+            originalEuler = originalRot.eulerAngles;
             elapsed += Time.deltaTime;
             float damperedMag = (damper != null) ? (damper.Evaluate(elapsed / duration) * magnitude) : magnitude;
             float x = (Mathf.PerlinNoise(Time.time * speed, 0f) * damperedMag) - (damperedMag / 2f);

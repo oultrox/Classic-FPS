@@ -66,9 +66,16 @@ public class RocketLauncher : MonoBehaviour {
             return;
         }
 
+        GameObject rocketInstantiated = Instantiate(rocketPrefab, spawnPoint.transform.position, Quaternion.identity);
+        rocketInstantiated.GetComponent<Rocket>().Init(damage,explosionRadius,explosionLayer,explosionPrefab);
+        Rigidbody rocketRbody = rocketInstantiated.GetComponent<Rigidbody>();
+        rocketRbody.AddForce(Camera.main.transform.forward * rocketForce, ForceMode.Impulse);
+
+
+
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
-        CameraKnockBack.instance.StartShake(shakeDuration, 0.1f);
+        WeaponShake.instance.StartShake(shakeDuration, 0.1f);
     }
 
     private void Reload()
