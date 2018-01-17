@@ -11,7 +11,7 @@ public class Rocket : MonoBehaviour {
     private LayerMask layerMask;
     private float radius;
     private int damage;
-    private float lifeTime;
+    private float lifeTime = 3f;
     private float lifeCounter;
 
    	void Start () {
@@ -26,26 +26,33 @@ public class Rocket : MonoBehaviour {
         this.explosionPrefab = _explosionPrefab;
     }
 
-    private void Explode()
-    {
-        Destroy(this.gameObject);
-    }
-
     void Update ()
     {
-        lifeTime += Time.deltaTime;
+        lifeCounter += Time.deltaTime;
         if (lifeCounter >= lifeTime)
         {
-            Explode();
+            Destroy(this.gameObject);
         }
 	}
 
     private void OnCollisionEnter(Collision collision)
     {
         ContactPoint contact = collision.contacts[0];
-        Collider[] hitColliders = Physics.OverlapSphere(contact.point, radius, layerMask);
-        Instantiate(explosionPrefab, contact.point, Quaternion.identity);
+        Explode(contact.point);
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Explode(other.transform.position);
+        }
+    }
+
+    private void Explode(Vector3 contactPoint)
+    {
+        //Perhaps just using transform.position here could fix any future bug related to the positions for triggers.
+        Collider[] hitColliders = Physics.OverlapSphere(contactPoint, radius, layerMask);
         for (int i = 0; i < hitColliders.Length; i++)
         {
             if (hitColliders[i].gameObject.CompareTag("Enemy") == false)
@@ -54,8 +61,9 @@ public class Rocket : MonoBehaviour {
             }
             hitColliders[i].GetComponent<Enemy>().TakeDamage(damage);
         }
+
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
     }
-
 }
