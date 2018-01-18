@@ -13,7 +13,6 @@ public class Rocket : MonoBehaviour {
     private int damage;
     private float lifeTime = 3f;
     private float lifeCounter;
-    private Vector3 firePosition;
 
     void Start () {
         lifeCounter = 0;
