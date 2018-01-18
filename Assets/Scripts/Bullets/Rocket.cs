@@ -13,10 +13,12 @@ public class Rocket : MonoBehaviour {
     private int damage;
     private float lifeTime = 3f;
     private float lifeCounter;
+    private Vector3 firePosition;
 
-   	void Start () {
+    void Start () {
         lifeCounter = 0;
-	}
+        
+    }
 
     public void Init(int _damage, float _radius, LayerMask _explosionLayer, GameObject _explosionPrefab)
     {
@@ -37,6 +39,10 @@ public class Rocket : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            return;
+        }
         ContactPoint contact = collision.contacts[0];
         Explode(contact.point);
     }

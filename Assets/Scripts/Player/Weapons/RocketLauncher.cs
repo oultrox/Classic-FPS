@@ -38,7 +38,6 @@ public class RocketLauncher : MonoBehaviour {
     {
         ammoClipLeft = ammoClipSize;
         ammoLeft = ammoAmount;
-
     }
 
     private void Update()
@@ -51,6 +50,16 @@ public class RocketLauncher : MonoBehaviour {
         {
             Reload();
         }
+    }
+
+    private void OnEnable()
+    {
+        this.spawnPoint.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        this.spawnPoint.SetActive(false);
     }
 
     // ------------------------------------------------------
@@ -70,8 +79,6 @@ public class RocketLauncher : MonoBehaviour {
         rocketInstantiated.GetComponent<Rocket>().Init(damage,explosionRadius,explosionLayer,explosionPrefab);
         Rigidbody rocketRbody = rocketInstantiated.GetComponent<Rigidbody>();
         rocketRbody.AddForce(Camera.main.transform.forward * rocketForce, ForceMode.Impulse);
-
-
 
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
