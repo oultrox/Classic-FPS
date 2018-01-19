@@ -12,6 +12,11 @@ public class HeadBobbing : MonoBehaviour
 
     void Update()
     {
+        if (ManagerScreen.instance.IsPaused())
+        {
+            return;
+        }
+
         float waveslice = 0.0f;
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");

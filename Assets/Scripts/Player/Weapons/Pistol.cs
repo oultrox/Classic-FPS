@@ -42,6 +42,11 @@ public class Pistol : MonoBehaviour {
 
     private void Update()
     {
+        if (ManagerScreen.instance.IsPaused())
+        {
+            return;
+        }
+
         if (Input.GetButtonDown("Fire1") && isReloading == false)
         {
             Shoot();
@@ -59,6 +64,8 @@ public class Pistol : MonoBehaviour {
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
     private void Shoot()
     {
+        
+
         if (ammoClipLeft <= 0)
         {
             Reload();

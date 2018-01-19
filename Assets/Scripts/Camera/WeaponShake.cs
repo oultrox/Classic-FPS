@@ -32,6 +32,11 @@ public class WeaponShake : MonoBehaviour {
         float elapsed = 0f;
         while (elapsed < duration)
         {
+            if (ManagerScreen.instance.IsPaused())
+            {
+                break;
+            }
+
             elapsed += Time.deltaTime;
             float damperedMag = (damper != null) ? (damper.Evaluate(elapsed / duration) * magnitude) : magnitude;
             float x = (Mathf.PerlinNoise(Time.time * speed, 0f) * damperedMag) - (damperedMag / 2f);

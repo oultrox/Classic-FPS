@@ -42,6 +42,11 @@ public class RocketLauncher : MonoBehaviour {
 
     private void Update()
     {
+        if (ManagerScreen.instance.IsPaused())
+        {
+            return;
+        }
+
         if (Input.GetButtonDown("Fire1") && isReloading == false)
         {
             Shoot();

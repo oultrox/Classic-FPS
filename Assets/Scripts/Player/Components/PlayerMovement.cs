@@ -28,6 +28,11 @@ public class PlayerMovement : MonoBehaviour {
     private void Update()
     {
 
+        if (ManagerScreen.instance.IsPaused())
+        {
+            return;
+        }
+
         float horizontalRotation = Input.GetAxis("Mouse X");
         transform.Rotate(0, horizontalRotation, 0);
 

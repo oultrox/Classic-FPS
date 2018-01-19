@@ -8,6 +8,7 @@ public class CameraShake : MonoBehaviour
     [SerializeField] private float speed = 20f;
     [SerializeField] private AnimationCurve damper = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.9f, .33f, -2f, -2f), new Keyframe(1f, 0f, -5.65f, -5.65f));
 
+    private float shakeIntensity = 1;
     private Transform originalTransform;
     private Vector3 originalPos;
     private Quaternion originalRot;
@@ -24,7 +25,7 @@ public class CameraShake : MonoBehaviour
     public void StartShakeRotating(float _duration, float _magnitude)
     {
         StopAllCoroutines();
-        StartCoroutine(ShakeRotation(_duration, _magnitude, damper));
+        StartCoroutine(ShakeRotation(_duration, _magnitude * shakeIntensity, damper));
     }
 
     IEnumerator ShakeRotation(float duration, float magnitude, AnimationCurve damper = null)
@@ -33,6 +34,11 @@ public class CameraShake : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < duration)
         {
+            if (ManagerScreen.instance.IsPaused())
+            {
+                break;
+            }
+
             originalRot = originalTransform.localRotation;
             originalEuler = originalRot.eulerAngles;
             elapsed += Time.deltaTime;
@@ -45,5 +51,20 @@ public class CameraShake : MonoBehaviour
         }
         originalTransform.localRotation = originalRot;
     }
+
+    #region Properties
+    public float ShakeIntensity
+    {
+        get
+        {
+            return shakeIntensity;
+        }
+
+        set
+        {
+            shakeIntensity = value;
+        }
+    }
+    #endregion  
 
 }

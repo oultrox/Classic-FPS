@@ -1,0 +1,151 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1938258716925156}
+  m_IsPrefabParent: 1
+--- !u!1 &1938258716925156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4503526631953752}
+  - component: {fileID: 114769270815674240}
+  m_Layer: 0
+  m_Name: PManagerAudio
+  m_TagString: AudioManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4503526631953752
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1938258716925156}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114769270815674240
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1938258716925156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7778b4300efedf4a99edef31f58dac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterMixer: {fileID: 24100000, guid: 366f48b63a5849f4e8e7e7e1b7192dc2, type: 2}
+  sounds:
+  - volume: 0.5
+    pitch: 1
+    name: MainTheme
+    isPlayedOnAwake: 0
+    isLoopeable: 1
+    clip: {fileID: 8300000, guid: 2c70267ce13415c4185dc907954a02f0, type: 3}
+    audioMixer: {fileID: 243875311180069022, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.2
+    pitch: 1.2
+    name: PlayerShoot
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: aa284fd99af362543ba2e25fcfd4cc87, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.2
+    pitch: 1.2
+    name: EnemyDeath
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: bcc8908cbe5ad8a4c8dd448f193c4cbb, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.2
+    pitch: 1.2
+    name: BulletImpact
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: 4c14adae8b005454186b8c4ee7504d65, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.35
+    pitch: 1.2
+    name: EnemyNormalShoot
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: 946bba9a003023c46b22fd21885ec59c, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.5
+    pitch: 1.2
+    name: EnemyTripleShoot
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: e58557098a9d53a4dac2203e4f99b239, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.35
+    pitch: 0.9
+    name: PlayerHurt
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: a50f73ba5c3adb94e91580af4f96bceb, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.4
+    pitch: 1.2
+    name: PlayerDeath
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: a163d4d19752fa54f90740645b916ba5, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.5
+    pitch: 1.2
+    name: NextLayout
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: c4bf78296b831084897abf60f94bd893, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.4
+    pitch: 1.2
+    name: PowerUp
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: 2610a0cebb2ce934c958883a909ed790, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.5
+    pitch: 1
+    name: EnemyRadialShoot
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: 38c3ae8046a813d40ae26d8e8c830227, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
+  - volume: 0.6
+    pitch: 1
+    name: Intro
+    isPlayedOnAwake: 0
+    isLoopeable: 0
+    clip: {fileID: 8300000, guid: 3cc675a22071494458c623b35e36d251, type: 3}
+    audioMixer: {fileID: 243830516625595922, guid: 366f48b63a5849f4e8e7e7e1b7192dc2,
+      type: 2}
