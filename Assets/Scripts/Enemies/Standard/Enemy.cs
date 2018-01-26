@@ -22,18 +22,19 @@ public abstract class Enemy : MonoBehaviour {
     [SerializeField] private float searchTime = 10f;
 
     protected NavMeshAgent navMesh;
-    protected Transform enemyTransform;
+    protected Transform selfTransform;
     protected Animator animator;
 
     public virtual void Awake()
     {
-        enemyTransform = this.GetComponent<Transform>();
+        selfTransform = this.GetComponent<Transform>();
         navMesh = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
     }
     public abstract bool IsLooking();
     public abstract void Walk();
     public abstract void Chase();
+    public abstract void Patrol();
     public abstract void Attack();
     public abstract void TakeDamage(int damage);
     public abstract void Die();
@@ -140,6 +141,19 @@ public abstract class Enemy : MonoBehaviour {
         set
         {
             searchTime = value;
+        }
+    }
+
+    public NavMeshAgent NavMesh
+    {
+        get
+        {
+            return navMesh;
+        }
+
+        set
+        {
+            navMesh = value;
         }
     }
     #endregion
