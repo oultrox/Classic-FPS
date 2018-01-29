@@ -22,7 +22,7 @@ public class ManagerScreen : MonoBehaviour
     }
 
     public static ManagerScreen instance;
-    public static bool debugON = true;
+    public static bool debugON = false;
     private Screen actualScreen;
 
     //-------Métodos API-------

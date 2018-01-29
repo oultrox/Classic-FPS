@@ -61,7 +61,8 @@ public class EnemyRanged : Enemy
         float distanceBetweenWayPoint = (waypoint - selfTransform.position).sqrMagnitude;
         if (distanceBetweenWayPoint < (1 * 1) || isWaypointBlocked || waypointTimer > waypointTravelTime)
         {
-            animator.SetBool("isMoving", true);
+            animator.SetBool("isMoving", false);
+            animator.SetBool("isMovingSides", true);
             Wander();
         }
         else
@@ -80,11 +81,13 @@ public class EnemyRanged : Enemy
             navMesh.destination = playerTransform.position;
             navMesh.isStopped = false;
             animator.SetBool("isMoving", true);
+            
         }
         if (navMesh.remainingDistance < minDistanceChase)
         {
            navMesh.isStopped = true;
            animator.SetBool("isMoving", false);
+           animator.SetBool("isMovingSides", false);
         }
     } 
 

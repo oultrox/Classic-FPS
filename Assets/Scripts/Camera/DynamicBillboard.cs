@@ -6,10 +6,9 @@ using UnityEngine.AI;
 
 public class DynamicBillboard : MonoBehaviour
 {
-    [SerializeField] private AnimationClip[] anims;
-
     private Animator anim;
     private Transform vision;
+    private float dotProduct;
 
     private void Awake()
     {
@@ -26,38 +25,26 @@ public class DynamicBillboard : MonoBehaviour
     {
         Vector3 playerDir = Camera.main.transform.forward;
         playerDir.y = 0;
+
         Vector3 enemyDir = vision.forward;
         enemyDir.y = 0;
 
-        float dotProduct = Vector3.Dot(playerDir, enemyDir);
-        if (dotProduct < -0.5f && dotProduct >= -1)
+        dotProduct = Vector3.Dot(playerDir, enemyDir);
+        if ((dotProduct < -0.5f && dotProduct >= -1) || (dotProduct > 0.5f && dotProduct <= 1))
         {
-            ChangeSprite(0);
-        }
-        else if (dotProduct > 0.5f && dotProduct <= 1)
-        {
-            ChangeSprite(1);
+            anim.SetFloat("dotProduct", dotProduct);
+            anim.SetBool("isMovingSides", false);
         }
         else
         {
+            anim.SetFloat("dotProduct", 0);
+            anim.SetBool("isMovingSides", true);
             Vector3 playerRight = Camera.main.transform.right;
             playerRight.y = 0;
 
             dotProduct = Vector3.Dot(playerRight, enemyDir);
-            if (dotProduct >= 0)
-            {
-                ChangeSprite(2);
-            }
-            else
-            {
-                ChangeSprite(3);
-            }
+            anim.SetFloat("dotProductSides", dotProduct);
         }
-
-    }
-
-    void ChangeSprite(int index)
-    {
-         anim.Play(anims[index].name);
+        
     }
 }
