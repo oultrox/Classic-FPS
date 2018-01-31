@@ -21,13 +21,27 @@ public class WeaponSwitch : MonoBehaviour {
             selectedWeapon = (selectedWeapon + 1) % weapons.Count;
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
-            selectedWeapon = Mathf.Abs(selectedWeapon - 1) % weapons.Count;
+        {
+            if (selectedWeapon > 0)
+            {
+                selectedWeapon = selectedWeapon - 1 % weapons.Count;
+            }
+            else
+            {
+                selectedWeapon = weapons.Count - 1;
+            }
+        }
+           
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
             selectedWeapon = 0;
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
             selectedWeapon = 1;
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            selectedWeapon = 2;
+
 
         UpdateWeapon();
     }

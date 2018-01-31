@@ -24,7 +24,6 @@ public class EnemyRanged : Enemy
 
     private GameObject bulletObj;
     private Transform playerTransform;
-    private Transform enemyVision;
     private float attackTimer;
     private int nextWaypoint = 0;
 
@@ -36,7 +35,6 @@ public class EnemyRanged : Enemy
     {
         base.Awake();
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        enemyVision = GetComponentInChildren<Transform>();
     }
 
     public override bool IsLooking()
