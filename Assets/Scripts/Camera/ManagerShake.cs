@@ -1,22 +1,30 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 // based on http://unitytipsandtricks.blogspot.com/2013/05/camera-shake.html
-public class CameraShake : MonoBehaviour
+public class ManagerShake : MonoBehaviour
 {
-    public static CameraShake instance;
+    public static ManagerShake instance;
+    [Header("Shake properties")]
     [SerializeField] private float speed = 20f;
     [SerializeField] private AnimationCurve damper = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.9f, .33f, -2f, -2f), new Keyframe(1f, 0f, -5.65f, -5.65f));
 
+    [Header("Zooming juice")]
+    [SerializeField] private float zoomSpeed = 20f;
+    [SerializeField] private float maxZoomFOV = 80f;
+
     private float shakeIntensity = 1;
     private Transform originalTransform;
-    private Vector3 originalPos;
     private Quaternion originalRot;
+    private Camera cameraSelf;
+    private float originalFOV;
 
     private void Awake()
     {
         instance = this;
         originalTransform = this.transform;
+        cameraSelf = this.GetComponent<Camera>();
+        originalFOV = cameraSelf.fieldOfView;
     }
 
     /// <summary>
@@ -26,6 +34,12 @@ public class CameraShake : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(ShakeRotation(_duration, _magnitude * shakeIntensity, damper));
+        
+    }
+
+    public void StartZoomEffect()
+    {
+        StartCoroutine(ZoomIn());
     }
 
     IEnumerator ShakeRotation(float duration, float magnitude, AnimationCurve damper = null)
@@ -50,6 +64,38 @@ public class CameraShake : MonoBehaviour
             yield return null;
         }
         originalTransform.localRotation = originalRot;
+    }
+
+
+    IEnumerator ZoomIn()
+    {
+        bool  isFinished = false;
+        bool isZoomingIn = true;
+        while (isFinished == false)
+        {
+            if ( cameraSelf.fieldOfView >= maxZoomFOV)
+            {
+                isZoomingIn = false;
+            }
+            else
+            {
+                if (isZoomingIn == false && cameraSelf.fieldOfView <= originalFOV)
+                {
+                    isFinished = true;
+                }
+            }
+
+            if (isZoomingIn)
+            {
+                cameraSelf.fieldOfView += zoomSpeed / 8;
+            }
+            else
+            {
+                cameraSelf.fieldOfView -= zoomSpeed / 8;
+            }
+            yield return null;
+        }
+        cameraSelf.fieldOfView = originalFOV;
     }
 
     #region Properties

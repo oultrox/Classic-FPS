@@ -69,6 +69,6 @@ public class Rocket : MonoBehaviour {
 
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
-        CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
+        ManagerShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
     }
 }

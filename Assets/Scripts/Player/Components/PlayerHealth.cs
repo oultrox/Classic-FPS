@@ -22,7 +22,7 @@ public class PlayerHealth : MonoBehaviour {
         {
             Dead();
         }
-        CameraShake.instance.StartShakeRotating(0.09f, 5f);
+        ManagerShake.instance.StartShakeRotating(0.09f, 5f);
         ManagerGUI.instance.HurtBlink();
     }
 

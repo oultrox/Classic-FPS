@@ -42,7 +42,7 @@ public class GUIPause : MonoBehaviour {
         float initialMainVolumeLevel;
         ManagerAudio.instance.MasterMixer.GetFloat("masterVolume", out initialMainVolumeLevel);
         mainVolumeBar.value = initialMainVolumeLevel;
-        shakenessBar.value = CameraShake.instance.ShakeIntensity;
+        shakenessBar.value = ManagerShake.instance.ShakeIntensity;
 
         //Adds a listener to the main slider and invokes a method when the value changes.
         shakenessBar.onValueChanged.AddListener (delegate { ValueShakenessChangeCheck(); });
@@ -52,7 +52,7 @@ public class GUIPause : MonoBehaviour {
     // Invoked when the value of the slider changes.
     public void ValueShakenessChangeCheck()
     {
-        CameraShake.instance.ShakeIntensity = shakenessBar.value;
+        ManagerShake.instance.ShakeIntensity = shakenessBar.value;
     }
 
     public void ValueVolumeChangeCheck()

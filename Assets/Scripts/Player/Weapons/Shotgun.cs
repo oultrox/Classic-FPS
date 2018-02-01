@@ -89,9 +89,10 @@ public class Shotgun : MonoBehaviour {
             }
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.03f;
-        CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
+        ManagerShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
+        ManagerShake.instance.StartZoomEffect();
         WeaponShake.instance.StartShake(shakeDuration, 0.1f);
-
+        
         //Check after in order to reload automatic if there's enough projectiles.
         if (ammoClipLeft <= 0)
         {
