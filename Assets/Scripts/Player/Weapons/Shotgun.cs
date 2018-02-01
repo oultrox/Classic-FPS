@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class Shotgun : MonoBehaviour {
 
-    [SerializeField] private float fireRate = 1f;
-
     [Header("Damage")]
-    [SerializeField] private int damage = 20;
-    [SerializeField] private float range = 100;
+    [SerializeField]
+    private int damage = 20;
+
+    [Header("Fire stuff")]
+    [SerializeField] private float fireRate = 1f;
+    [SerializeField] private float maxFireDistance = 100f;
+    [SerializeField] private float fireRadius = 10f;
+    [SerializeField] private LayerMask shootLayer;
 
     [Header("Ammunation")]
     [SerializeField] private int ammoAmount = 200;
@@ -18,8 +22,8 @@ public class Shotgun : MonoBehaviour {
     [SerializeField] private float shakeDuration = 0.08f;
     [SerializeField] private float shakeMagnitude = 4;
 
+    private Transform camTransform;
     private Animator anim;
-    private Vector3 firePosition;
     private int ammoLeft;
     private int ammoClipLeft;
     private bool isReloading = false;
@@ -33,8 +37,8 @@ public class Shotgun : MonoBehaviour {
         anim = GetComponent<Animator>();
         ammoClipLeft = ammoClipSize;
         ammoLeft = ammoAmount;
-        firePosition = new Vector3(Screen.width / 2, Screen.height / 2, 0);
         shootCooldown = fireRate;
+        camTransform = Camera.main.transform;
     }
 
     private void Update()
@@ -59,6 +63,7 @@ public class Shotgun : MonoBehaviour {
             Shoot();
         }
     }
+    private RaycastHit hit;
 
     // ------------------------------------------------------
     // Custom methods
@@ -71,13 +76,12 @@ public class Shotgun : MonoBehaviour {
             Reload();
             return;
         }
+
         shootCooldown = 0f;
         anim.SetTrigger("Shoot");
         ammoClipLeft -= 1;
 
-        Ray ray = Camera.main.ScreenPointToRay(firePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, range))
+        if (Physics.SphereCast(camTransform.position, fireRadius, camTransform.forward, out hit, maxFireDistance, shootLayer))
         {
             if (hit.collider.CompareTag("Enemy"))
             {
@@ -87,6 +91,13 @@ public class Shotgun : MonoBehaviour {
         DynamicCrosshair.instance.ExpansionTimer = 0.03f;
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
         WeaponShake.instance.StartShake(shakeDuration, 0.1f);
+
+        //Check after in order to reload automatic if there's enough projectiles.
+        if (ammoClipLeft <= 0)
+        {
+            Reload();
+            return;
+        }
     }
 
     private void Reload()
@@ -121,6 +132,15 @@ public class Shotgun : MonoBehaviour {
                 ammoClipLeft += ammoLeft;
                 ammoLeft = 0;
             }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (hit.collider)
+        {
+            Gizmos.DrawRay(camTransform.position, camTransform.forward * hit.distance);
+            Gizmos.DrawWireSphere(transform.position + transform.forward * (hit.distance), fireRadius );
         }
     }
 

@@ -91,6 +91,13 @@ public class Pistol : MonoBehaviour {
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
         WeaponShake.instance.StartShake(shakeDuration, 0.1f);
+
+        //Check after in order to reload automatic if there's enough projectiles.
+        if (ammoClipLeft <= 0)
+        {
+            Reload();
+            return;
+        }
     }
 
     private void Reload()

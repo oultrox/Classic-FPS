@@ -80,6 +80,7 @@ public class RocketLauncher : MonoBehaviour {
             return;
         }
 
+        ammoClipLeft -= 1;
         GameObject rocketInstantiated = Instantiate(rocketPrefab, spawnPoint.transform.position, Quaternion.identity);
         rocketInstantiated.GetComponent<Rocket>().Init(damage,explosionRadius,explosionLayer,explosionPrefab);
         Rigidbody rocketRbody = rocketInstantiated.GetComponent<Rigidbody>();
@@ -88,6 +89,13 @@ public class RocketLauncher : MonoBehaviour {
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
         CameraShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
         WeaponShake.instance.StartShake(shakeDuration, 0.1f);
+
+        //Check after in order to reload automatic if there's enough projectiles.
+        if (ammoClipLeft <= 0)
+        {
+            Reload();
+            return;
+        }
     }
 
     private void Reload()
