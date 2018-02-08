@@ -13,6 +13,7 @@ public class State : ScriptableObject
     public void UpdateState(EnemyStateMachine stateController)
     {
         DoAction(stateController, SM_Action.UpdateType.Update);
+        CheckTransitions(stateController);
     }
 
     public void FixedUpdateState(EnemyStateMachine stateController)
@@ -34,7 +35,7 @@ public class State : ScriptableObject
                 actions[i].Act(stateController);
             }
         }
-        CheckTransitions(stateController);
+        
     }
 
     private void CheckTransitions(EnemyStateMachine stateController)

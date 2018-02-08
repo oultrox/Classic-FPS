@@ -46,6 +46,7 @@ public class EnemyRanged : Enemy
     {
         navMesh.destination = patrolWayPoints[nextWaypoint].position;
         navMesh.isStopped = false;
+        animator.SetBool("isMoving", !navMesh.isStopped);
         if (navMesh.remainingDistance <= navMesh.stoppingDistance && !navMesh.pathPending)
         {
             nextWaypoint = (nextWaypoint + 1) % patrolWayPoints.Length;
@@ -60,7 +61,7 @@ public class EnemyRanged : Enemy
         if (distanceBetweenWayPoint < (1 * 1) || isWaypointBlocked || waypointTimer > waypointTravelTime)
         {
             animator.SetBool("isMoving", false);
-            animator.SetBool("isMovingSides", true);
+            animator.SetBool("isMovingSides", false);
             Wander();
         }
         else
