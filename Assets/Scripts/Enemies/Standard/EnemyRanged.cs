@@ -19,8 +19,9 @@ public class EnemyRanged : Enemy
     [SerializeField] private LayerMask raycastMask;
 
     [Header("Patrol")]
-    [SerializeField] private Transform[] patrolWayPoints;
     [SerializeField] private float walkRange = 3;
+    [SerializeField] private Transform[] patrolWayPoints;
+    
 
     private GameObject bulletObj;
     private Transform playerTransform;
@@ -158,8 +159,9 @@ public class EnemyRanged : Enemy
         // does nothing except pick a new destination to go to
         waypoint = new Vector3(UnityEngine.Random.Range(selfTransform.position.x - walkRange, selfTransform.position.x + walkRange),
                                0, UnityEngine.Random.Range(selfTransform.position.z - walkRange, selfTransform.position.z + walkRange));
+
         // if the waypoint is blocked the Walk method will call Wander() again to make sure the enemy follows a correct path.
-        //isWaypointBlocked = Physics.Linecast(selfTransform.position, waypoint);
+        isWaypointBlocked = Physics.Linecast(selfTransform.position, waypoint,raycastMask);
 
         float distance = (waypoint - selfTransform.position).sqrMagnitude;
         waypointTravelTime = distance / (movementSpeed * movementSpeed);
