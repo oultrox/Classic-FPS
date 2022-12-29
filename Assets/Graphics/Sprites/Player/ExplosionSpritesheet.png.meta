@@ -1,27 +1,57 @@
 fileFormatVersion: 2
 guid: e19fc500a06247944ba1579a12ab6a90
-timeCreated: 1515616024
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: ExplosionSpritesheet_0
-    21300002: ExplosionSpritesheet_1
-    21300004: ExplosionSpritesheet_2
-    21300006: ExplosionSpritesheet_3
-    21300008: ExplosionSpritesheet_4
-    21300010: ExplosionSpritesheet_5
-    21300012: ExplosionSpritesheet_6
-    21300014: ExplosionSpritesheet_7
-    21300016: ExplosionSpritesheet_8
-    21300018: ExplosionSpritesheet_9
-    21300020: ExplosionSpritesheet_10
-    21300022: ExplosionSpritesheet_11
-    21300024: ExplosionSpritesheet_12
-    21300026: ExplosionSpritesheet_13
-    21300028: ExplosionSpritesheet_14
-    21300030: ExplosionSpritesheet_15
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: ExplosionSpritesheet_0
+  - first:
+      213: 21300002
+    second: ExplosionSpritesheet_1
+  - first:
+      213: 21300004
+    second: ExplosionSpritesheet_2
+  - first:
+      213: 21300006
+    second: ExplosionSpritesheet_3
+  - first:
+      213: 21300008
+    second: ExplosionSpritesheet_4
+  - first:
+      213: 21300010
+    second: ExplosionSpritesheet_5
+  - first:
+      213: 21300012
+    second: ExplosionSpritesheet_6
+  - first:
+      213: 21300014
+    second: ExplosionSpritesheet_7
+  - first:
+      213: 21300016
+    second: ExplosionSpritesheet_8
+  - first:
+      213: 21300018
+    second: ExplosionSpritesheet_9
+  - first:
+      213: 21300020
+    second: ExplosionSpritesheet_10
+  - first:
+      213: 21300022
+    second: ExplosionSpritesheet_11
+  - first:
+      213: 21300024
+    second: ExplosionSpritesheet_12
+  - first:
+      213: 21300026
+    second: ExplosionSpritesheet_13
+  - first:
+      213: 21300028
+    second: ExplosionSpritesheet_14
+  - first:
+      213: 21300030
+    second: ExplosionSpritesheet_15
   externalObjects: {}
-  serializedVersion: 4
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -39,6 +69,10 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -48,11 +82,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -61,18 +95,26 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 25
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -81,7 +123,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -90,6 +135,32 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -107,6 +178,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_1
       rect:
@@ -121,6 +199,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_2
       rect:
@@ -135,6 +220,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_3
       rect:
@@ -149,6 +241,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_4
       rect:
@@ -163,6 +262,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 82305410000000000800000000000000
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_5
       rect:
@@ -177,6 +283,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a2305410000000000800000000000000
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_6
       rect:
@@ -191,6 +304,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c2305410000000000800000000000000
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_7
       rect:
@@ -205,6 +325,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e2305410000000000800000000000000
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_8
       rect:
@@ -219,6 +346,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 03305410000000000800000000000000
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_9
       rect:
@@ -233,6 +367,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 23305410000000000800000000000000
+      internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_10
       rect:
@@ -247,6 +388,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 43305410000000000800000000000000
+      internalID: 21300020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_11
       rect:
@@ -261,6 +409,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 63305410000000000800000000000000
+      internalID: 21300022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_12
       rect:
@@ -275,6 +430,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 83305410000000000800000000000000
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_13
       rect:
@@ -289,6 +451,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a3305410000000000800000000000000
+      internalID: 21300026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_14
       rect:
@@ -303,6 +472,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c3305410000000000800000000000000
+      internalID: 21300028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ExplosionSpritesheet_15
       rect:
@@ -317,9 +493,43 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e3305410000000000800000000000000
+      internalID: 21300030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      ExplosionSpritesheet_12: 21300024
+      ExplosionSpritesheet_6: 21300012
+      ExplosionSpritesheet_1: 21300002
+      ExplosionSpritesheet_4: 21300008
+      ExplosionSpritesheet_11: 21300022
+      ExplosionSpritesheet_3: 21300006
+      ExplosionSpritesheet_9: 21300018
+      ExplosionSpritesheet_15: 21300030
+      ExplosionSpritesheet_2: 21300004
+      ExplosionSpritesheet_8: 21300016
+      ExplosionSpritesheet_14: 21300028
+      ExplosionSpritesheet_0: 21300000
+      ExplosionSpritesheet_10: 21300020
+      ExplosionSpritesheet_7: 21300014
+      ExplosionSpritesheet_13: 21300026
+      ExplosionSpritesheet_5: 21300010
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
