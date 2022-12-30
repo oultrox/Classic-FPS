@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyRanged : Enemy
 {
+    [Header("====== Ranged ======")]
     [Header("Proyectil")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private int bulletDamage = 20;
@@ -27,15 +28,29 @@ public class EnemyRanged : Enemy
     private Transform playerTransform;
     private float attackTimer;
     private int nextWaypoint = 0;
-
+    
     private Vector3 waypoint;
     private bool isWaypointBlocked;
     private float waypointTimer;
     private float waypointTravelTime;
+    private Animator anim;
+
+
+
     public override void Awake()
     {
         base.Awake();
+        anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    }
+
+    public void Update()
+    {
+        if (navMesh.remainingDistance <= 1.0f)
+        {
+           anim.SetBool("isMoving", false);
+           anim.SetBool("isMovingSides", false);
+        }
     }
 
     public override bool IsLooking()
@@ -47,7 +62,7 @@ public class EnemyRanged : Enemy
     {
         navMesh.destination = patrolWayPoints[nextWaypoint].position;
         navMesh.isStopped = false;
-        animator.SetBool("isMoving", !navMesh.isStopped);
+        anim.SetBool("isMoving", !navMesh.isStopped);
         if (navMesh.remainingDistance <= navMesh.stoppingDistance && !navMesh.pathPending)
         {
             nextWaypoint = (nextWaypoint + 1) % patrolWayPoints.Length;
@@ -61,13 +76,13 @@ public class EnemyRanged : Enemy
         float distanceBetweenWayPoint = (waypoint - selfTransform.position).sqrMagnitude;
         if (distanceBetweenWayPoint < (1 * 1) || isWaypointBlocked || waypointTimer > waypointTravelTime)
         {
-            animator.SetBool("isMoving", false);
-            animator.SetBool("isMovingSides", false);
+            anim.SetBool("isMoving", false);
+            anim.SetBool("isMovingSides", false);
             Wander();
         }
         else
         {
-            animator.SetBool("isMoving", true);
+            anim.SetBool("isMoving", true);
             navMesh.destination = waypoint;
             navMesh.isStopped = false;
         }
@@ -80,14 +95,14 @@ public class EnemyRanged : Enemy
         {
             navMesh.destination = playerTransform.position;
             navMesh.isStopped = false;
-            animator.SetBool("isMoving", true);
+            anim.SetBool("isMoving", true);
             
         }
         if (navMesh.remainingDistance < minDistanceChase)
         {
            navMesh.isStopped = true;
-           animator.SetBool("isMoving", false);
-           animator.SetBool("isMovingSides", false);
+           anim.SetBool("isMoving", false);
+           anim.SetBool("isMovingSides", false);
         }
     } 
 

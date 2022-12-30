@@ -35,11 +35,10 @@ public class PlayerMovement : MonoBehaviour {
 
         float horizontalRotation = Input.GetAxis("Mouse X");
         transform.Rotate(0, horizontalRotation, 0);
-
         verticalRotation -= Input.GetAxis("Mouse Y");
         verticalRotation = Mathf.Clamp(verticalRotation, -verticalRotationLimit, verticalRotationLimit);
         Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation,0, 0);
-  
+
         // Calculating the movement based on input
         if (Input.GetKey(KeyCode.LeftShift))
         {

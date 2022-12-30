@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour {
 
+    [Header("====== Enemy ======")]
     [Header("Movimiento")]
     [SerializeField] protected float movementSpeed = 5;
     [SerializeField] protected float accelerationStep = 2f;
