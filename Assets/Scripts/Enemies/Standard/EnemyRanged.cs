@@ -46,12 +46,16 @@ public class EnemyRanged : Enemy
 
     public void Update()
     {
-        if (navMesh.remainingDistance <= 1.0f)
+        if (this.NavMesh.remainingDistance <= 1.0f)
         {
            anim.SetBool("isMoving", false);
            anim.SetBool("isMovingSides", false);
         }
     }
+
+    //------------------------------------------------------------------
+    // Enemy methods
+    //------------------------------------------------------------------
 
     public override bool IsLooking()
     {
@@ -60,10 +64,10 @@ public class EnemyRanged : Enemy
 
     public override void Patrol()
     {
-        navMesh.destination = patrolWayPoints[nextWaypoint].position;
-        navMesh.isStopped = false;
-        anim.SetBool("isMoving", !navMesh.isStopped);
-        if (navMesh.remainingDistance <= navMesh.stoppingDistance && !navMesh.pathPending)
+        this.NavMesh.destination = patrolWayPoints[nextWaypoint].position;
+        this.NavMesh.isStopped = false;
+        anim.SetBool("isMoving", !NavMesh.isStopped);
+        if (this.NavMesh.remainingDistance <= NavMesh.stoppingDistance && !this.NavMesh.pathPending)
         {
             nextWaypoint = (nextWaypoint + 1) % patrolWayPoints.Length;
         }
@@ -71,6 +75,8 @@ public class EnemyRanged : Enemy
 
     public override void Walk()
     {
+
+        Debug.Log("Walking.");
         waypointTimer += Time.deltaTime;
 
         float distanceBetweenWayPoint = (waypoint - selfTransform.position).sqrMagnitude;
@@ -79,28 +85,29 @@ public class EnemyRanged : Enemy
             anim.SetBool("isMoving", false);
             anim.SetBool("isMovingSides", false);
             Wander();
+            Debug.Log("Eh, it's blocked?");
         }
         else
         {
             anim.SetBool("isMoving", true);
-            navMesh.destination = waypoint;
-            navMesh.isStopped = false;
+            this.NavMesh.destination = waypoint;
+            this.NavMesh.isStopped = false;
         }
         
     }
 
     public override void Chase()
     {
-        if (!navMesh.pathPending && (playerTransform.position - selfTransform.position).sqrMagnitude > minDistanceChase * minDistanceChase)
+        if (!this.NavMesh.pathPending && (playerTransform.position - selfTransform.position).sqrMagnitude > minDistanceChase * minDistanceChase)
         {
-            navMesh.destination = playerTransform.position;
-            navMesh.isStopped = false;
+            this.NavMesh.destination = playerTransform.position;
+            this.NavMesh.isStopped = false;
             anim.SetBool("isMoving", true);
             
         }
-        if (navMesh.remainingDistance < minDistanceChase)
+        if (this.NavMesh.remainingDistance < minDistanceChase)
         {
-           navMesh.isStopped = true;
+           this.NavMesh.isStopped = true;
            anim.SetBool("isMoving", false);
            anim.SetBool("isMovingSides", false);
         }
@@ -135,13 +142,6 @@ public class EnemyRanged : Enemy
         
     }
 
-    private IEnumerator Alert()
-    {
-        sightDistance *= 4;
-        yield return new WaitForSeconds(0.1f);
-        sightDistance /= 4;
-    }
-
     public override void Die()
     {
         //Checking for testing purposes.
@@ -155,6 +155,13 @@ public class EnemyRanged : Enemy
     //------------------------------------------------------------------
     // Private methods that helps the Enemy implementation
     //------------------------------------------------------------------
+
+    private IEnumerator Alert()
+    {
+        sightDistance *= 4;
+        yield return new WaitForSeconds(0.1f);
+        sightDistance /= 4;
+    }
 
     private void Shoot(float anguloDisparo)
     {
