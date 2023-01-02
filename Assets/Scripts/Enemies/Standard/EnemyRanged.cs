@@ -19,8 +19,9 @@ public class EnemyRanged : Enemy
     [SerializeField] private float viewAngle;
     [SerializeField] private LayerMask raycastMask;
 
-    [Header("Patrol")]
-    [SerializeField] private float walkRange = 3;
+    [Header("Patrol (5 is minimum)")]
+    [Min(5)]
+    [SerializeField] private float walkRange = 5;
     [SerializeField] private Transform[] patrolWayPoints;
     
 
