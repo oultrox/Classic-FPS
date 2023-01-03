@@ -10,6 +10,10 @@ public class HeadBobbing : MonoBehaviour
     [SerializeField] private bool isHeadBobbing = true;
     private float timer = 0.0f;
 
+    private float translateChange;
+    private float totalAxes;
+    private Vector3 cSharpConversion;
+    private float limitIteration = Mathf.PI * 2;
     void Update()
     {
         if (ManagerScreen.instance.IsPaused())
@@ -20,7 +24,7 @@ public class HeadBobbing : MonoBehaviour
         float waveslice = 0.0f;
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        Vector3 cSharpConversion = transform.localPosition;
+        cSharpConversion = transform.localPosition;
 
         if (Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
         {
@@ -29,18 +33,20 @@ public class HeadBobbing : MonoBehaviour
         else
         {
             waveslice = Mathf.Sin(timer);
-            timer = timer + bobbingSpeed;
-            if (timer > Mathf.PI * 2)
+            
+            // Timer routine for making the bobbling.
+            timer = timer + (bobbingSpeed * Time.deltaTime);
+            if (timer > limitIteration)
             {
-                timer = timer - (Mathf.PI * 2);
+                timer = timer - limitIteration;
             }
         }
 
         if (waveslice != 0)
         {
-            float translateChange = waveslice * bobbingHeight;
-            float totalAxes = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
-            totalAxes = Mathf.Clamp(totalAxes, 0.0f, 1.0f);
+             translateChange = waveslice * bobbingHeight;
+             totalAxes = (Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+             totalAxes = Mathf.Clamp(totalAxes, 0.0f, 1.0f);
             translateChange = totalAxes * translateChange;
             if (isHeadBobbing)
                 cSharpConversion.y = midpoint + translateChange;
@@ -54,7 +60,6 @@ public class HeadBobbing : MonoBehaviour
             else
                 cSharpConversion.x = 0;
         }
-
         transform.localPosition = cSharpConversion;
     }
 

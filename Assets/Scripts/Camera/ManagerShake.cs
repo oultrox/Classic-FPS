@@ -87,11 +87,11 @@ public class ManagerShake : MonoBehaviour
 
             if (isZoomingIn)
             {
-                cameraSelf.fieldOfView += zoomSpeed / 8;
+                cameraSelf.fieldOfView += (zoomSpeed / 8) * Time.deltaTime;
             }
             else
             {
-                cameraSelf.fieldOfView -= zoomSpeed / 8;
+                cameraSelf.fieldOfView -= (zoomSpeed / 8) * Time.deltaTime;
             }
             yield return null;
         }
