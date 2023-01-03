@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour {
 
-	[SerializeField] private int startingHealth;
+	[SerializeField] 
+    private int startingHealth;
 	private int currentHealth;
     private static bool isDead;
-	
+    public static PlayerHealth instance;
+    
+    void OnEnable () 	
+    { 	
+        instance = this; 	
+    } 	
+    
+    void OnDisable () 	
+    {
+        instance = null; 	
+    } 
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -32,4 +44,22 @@ public class PlayerHealth : MonoBehaviour {
         this.GetComponent<PlayerMovement>().enabled = false;
         this.GetComponentInChildren<SpriteRenderer>().enabled = false;
     }
+
+    #region Properties
+
+    public PlayerHealth Instance
+    {
+        get
+        {
+            return Instance;
+        }
+
+        set
+        {
+            Instance = value;
+        }
+    }
+    
+    #endregion
+
 }

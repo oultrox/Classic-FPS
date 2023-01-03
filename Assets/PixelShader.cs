@@ -6,7 +6,7 @@ using System.Collections;
 public class PixelShader : MonoBehaviour
 {
     public int width = 720;
-    private int height;
+    private int height = 1;
 
     public Camera cam;
 

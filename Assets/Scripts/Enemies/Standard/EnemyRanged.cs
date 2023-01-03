@@ -42,7 +42,7 @@ public class EnemyRanged : Enemy
     {
         base.Awake();
         anim = GetComponent<Animator>();
-        playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        playerTransform = PlayerHealth.instance.GetComponent<Transform>();
     }
 
     public void Update()
@@ -77,7 +77,6 @@ public class EnemyRanged : Enemy
     public override void Walk()
     {
 
-        Debug.Log("Walking.");
         waypointTimer += Time.deltaTime;
 
         float distanceBetweenWayPoint = (waypoint - selfTransform.position).sqrMagnitude;
@@ -86,7 +85,6 @@ public class EnemyRanged : Enemy
             anim.SetBool("isMoving", false);
             anim.SetBool("isMovingSides", false);
             Wander();
-            Debug.Log("Eh, it's blocked?");
         }
         else
         {
