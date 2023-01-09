@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class EnemyRanged : Enemy
@@ -34,23 +32,27 @@ public class EnemyRanged : Enemy
     private bool isWaypointBlocked;
     private float waypointTimer;
     private float waypointTravelTime;
-    private Animator anim;
 
 
 
     public override void Awake()
     {
         base.Awake();
-        anim = GetComponent<Animator>();
-        playerTransform = PlayerHealth.instance.GetComponent<Transform>();
+        playerTransform = PlayerHealth.instance.GetComponent<Transform>(); 
+        Sexar();
+    }
+
+    public new void Sexar()
+    {
+        Debug.Log("H0li B");
     }
 
     public void Update()
     {
-        if (this.NavMesh.remainingDistance <= 1.0f)
+        if (NavMesh.remainingDistance <= 1.0f)
         {
-           anim.SetBool("isMoving", false);
-           anim.SetBool("isMovingSides", false);
+           Animator.SetBool("isMoving", false);
+           Animator.SetBool("isMovingSides", false);
         }
     }
 
@@ -60,15 +62,15 @@ public class EnemyRanged : Enemy
 
     public override bool IsLooking()
     {
-       return (playerTransform.position - selfTransform.position).sqrMagnitude < sightDistance * sightDistance;
+       return (playerTransform.position - SelfTransform.position).sqrMagnitude < sightDistance * sightDistance;
     }
 
     public override void Patrol()
     {
-        this.NavMesh.destination = patrolWayPoints[nextWaypoint].position;
-        this.NavMesh.isStopped = false;
-        anim.SetBool("isMoving", !NavMesh.isStopped);
-        if (this.NavMesh.remainingDistance <= NavMesh.stoppingDistance && !this.NavMesh.pathPending)
+        NavMesh.destination = patrolWayPoints[nextWaypoint].position;
+        NavMesh.isStopped = false;
+        Animator.SetBool("isMoving", !NavMesh.isStopped);
+        if (NavMesh.remainingDistance <= NavMesh.stoppingDistance && !NavMesh.pathPending)
         {
             nextWaypoint = (nextWaypoint + 1) % patrolWayPoints.Length;
         }
@@ -79,36 +81,36 @@ public class EnemyRanged : Enemy
 
         waypointTimer += Time.deltaTime;
 
-        float distanceBetweenWayPoint = (waypoint - selfTransform.position).sqrMagnitude;
+        float distanceBetweenWayPoint = (waypoint - SelfTransform.position).sqrMagnitude;
         if (distanceBetweenWayPoint < (1 * 1) || isWaypointBlocked || waypointTimer > waypointTravelTime)
         {
-            anim.SetBool("isMoving", false);
-            anim.SetBool("isMovingSides", false);
+            Animator.SetBool("isMoving", false);
+            Animator.SetBool("isMovingSides", false);
             Wander();
         }
         else
         {
-            anim.SetBool("isMoving", true);
-            this.NavMesh.destination = waypoint;
-            this.NavMesh.isStopped = false;
+            Animator.SetBool("isMoving", true);
+            NavMesh.destination = waypoint;
+            NavMesh.isStopped = false;
         }
         
     }
 
     public override void Chase()
     {
-        if (!this.NavMesh.pathPending && (playerTransform.position - selfTransform.position).sqrMagnitude > minDistanceChase * minDistanceChase)
+        if (!NavMesh.pathPending && (playerTransform.position - SelfTransform.position).sqrMagnitude > minDistanceChase * minDistanceChase)
         {
-            this.NavMesh.destination = playerTransform.position;
-            this.NavMesh.isStopped = false;
-            anim.SetBool("isMoving", true);
+            NavMesh.destination = playerTransform.position;
+            NavMesh.isStopped = false;
+            Animator.SetBool("isMoving", true);
             
         }
-        if (this.NavMesh.remainingDistance < minDistanceChase)
+        if (NavMesh.remainingDistance < minDistanceChase)
         {
-           this.NavMesh.isStopped = true;
-           anim.SetBool("isMoving", false);
-           anim.SetBool("isMovingSides", false);
+            NavMesh.isStopped = true;
+            Animator.SetBool("isMoving", false);
+            Animator.SetBool("isMovingSides", false);
         }
     } 
 
@@ -146,7 +148,7 @@ public class EnemyRanged : Enemy
         //Checking for testing purposes.
         if (corpse)
         {
-            Instantiate(corpse, selfTransform.position, selfTransform.rotation);
+            Instantiate(corpse, SelfTransform.position, SelfTransform.rotation);
         }
         Destroy(gameObject);
     }
@@ -164,12 +166,12 @@ public class EnemyRanged : Enemy
 
     private void Shoot(float anguloDisparo)
     {
-        Vector3 direction = playerTransform.position - selfTransform.position;
+        Vector3 direction = playerTransform.position - SelfTransform.position;
         direction = Quaternion.Euler(anguloDisparo, anguloDisparo, 0 ) * direction;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         direction = direction.normalized;
 
-        bulletObj = Instantiate(bulletPrefab, selfTransform.position, Quaternion.AngleAxis(angle, Vector3.forward)) as GameObject;
+        bulletObj = Instantiate(bulletPrefab, SelfTransform.position, Quaternion.AngleAxis(angle, Vector3.forward)) as GameObject;
         bulletObj.GetComponent<BulletEnemy>().Init(bulletDamage, direction, bulletSpeed);
     }
 
@@ -178,13 +180,13 @@ public class EnemyRanged : Enemy
     {
         waypointTimer = 0;
         // does nothing except pick a new destination to go to
-        waypoint = new Vector3(UnityEngine.Random.Range(selfTransform.position.x - walkRange, selfTransform.position.x + walkRange),
-                               0, UnityEngine.Random.Range(selfTransform.position.z - walkRange, selfTransform.position.z + walkRange));
+        waypoint = new Vector3(UnityEngine.Random.Range(SelfTransform.position.x - walkRange, SelfTransform.position.x + walkRange),
+                               0, UnityEngine.Random.Range(SelfTransform.position.z - walkRange, SelfTransform.position.z + walkRange));
 
         // if the waypoint is blocked the Walk method will call Wander() again to make sure the enemy follows a correct path.
-        isWaypointBlocked = Physics.Linecast(selfTransform.position, waypoint,raycastMask);
+        isWaypointBlocked = Physics.Linecast(SelfTransform.position, waypoint,raycastMask);
 
-        float distance = (waypoint - selfTransform.position).sqrMagnitude;
+        float distance = (waypoint - SelfTransform.position).sqrMagnitude;
         waypointTravelTime = distance / (movementSpeed * movementSpeed);
     }
 

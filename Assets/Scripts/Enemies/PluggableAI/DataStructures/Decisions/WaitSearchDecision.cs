@@ -5,6 +5,6 @@ public class WaitSearchDecision : Decision
 {
     public override bool Decide(EnemyStateMachine stateController)
     {
-        return stateController.CheckIfCountDownElapsed(stateController.Enemy.SearchTime);
+        return stateController.CheckIfCountDownElapsed(stateController.Enemy.SearchDuration);
     }
 }

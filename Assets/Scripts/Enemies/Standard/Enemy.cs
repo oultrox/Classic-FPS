@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.AI;
+﻿using UnityEngine.AI;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour {
@@ -20,17 +18,17 @@ public abstract class Enemy : MonoBehaviour {
     [Header("Transiciones (0 lo deja continuo)")]
     [SerializeField] protected float idleDuration = 1.5f;
     [SerializeField] protected float walkDuration = 4;
-    [SerializeField] private float searchTime = 10f;
+    [SerializeField] private float searchDuration = 10f;
 
     protected NavMeshAgent navMesh;
-    protected Transform selfTransform;
-    protected Animator animator;
+    private Transform selfTransform;
+    private Animator animator;
 
     public virtual void Awake()
     {
-        selfTransform = this.GetComponent<Transform>();
-        navMesh = this.GetComponent<NavMeshAgent>();
-        animator = this.GetComponent<Animator>();
+        SelfTransform = GetComponent<Transform>();
+        NavMesh = GetComponent<NavMeshAgent>();
+        Animator = GetComponent<Animator>();
     }
     public abstract bool IsLooking();
     public abstract void Walk();
@@ -39,6 +37,11 @@ public abstract class Enemy : MonoBehaviour {
     public abstract void Attack();
     public abstract void TakeDamage(int damage);
     public abstract void Die();
+
+    public  void Sexar()
+    {
+        Debug.Log("Holi A");
+    }
 
     #region Properties
     public float MovementSpeed
@@ -132,16 +135,16 @@ public abstract class Enemy : MonoBehaviour {
         }
     }
 
-    public float SearchTime
+    public float SearchDuration
     {
         get
         {
-            return searchTime;
+            return searchDuration;
         }
 
         set
         {
-            searchTime = value;
+            searchDuration = value;
         }
     }
 
@@ -157,5 +160,8 @@ public abstract class Enemy : MonoBehaviour {
             navMesh = value;
         }
     }
+
+    protected Transform SelfTransform { get => selfTransform; set => selfTransform = value; }
+    protected Animator Animator { get => animator; set => animator = value; }
     #endregion
 }

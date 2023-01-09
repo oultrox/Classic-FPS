@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-//State machine que será usada por los enemigos para llamar los estados.
+//Uses the enemy class to set the states via the Plugglable IA with ScriptableObjects.
 public class EnemyStateMachine : MonoBehaviour {
 
     [SerializeField] private State currentState;
@@ -17,10 +17,10 @@ public class EnemyStateMachine : MonoBehaviour {
         stateTimeElapsed = 0;
     }
 
-    void Update ()
+    void Update()
     {
         currentState.UpdateState(this);
-	}
+    }
 
     void FixedUpdate()
     {
@@ -41,7 +41,6 @@ public class EnemyStateMachine : MonoBehaviour {
 
     public bool CheckIfCountDownElapsed(float duration)
     {
-        //Para evitar transitar si la duracion es 0.
         if (duration <= 0)
         {
             return false;
