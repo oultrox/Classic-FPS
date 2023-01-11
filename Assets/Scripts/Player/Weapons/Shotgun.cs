@@ -1,42 +1,25 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Shotgun : MonoBehaviour {
+public class Shotgun : Weapon {
 
-    [Header("Damage")]
-    [SerializeField]
-    private int damage = 20;
 
-    [Header("Fire stuff")]
+    [Header("Shotgun stuff")]
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float maxFireDistance = 100f;
     [SerializeField] private float fireRadius = 10f;
     [SerializeField] private LayerMask shootLayer;
 
-    [Header("Ammunation")]
-    [SerializeField] private int ammoAmount = 200;
-    [SerializeField] private int ammoClipSize = 12;
-    [SerializeField] private float reloadTime = 1;
-
-    [Header("Shake")]
-    [SerializeField] private float shakeDuration = 0.08f;
-    [SerializeField] private float shakeMagnitude = 4;
-
     private Transform camTransform;
     private Animator anim;
-    private int ammoLeft;
-    private int ammoClipLeft;
-    private bool isReloading = false;
     private float shootCooldown = 0f;
-    // ------------------------------------------------------
-    // API Methods
-    // ------------------------------------------------------
+    private RaycastHit hit;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        ammoClipLeft = ammoClipSize;
-        ammoLeft = ammoAmount;
+        AmmoClipLeft = AmmoClipSize;
+        AmmoLeft = AmmoAmount;
         shootCooldown = fireRate;
         camTransform = Camera.main.transform;
     }
@@ -53,25 +36,21 @@ public class Shotgun : MonoBehaviour {
             shootCooldown += Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && isReloading == false)
+        if (Input.GetKeyDown(KeyCode.R) && IsReloading == false)
         {
             Reload();
         }
         
-        if (Input.GetButtonDown("Fire1") && isReloading == false && shootCooldown >= fireRate)
+        if (Input.GetButtonDown("Fire1") && IsReloading == false && shootCooldown >= fireRate)
         {
             Shoot();
         }
     }
-    private RaycastHit hit;
-
-    // ------------------------------------------------------
-    // Custom methods
-    // ------------------------------------------------------
+    
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
     private void Shoot()
     {
-        if (ammoClipLeft <= 0)
+        if (AmmoClipLeft <= 0)
         {
             Reload();
             return;
@@ -79,22 +58,22 @@ public class Shotgun : MonoBehaviour {
 
         shootCooldown = 0f;
         anim.SetTrigger("Shoot");
-        ammoClipLeft -= 1;
+        AmmoClipLeft -= 1;
 
         if (Physics.SphereCast(camTransform.position, fireRadius, camTransform.forward, out hit, maxFireDistance, shootLayer))
         {
             if (hit.collider.CompareTag("Enemy"))
             {
-                hit.collider.GetComponent<Enemy>().TakeDamage(damage);
+                hit.collider.GetComponent<Enemy>().TakeDamage(Damage);
             }
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.03f;
-        ManagerShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
+        ManagerShake.instance.StartShakeRotating(ShakeDuration, ShakeMagnitude);
         ManagerShake.instance.StartZoomEffect();
-        WeaponShake.instance.StartShake(shakeDuration, 0.1f);
+        WeaponShake.instance.StartShake(ShakeDuration, 0.1f);
         
         //Check after in order to reload automatic if there's enough projectiles.
-        if (ammoClipLeft <= 0)
+        if (AmmoClipLeft <= 0)
         {
             Reload();
             return;
@@ -108,30 +87,30 @@ public class Shotgun : MonoBehaviour {
 
     private IEnumerator ReloadWeapon()
     {
-        int bulletsToReload = ammoClipSize - ammoClipLeft;
+        int bulletsToReload = AmmoClipSize - AmmoClipLeft;
         // If there's something to reload - activate coroutine for the delay. 
-        if (bulletsToReload > 0 && ammoLeft > 0)
+        if (bulletsToReload > 0 && AmmoLeft > 0)
         {
-            isReloading = true;
-            yield return new WaitForSeconds(reloadTime);
+            IsReloading = true;
+            yield return new WaitForSeconds(ReloadTime);
         }
         else
         {
             //no ammo.
         }
 
-        if (isReloading)
+        if (IsReloading)
         {
-            isReloading = false;
-            if (ammoLeft >= bulletsToReload)
+            IsReloading = false;
+            if (AmmoLeft >= bulletsToReload)
             {
-                ammoLeft -= bulletsToReload;
-                ammoClipLeft = ammoClipSize;
+                AmmoLeft -= bulletsToReload;
+                AmmoClipLeft = AmmoClipSize;
             }
-            else if (ammoLeft > 0 && ammoLeft < bulletsToReload)
+            else if (AmmoLeft > 0 && AmmoLeft < bulletsToReload)
             {
-                ammoClipLeft += ammoLeft;
-                ammoLeft = 0;
+                AmmoClipLeft += AmmoLeft;
+                AmmoLeft = 0;
             }
         }
     }

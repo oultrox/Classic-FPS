@@ -2,31 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RocketLauncher : MonoBehaviour {
+public class RocketLauncher : Weapon {
 
     [Header("Prefab referencies")]
     [SerializeField] private GameObject rocketPrefab;
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private GameObject spawnPoint;
 
-    [Header("Bullet & damage")]
-    [SerializeField] private int damage = 20;
+    [Header("Rocket Properties")]
     [SerializeField] private float rocketForce;
     [SerializeField] private float explosionRadius;
     [SerializeField] LayerMask explosionLayer;
-
-    [Header("Ammunation")]
-    [SerializeField] private int ammoAmount = 200;
-    [SerializeField] private int ammoClipSize = 12;
-    [SerializeField] private float reloadTime = 1;
-
-    [Header("Shake")]
-    [SerializeField] private float shakeDuration = 0.08f;
-    [SerializeField] private float shakeMagnitude = 4;
-
-    private int ammoLeft;
-    private int ammoClipLeft;
-    private bool isReloading;
+    
     private bool isCharged;
     private bool isShot;
 
@@ -36,8 +23,8 @@ public class RocketLauncher : MonoBehaviour {
 
     private void Awake()
     {
-        ammoClipLeft = ammoClipSize;
-        ammoLeft = ammoAmount;
+        AmmoClipLeft = AmmoClipSize;
+        AmmoLeft = AmmoAmount;
     }
 
     private void Update()
@@ -47,11 +34,11 @@ public class RocketLauncher : MonoBehaviour {
             return;
         }
 
-        if (Input.GetButtonDown("Fire1") && isReloading == false)
+        if (Input.GetButtonDown("Fire1") && IsReloading == false)
         {
             Shoot();
         }
-        if (Input.GetKeyDown(KeyCode.R) && isReloading == false)
+        if (Input.GetKeyDown(KeyCode.R) && IsReloading == false)
         {
             Reload();
         }
@@ -74,24 +61,24 @@ public class RocketLauncher : MonoBehaviour {
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
     private void Shoot()
     {
-        if (ammoClipLeft <= 0)
+        if (AmmoClipLeft <= 0)
         {
             Reload();
             return;
         }
 
-        ammoClipLeft -= 1;
+        AmmoClipLeft -= 1;
         GameObject rocketInstantiated = Instantiate(rocketPrefab, spawnPoint.transform.position, Quaternion.identity);
-        rocketInstantiated.GetComponent<Rocket>().Init(damage,explosionRadius,explosionLayer,explosionPrefab);
+        rocketInstantiated.GetComponent<Rocket>().Init(Damage,explosionRadius,explosionLayer,explosionPrefab);
         Rigidbody rocketRbody = rocketInstantiated.GetComponent<Rigidbody>();
         rocketRbody.AddForce(Camera.main.transform.forward * rocketForce, ForceMode.Impulse);
 
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
-        ManagerShake.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
-        WeaponShake.instance.StartShake(shakeDuration, 0.1f);
+        ManagerShake.instance.StartShakeRotating(ShakeDuration, ShakeMagnitude);
+        WeaponShake.instance.StartShake(ShakeDuration, 0.1f);
 
         //Check after in order to reload automatic if there's enough projectiles.
-        if (ammoClipLeft <= 0)
+        if (AmmoClipLeft <= 0)
         {
             Reload();
             return;
@@ -105,30 +92,30 @@ public class RocketLauncher : MonoBehaviour {
 
     private IEnumerator ReloadWeapon()
     {
-        int bulletsToReload = ammoClipSize - ammoClipLeft;
+        int bulletsToReload = AmmoClipSize - AmmoClipLeft;
         // If there's something to reload - activate coroutine for the delay. 
-        if (bulletsToReload > 0 && ammoLeft > 0)
+        if (bulletsToReload > 0 && AmmoLeft > 0)
         {
-            isReloading = true;
-            yield return new WaitForSeconds(reloadTime);
+            IsReloading = true;
+            yield return new WaitForSeconds(ReloadTime);
         }
         else
         {
             //no ammo.
         }
 
-        if (isReloading)
+        if (IsReloading)
         {
-            isReloading = false;
-            if (ammoLeft >= bulletsToReload)
+            IsReloading = false;
+            if (AmmoLeft >= bulletsToReload)
             {
-                ammoLeft -= bulletsToReload;
-                ammoClipLeft = ammoClipSize;
+                AmmoLeft -= bulletsToReload;
+                AmmoClipLeft = AmmoClipSize;
             }
-            else if (ammoLeft > 0 && ammoLeft < bulletsToReload)
+            else if (AmmoLeft > 0 && AmmoLeft < bulletsToReload)
             {
-                ammoClipLeft += ammoLeft;
-                ammoLeft = 0;
+                AmmoClipLeft += AmmoLeft;
+                AmmoLeft = 0;
             }
         }
     }

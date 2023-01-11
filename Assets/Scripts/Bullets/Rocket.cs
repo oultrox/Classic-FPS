@@ -60,11 +60,10 @@ public class Rocket : MonoBehaviour {
         Collider[] hitColliders = Physics.OverlapSphere(contactPoint, radius, layerMask);
         for (int i = 0; i < hitColliders.Length; i++)
         {
-            if (hitColliders[i].gameObject.CompareTag("Enemy") == false)
+            if (hitColliders[i].gameObject.CompareTag("Enemy") == true)
             {
-                continue;
+                hitColliders[i].GetComponent<Enemy>().TakeDamage(damage);
             }
-            hitColliders[i].GetComponent<Enemy>().TakeDamage(damage);
         }
 
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);

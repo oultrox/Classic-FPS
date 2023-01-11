@@ -29,6 +29,7 @@ public abstract class Enemy : MonoBehaviour {
         SelfTransform = GetComponent<Transform>();
         NavMesh = GetComponent<NavMeshAgent>();
         Animator = GetComponent<Animator>();
+        NavMesh.speed = MovementSpeed;
     }
     public abstract bool IsLooking();
     public abstract void Walk();
@@ -37,11 +38,6 @@ public abstract class Enemy : MonoBehaviour {
     public abstract void Attack();
     public abstract void TakeDamage(int damage);
     public abstract void Die();
-
-    public  void Sexar()
-    {
-        Debug.Log("Holi A");
-    }
 
     #region Properties
     public float MovementSpeed

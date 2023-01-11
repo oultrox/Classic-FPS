@@ -38,14 +38,9 @@ public class EnemyRanged : Enemy
     public override void Awake()
     {
         base.Awake();
-        playerTransform = PlayerHealth.instance.GetComponent<Transform>(); 
-        Sexar();
+        playerTransform = PlayerHealth.instance.GetComponent<Transform>();
     }
 
-    public new void Sexar()
-    {
-        Debug.Log("H0li B");
-    }
 
     public void Update()
     {
