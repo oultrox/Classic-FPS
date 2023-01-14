@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyStateMachine))]
 public class EnemyRanged : Enemy
 {
     [Header("====== Ranged ======")]
