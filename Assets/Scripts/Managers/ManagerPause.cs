@@ -13,27 +13,18 @@ public class ManagerPause : MonoBehaviour {
         AmbientOcclusion = 4
     }
 
-    public static ManagerPause instance;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private PostProcessProfile pp;
 
+    private static bool isPaused;
     private bool isMotionBlurEnabled;
     private bool isBloomEnabled;
     private bool isChromaticEnabled;
     private bool isVignetteEnabled;
     private bool isParticleEnabled;
     private ManagerScreen.Screen originalScreen;
-
-    //----Métodos API------
-    // Singleton creation
-    private void Awake()
-    {
-        //Singleton creation
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
-    }
+    
+    public static bool IsPaused { get => isPaused; set => isPaused = value; }
 
     void Start ()
     {
