@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyStateMachine))]
-public class EnemyRanged : Enemy
+public class EnemyRangedController : Enemy
 {
     [Header("====== Ranged ======")]
     [Header("Proyectil")]

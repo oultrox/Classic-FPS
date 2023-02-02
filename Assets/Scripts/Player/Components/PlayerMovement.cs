@@ -6,39 +6,32 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float playerWalkingSpeed = 5f;
     [SerializeField] private float playerRunningSpeed = 15f;
     [SerializeField] private float jumpStrength = 20f;
-    [SerializeField] private float verticalRotationLimit = 80f;
+    
     
     private CharacterController controller;
-    private float verticalRotation;
     private float forwardMovement;
     private float sideAwaysMovement;
     private Vector3 playerMovement;
     private float verticalVelocity;
 
-    // Use this for initialization
     private void Awake ()
     {
         controller = this.GetComponent<CharacterController>();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        verticalRotation = 0;
-        playerMovement = Vector3.zero;
 	}
+
+    private void Start()
+    {
+        playerMovement = Vector3.zero;
+    }
 
     private void Update()
     {
+        if (ManagerScreen.instance.IsPaused()) return;
+        ApplyMovement();
+    }
 
-        if (ManagerScreen.instance.IsPaused())
-        {
-            return;
-        }
-
-        float horizontalRotation = Input.GetAxis("Mouse X");
-        transform.Rotate(0, horizontalRotation, 0);
-        verticalRotation -= Input.GetAxis("Mouse Y");
-        verticalRotation = Mathf.Clamp(verticalRotation, -verticalRotationLimit, verticalRotationLimit);
-        Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation,0, 0);
-
+    private void ApplyMovement()
+    {
         // Calculating the movement based on input
         if (Input.GetKey(KeyCode.LeftShift))
         {
