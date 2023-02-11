@@ -3,65 +3,114 @@ using UnityEngine;
 using System;
 
 
-// TO DO: even better, avoid inheritance and uses components for looking, walking, patrolling, attacking with Interfaces for polymorphysm.
-public abstract class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour {
 
     [Header("====== Enemy ======")]
-    [Header("Movimiento")]
-    [SerializeField] protected float movementSpeed = 5;
-    [SerializeField] protected float accelerationStep = 2f;
-    [SerializeField] protected float minDistanceChase = 3f;
+    [Header("Movement")]
+    [SerializeField] private float movementSpeed = 5;
+    [SerializeField] private float accelerationStep = 2f;
+    [SerializeField] private float minDistanceChase = 3f;
 
-    [Header("Vida del enemigo")]
-    [SerializeField] protected int enemyHP = 100;
-    [SerializeField] protected int maxEnemyHP = 150;
-    [SerializeField] protected int scoreValue = 10;
-    [SerializeField] protected GameObject corpse;
+    [Header("Life del enemigo")]
+    [SerializeField] private int enemyHP = 100;
+    [SerializeField] private int maxEnemyHP = 150;
+    [SerializeField] private int scoreValue = 10;
+    [SerializeField] private GameObject corpse;
 
-    [Header("Transiciones (0 lo deja continuo)")]
-    [SerializeField] protected float idleDuration = 1.5f;
-    [SerializeField] protected float walkDuration = 4;
+    [Header("Transitions (0 it's infinite)")]
+    [SerializeField] private float idleDuration = 1.5f;
+    [SerializeField] private float walkDuration = 4;
     [SerializeField] private float searchDuration = 10f;
 
-    protected NavMeshAgent navMesh;
+    [Header("Attack")]
+    [SerializeField] private float attackRate = 1;
+    [SerializeField] private float sightDistance = 10f;
+
+    [Header("Vision")]
+    [SerializeField] private float viewAngle;
+    [SerializeField] private LayerMask raycastMask;
+
+    private NavMeshAgent navMesh;
     private Transform selfTransform;
     private Animator animator;
 
-    public virtual void Awake()
+    private IEnemyLook look;
+    private IEnemyAttack attack;
+    private IEnemyPatrol patrol;
+    private IEnemyWalk walk;
+    private IEnemyChase chase;
+    
+
+
+    private  void Awake()
     {
         SelfTransform = GetComponent<Transform>();
         NavMesh = GetComponent<NavMeshAgent>();
         Animator = GetComponent<Animator>();
+        playerTransform = PlayerHealth.instance.GetComponent<Transform>();
+        
+    }
+
+    private void Start()
+    {
         NavMesh.speed = MovementSpeed;
     }
-    public abstract bool IsLooking();
-    public abstract void Walk();
-    public abstract void Chase();
-    public abstract void Patrol();
-    public abstract void Attack();
-    public abstract void TakeDamage(int damage);
-    public abstract void Die();
 
     internal void InitChase()
     {
-        throw new NotImplementedException();
+        chase.Init();
     }
 
     internal void InitWalk()
     {
-        throw new NotImplementedException();
+        walk.Init();
     }
 
     internal void InitAttack()
     {
-        throw new NotImplementedException();
+        attack.Init();
     }
 
     internal void InitPatrol()
     {
-        throw new NotImplementedException();
+        patrol.Init();
     }
 
+    public  bool IsLooking()
+    {
+        return (playerTransform.position - SelfTransform.position).sqrMagnitude < sightDistance * sightDistance;
+    }
+
+    public  void Walk()
+    {
+        walk.Tick();
+    }
+
+    public  void Chase()
+    {
+        chase.Tick();
+    }
+
+    public  void Patrol()
+    {
+        patrol.Tick();
+    }
+
+    public  void Attack()
+    {
+        attack.Tick();
+    }
+
+    public  void TakeDamage(int damage)
+    {
+
+    }
+    public  void Die()
+    {
+
+    }
+
+    
     #region Properties
     public float MovementSpeed
     {
@@ -182,5 +231,7 @@ public abstract class Enemy : MonoBehaviour {
 
     protected Transform SelfTransform { get => selfTransform; set => selfTransform = value; }
     protected Animator Animator { get => animator; set => animator = value; }
+
+    private Transform playerTransform;
     #endregion
 }
