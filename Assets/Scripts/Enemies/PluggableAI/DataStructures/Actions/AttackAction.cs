@@ -6,8 +6,15 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PluggableAI/SM_Actions/Attack")]
 public class AttackAction : SM_Action
 {
+    public override void Initialize(EnemyStateMachine stateController)
+    {
+        stateController.Enemy.InitAttack();
+    }
+
     public override void Act(EnemyStateMachine stateController)
     {
         stateController.Enemy.Attack();
     }
+
+    
 }

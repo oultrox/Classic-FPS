@@ -1,6 +1,9 @@
 ﻿using UnityEngine.AI;
 using UnityEngine;
+using System;
 
+
+// TO DO: even better, avoid inheritance and uses components for looking, walking, patrolling, attacking with Interfaces for polymorphysm.
 public abstract class Enemy : MonoBehaviour {
 
     [Header("====== Enemy ======")]
@@ -38,6 +41,26 @@ public abstract class Enemy : MonoBehaviour {
     public abstract void Attack();
     public abstract void TakeDamage(int damage);
     public abstract void Die();
+
+    internal void InitChase()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void InitWalk()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void InitAttack()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void InitPatrol()
+    {
+        throw new NotImplementedException();
+    }
 
     #region Properties
     public float MovementSpeed

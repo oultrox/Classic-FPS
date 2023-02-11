@@ -30,6 +30,7 @@ public class PlayerAim : MonoBehaviour
     private void CheckPlayerLook()
     {
         if (_mainCamera == null) return;
+        if (ManagerPause.IsPaused) return;
 
         float horizontalRotation = Input.GetAxis("Mouse X");
         transform.Rotate(0, horizontalRotation, 0);

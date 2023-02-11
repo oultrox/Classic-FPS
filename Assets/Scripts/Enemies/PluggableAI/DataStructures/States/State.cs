@@ -10,6 +10,13 @@ public class State : ScriptableObject
 
     private bool decisionSucceded;
 
+    public void StartState(EnemyStateMachine stateController)
+    {
+        for (int i = 0; i < actions.Length; i++)
+        {
+            actions[i].Initialize(stateController);
+        }
+    }
     public void UpdateState(EnemyStateMachine stateController)
     {
         DoAction(stateController, SM_Action.UpdateType.Update);
@@ -35,7 +42,6 @@ public class State : ScriptableObject
                 actions[i].Act(stateController);
             }
         }
-        
     }
 
     private void CheckTransitions(EnemyStateMachine stateController)

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 //Uses the enemy class to set the states via the Plugglable IA with ScriptableObjects.
 public class EnemyStateMachine : MonoBehaviour {
@@ -8,13 +9,15 @@ public class EnemyStateMachine : MonoBehaviour {
     private Enemy enemy;
     private float stateTimeElapsed;
 
-    //-------------------------------------------------
-    // Métodos API
-    //-------------------------------------------------
     private void Awake()
     {
-        enemy = this.GetComponent<Enemy>();
+        enemy = GetComponent<Enemy>();
         stateTimeElapsed = 0;
+    }
+
+    private void Start()
+    {
+        currentState.StartState(this);
     }
 
     void Update()
@@ -27,14 +30,12 @@ public class EnemyStateMachine : MonoBehaviour {
         currentState.FixedUpdateState(this);
     }
 
-    //-------------------------------------------------
-    // Métodos Custom
-    //-------------------------------------------------
     public void TransitionToState(State nextState)
     {
         if (nextState != remainState)
         {
             currentState = nextState;
+            currentState.StartState(this);
             stateTimeElapsed = 0;
         }
     }
@@ -51,19 +52,15 @@ public class EnemyStateMachine : MonoBehaviour {
         return isCountDownElapsed;
     }
 
-
-    //-------------------------------------------------
-    // Métodos Editor
-    //-------------------------------------------------
     #if UNITY_EDITOR
-        void OnDrawGizmos()
+    void OnDrawGizmos()
+    {
+        if (currentState != null)
         {
-            if (currentState != null)
-            {
-                Gizmos.color = currentState.sceneGizmoColor;
-                Gizmos.DrawWireSphere(transform.position, 1f);
-            }
+            Gizmos.color = currentState.sceneGizmoColor;
+            Gizmos.DrawWireSphere(transform.position, 1f);
         }
+    }
     #endif
 
 

@@ -10,5 +10,7 @@ public abstract class SM_Action: ScriptableObject
     }
 
     public UpdateType updateType;
+
+    public abstract void Initialize(EnemyStateMachine stateController);
     public abstract void Act(EnemyStateMachine stateController);
 }
