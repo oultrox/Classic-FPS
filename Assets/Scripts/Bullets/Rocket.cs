@@ -48,7 +48,7 @@ public class Rocket : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("EnemyController"))
         {
             Explode(other.transform.position);
         }
@@ -60,9 +60,9 @@ public class Rocket : MonoBehaviour {
         Collider[] hitColliders = Physics.OverlapSphere(contactPoint, radius, layerMask);
         for (int i = 0; i < hitColliders.Length; i++)
         {
-            if (hitColliders[i].gameObject.CompareTag("Enemy") == true)
+            if (hitColliders[i].gameObject.CompareTag("EnemyController") == true)
             {
-                hitColliders[i].GetComponent<Enemy>().TakeDamage(damage);
+                hitColliders[i].GetComponent<EnemyController>().TakeDamage(damage);
             }
         }
 

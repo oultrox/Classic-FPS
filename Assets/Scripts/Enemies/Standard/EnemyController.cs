@@ -1,43 +1,35 @@
 ﻿using UnityEngine.AI;
 using UnityEngine;
 using System;
+using System.Collections;
 
-
-public class Enemy : MonoBehaviour 
+public class EnemyController : MonoBehaviour 
 {
     // TODO: Move to the health component.
-    [Header("Life del enemigo")]
+    [Header("Enemy Health")]
     [SerializeField] private int enemyHP = 100;
     [SerializeField] private int maxEnemyHP = 150;
     [SerializeField] private int scoreValue = 10;
     [SerializeField] private GameObject corpse;
+
+    // TODO: move to a look component I guess.
+    [Header("Enemy Sight")]
+    [SerializeField] private float sightDistance = 10f;
 
     [Header("Transitions (0 it's infinite)")]
     [SerializeField] private float idleDuration = 1.5f;
     [SerializeField] private float walkDuration = 4;
     [SerializeField] private float searchDuration = 10f;
     
-    // TODO: move to a look component I guess.
-    [SerializeField] private float sightDistance = 10f;
-
-
-    private NavMeshAgent navMesh;
-    private Transform selfTransform;
-    private Animator animator;
-
-    private IEnemyLook look;
+    private Transform playerTransform;
     private IEnemyAttack attack;
     private IEnemyPatrol patrol;
     private IEnemyWalk walk;
     private IEnemyChase chase;
     
 
-
     private  void Awake()
     {
-        SelfTransform = GetComponent<Transform>();
-        NavMesh = GetComponent<NavMeshAgent>();
-        Animator = GetComponent<Animator>();
         playerTransform = PlayerHealth.instance.GetComponent<Transform>();
         
         attack = GetComponent<IEnemyAttack>();
@@ -48,86 +40,80 @@ public class Enemy : MonoBehaviour
 
     internal void InitChase()
     {
-        chase.Init();
+        chase?.Init();
     }
 
     internal void InitWalk()
     {
-        walk.Init();
+        walk?.Init();
     }
 
     internal void InitAttack()
     {
-        attack.Init();
+        attack?.Init();
     }
 
     internal void InitPatrol()
     {
-        patrol.Init();
+        patrol?.Init();
     }
 
     public  bool IsLooking()
     {
-        return (playerTransform.position - SelfTransform.position).sqrMagnitude < sightDistance * sightDistance;
+        return (playerTransform.position - transform.position).sqrMagnitude < sightDistance * sightDistance;
     }
 
     public  void Walk()
     {
-        walk.Tick();
+        walk?.Tick();
     }
 
     public  void Chase()
     {
-        chase.Tick();
+        chase?.Tick();
     }
 
     public  void Patrol()
     {
-        patrol.Tick();
+        patrol?.Tick();
     }
 
     public  void Attack()
     {
-        attack.Tick();
+        attack?.Tick();
     }
 
-    public  void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
-
+        enemyHP -= damage;
+        if (enemyHP <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            StartCoroutine(Alert());
+        }
     }
-    public  void Die()
-    {
 
+    private IEnumerator Alert()
+    {
+        sightDistance *= 4;
+        yield return new WaitForSeconds(0.1f);
+        sightDistance /= 4;
+    }
+
+    public void Die()
+    {
+        if (corpse)
+        {
+            Instantiate(corpse, transform.position, transform.rotation);
+        }
+        Destroy(gameObject);
     }
 
 
     #region Properties
-    public int EnemyHP
-    {
-        get
-        {
-            return enemyHP;
-        }
-
-        set
-        {
-            enemyHP = value;
-        }
-    }
-
-    public int MaxEnemyHP
-    {
-        get
-        {
-            return maxEnemyHP;
-        }
-
-        set
-        {
-            maxEnemyHP = value;
-        }
-    }
-
     public int ScoreValue
     {
         get
@@ -179,23 +165,6 @@ public class Enemy : MonoBehaviour
             searchDuration = value;
         }
     }
-
-    public NavMeshAgent NavMesh
-    {
-        get
-        {
-            return navMesh;
-        }
-
-        set
-        {
-            navMesh = value;
-        }
-    }
-
-    protected Transform SelfTransform { get => selfTransform; set => selfTransform = value; }
-    protected Animator Animator { get => animator; set => animator = value; }
-
-    private Transform playerTransform;
     #endregion
+
 }

@@ -13,8 +13,6 @@ public class EnemyRangedAttack : MonoBehaviour,IEnemyAttack
     [SerializeField] private int bulletDamage = 20;
     [SerializeField] private float bulletSpeed = 10;
     
-    // TODO: Move to the health component.
-    [SerializeField] private int enemyHP = 100;
 
     private GameObject bulletObj;
     private Transform playerTransform;
@@ -24,26 +22,20 @@ public class EnemyRangedAttack : MonoBehaviour,IEnemyAttack
     {
         playerTransform = PlayerHealth.instance.GetComponent<Transform>();
     }
-    public void Init()
-    {
 
-    }
+    public void Init(){}
 
     public void Tick()
     {
         attackTimer += Time.deltaTime;
-
-        bool canEnemyAttack = attackTimer >= attackRate && enemyHP > 0;
-        if (!canEnemyAttack)
-        {
+        if (attackTimer < attackRate)
             return;
-        }
 
-        //Reinicio del timer.
         attackTimer = 0f;
         Shoot(0);
     }
 
+    // Enemy just instantiates a prefat directly to player.
     private void Shoot(float anguloDisparo)
     {
         Vector3 direction = playerTransform.position - transform.position;
@@ -54,4 +46,6 @@ public class EnemyRangedAttack : MonoBehaviour,IEnemyAttack
         bulletObj = Instantiate(bulletPrefab, transform.position, Quaternion.AngleAxis(angle, Vector3.forward)) as GameObject;
         bulletObj.GetComponent<BulletEnemy>().Init(bulletDamage, direction, bulletSpeed);
     }
+
+ 
 }

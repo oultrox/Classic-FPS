@@ -6,12 +6,12 @@ public class EnemyStateMachine : MonoBehaviour {
 
     [SerializeField] private State currentState;
     [SerializeField] private State remainState;
-    private Enemy enemy;
+    private EnemyController enemy;
     private float stateTimeElapsed;
 
     private void Awake()
     {
-        enemy = GetComponent<Enemy>();
+        enemy = GetComponent<EnemyController>();
         stateTimeElapsed = 0;
     }
 
@@ -65,7 +65,7 @@ public class EnemyStateMachine : MonoBehaviour {
 
 
     #region Properties
-    public Enemy Enemy
+    public EnemyController Enemy
     {
         get
         {

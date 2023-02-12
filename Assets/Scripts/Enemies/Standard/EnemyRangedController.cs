@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyStateMachine))]
-public class EnemyRangedController : Enemy
+public class EnemyRangedController : EnemyController
 {
 //    [Header("====== Ranged ======")]
 //    [Header("Proyectil")]
@@ -52,7 +52,7 @@ public class EnemyRangedController : Enemy
 //    }
 
 //    //------------------------------------------------------------------
-//    // Enemy methods
+//    // EnemyController methods
 //    //------------------------------------------------------------------
 
 //    public override bool IsLooking()
@@ -149,7 +149,7 @@ public class EnemyRangedController : Enemy
 //    }
 
 //    //------------------------------------------------------------------
-//    // Private methods that helps the Enemy implementation
+//    // Private methods that helps the EnemyController implementation
 //    //------------------------------------------------------------------
 
 //    private IEnumerator Alert()
