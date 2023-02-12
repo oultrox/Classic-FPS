@@ -5,7 +5,7 @@ using UnityEngine.AI;
 public class EnemyWander : MonoBehaviour,IEnemyWalk
 {
     [SerializeField] private LayerMask raycastMask;
-    [SerializeField] private float movementSpeed = 5;
+    [SerializeField] private float wanderSpeed = 5;
     [SerializeField] private float walkRange = 5;
     private float waypointTimer;
     private NavMeshAgent navMesh;
@@ -21,7 +21,7 @@ public class EnemyWander : MonoBehaviour,IEnemyWalk
 
     public void Init()
     {
-
+        navMesh.speed = wanderSpeed;
     }
 
     public void Tick()
@@ -51,6 +51,18 @@ public class EnemyWander : MonoBehaviour,IEnemyWalk
         isWaypointBlocked = Physics.Linecast(transform.position, waypoint, raycastMask);
 
         float distance = (waypoint - transform.position).sqrMagnitude;
-        waypointTravelTime = distance / (movementSpeed * movementSpeed);
+        waypointTravelTime = distance / (wanderSpeed * wanderSpeed);
     }
+
+    #if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if (waypoint != Vector3.zero && !isWaypointBlocked)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(waypoint, 1f);
+        }
+    }
+    #endif
+
 }

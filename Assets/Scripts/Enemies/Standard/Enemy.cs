@@ -3,14 +3,9 @@ using UnityEngine;
 using System;
 
 
-public class Enemy : MonoBehaviour {
-
-    [Header("====== Enemy ======")]
-    [Header("Movement")]
-    [SerializeField] private float movementSpeed = 5;
-    [SerializeField] private float accelerationStep = 2f;
-    [SerializeField] private float minDistanceChase = 3f;
-
+public class Enemy : MonoBehaviour 
+{
+    // TODO: Move to the health component.
     [Header("Life del enemigo")]
     [SerializeField] private int enemyHP = 100;
     [SerializeField] private int maxEnemyHP = 150;
@@ -21,14 +16,10 @@ public class Enemy : MonoBehaviour {
     [SerializeField] private float idleDuration = 1.5f;
     [SerializeField] private float walkDuration = 4;
     [SerializeField] private float searchDuration = 10f;
-
-    [Header("Attack")]
-    [SerializeField] private float attackRate = 1;
+    
+    // TODO: move to a look component I guess.
     [SerializeField] private float sightDistance = 10f;
 
-    [Header("Vision")]
-    [SerializeField] private float viewAngle;
-    [SerializeField] private LayerMask raycastMask;
 
     private NavMeshAgent navMesh;
     private Transform selfTransform;
@@ -49,11 +40,10 @@ public class Enemy : MonoBehaviour {
         Animator = GetComponent<Animator>();
         playerTransform = PlayerHealth.instance.GetComponent<Transform>();
         
-    }
-
-    private void Start()
-    {
-        NavMesh.speed = MovementSpeed;
+        attack = GetComponent<IEnemyAttack>();
+        patrol = GetComponent<IEnemyPatrol>();
+        walk = GetComponent<IEnemyWalk>();
+        chase = GetComponent<IEnemyChase>();
     }
 
     internal void InitChase()
@@ -110,34 +100,8 @@ public class Enemy : MonoBehaviour {
 
     }
 
-    
+
     #region Properties
-    public float MovementSpeed
-    {
-        get
-        {
-            return movementSpeed;
-        }
-
-        set
-        {
-            movementSpeed = value;
-        }
-    }
-
-    public float AccelerationStep
-    {
-        get
-        {
-            return accelerationStep;
-        }
-
-        set
-        {
-            accelerationStep = value;
-        }
-    }
-
     public int EnemyHP
     {
         get

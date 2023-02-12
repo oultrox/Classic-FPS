@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyChase : MonoBehaviour, IEnemyChase
+public class EnemyChase : MonoBehaviour,IEnemyChase
 {
-
+    [SerializeField] private float chaseSpeed = 5;
     [SerializeField] private float minDistanceChase = 3f;
     private NavMeshAgent navMesh;
     private Transform playerTransform;
@@ -12,6 +12,12 @@ public class EnemyChase : MonoBehaviour, IEnemyChase
     private void Awake()
     {
         navMesh = GetComponent<NavMeshAgent>();
+        playerTransform = PlayerHealth.instance.GetComponent<Transform>();
+    }
+
+    private void Start()
+    {
+        navMesh.speed = chaseSpeed;
     }
 
     public void Init()
