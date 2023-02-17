@@ -4,20 +4,23 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-
+[Serializable]
 public class ScriptableObjectsEditor : EditorWindow
 {
     private GUIStyle _customLabelStyle = new GUIStyle(EditorStyles.label);
     private Vector2 _scrollPos;
     private List<Type> _scriptableObjectTypes = new List<Type>();
-    
-    private string[] _objectsGuids = new string[0];
+    private HashSet<string> _objectsGuids = new HashSet<string>();
+    private SerializedObject _serializedObject;
     private List<string> _selectedGuids = new List<string>();
+
     private int _selectedIndex = -1;
     int _selectedObjectTypeIndex = 0;
     private int _lastIndexSelected = 0;
-
     private bool _isOpenedFirstTime = false;
+
+    private const string WINDOW_TITLE = "Scriptable Objects Organizer";
+    private const string OBJECTS_FILTER = "t:ScriptableObject";
     private const string INITIAL_FOLDER = "Assets";
     private string _selectedDirectory = INITIAL_FOLDER;
     private string _currentOpenDirectory;
@@ -34,22 +37,22 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         _customLabelStyle.fontSize = 25;
         _customLabelStyle.alignment = TextAnchor.UpperCenter;
-        GUILayout.Label("Scriptable Objects Organizer", _customLabelStyle);
+        GUILayout.Label(WINDOW_TITLE, _customLabelStyle);
 
+        //Left Side
         EditorGUILayout.BeginHorizontal();
-        // Left side of the window
         EditorGUILayout.BeginVertical(GUILayout.Width(300));
-        OpenFolderObjects();
+        DisplaySelectedFolder();
         EditorGUILayout.EndVertical();
-        
-        // Right side of the window
+       
+        // Right Side
         EditorGUILayout.BeginVertical();
-        DisplayScriptableObjectInspector();
+        DisplaySelectedScriptableObject();
         EditorGUILayout.EndVertical();
         EditorGUILayout.EndHorizontal();
     }
 
-    private void DisplayScriptableObjectInspector()
+    private void DisplaySelectedScriptableObject()
     {
         if (_selectedIndex >= 0 && _selectedIndex < _selectedGuids.Count)
         {
@@ -60,33 +63,41 @@ public class ScriptableObjectsEditor : EditorWindow
             GUILayout.Label(obj.name, _customLabelStyle, GUILayout.Height(40));
             DisplayOpenObjectFolder();
 
-            Editor scriptableObjectEditor = Editor.CreateEditor(obj);
+            EditorGUI.BeginChangeCheck();
+            _serializedObject = new SerializedObject(obj);
+            _serializedObject.Update();
+            Editor scriptableObjectEditor = Editor.CreateEditor(_serializedObject.targetObject);
             scriptableObjectEditor.OnInspectorGUI();
+            if (EditorGUI.EndChangeCheck())
+            {
+                _serializedObject.ApplyModifiedProperties();
+                EditorUtility.SetDirty(obj);
+            }
         }
     }
 
-    private void OpenFolderObjects()
+    private void DisplaySelectedFolder()
     {
         _customLabelStyle.fontSize = 15;
         GUILayout.Label("Select a folder:", _customLabelStyle);
         if (GUILayout.Button("Open Folder", GUILayout.Height(30)))
         {
             _selectedDirectory = EditorUtility.OpenFolderPanel("Select a folder", _selectedDirectory, "");
-            _selectedDirectory = _selectedDirectory.Replace(Application.dataPath, "Assets");
+            _selectedDirectory = _selectedDirectory.Replace(Application.dataPath, INITIAL_FOLDER);
             GUILayout.Label(Path.GetFileName(_selectedDirectory), _customLabelStyle);
             _isOpenedFirstTime = true;
         }
 
-        LoadObjectsList();
+        LoadScriptableObjectsInFolder();
     }
 
-    private void LoadObjectsList()
+    private void LoadScriptableObjectsInFolder()
     {
         if (CheckFolderAvailibity())
         {
             _currentOpenDirectory = _selectedDirectory;
             _customLabelStyle.fontSize = 13;
-            _objectsGuids = AssetDatabase.FindAssets("t:ScriptableObject", new[] { _selectedDirectory });
+            _objectsGuids = new HashSet<string>(AssetDatabase.FindAssets(OBJECTS_FILTER, new[] { _selectedDirectory }));
             _lastIndexSelected = -1;
             _selectedObjectTypeIndex = 0;
             GetScriptableObjectTypes();
@@ -106,11 +117,11 @@ public class ScriptableObjectsEditor : EditorWindow
         GUILayout.Label(" List", _customLabelStyle);
         _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
         
-        ShowObjectsInToggleBox();
+        DisplayScriptableObjectsInList();
         EditorGUILayout.EndScrollView();
     }
 
-    private void ShowObjectsInToggleBox()
+    private void DisplayScriptableObjectsInList()
     {
         int index = 0;
         foreach (string guid in _selectedGuids)
@@ -183,3 +194,4 @@ public class ScriptableObjectsEditor : EditorWindow
     }
 
 }
+
