@@ -4,15 +4,14 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-[Serializable]
 public class ScriptableObjectsEditor : EditorWindow
 {
     private GUIStyle _customLabelStyle = new GUIStyle(EditorStyles.label);
     private Vector2 _scrollPos;
     private List<Type> _scriptableObjectTypes = new List<Type>();
     private HashSet<string> _objectsGuids = new HashSet<string>();
-    private SerializedObject _serializedObject;
     private List<string> _selectedGuids = new List<string>();
+    private SerializedObject _serializedObject;
 
     private int _selectedIndex = -1;
     int _selectedObjectTypeIndex = 0;
@@ -52,6 +51,7 @@ public class ScriptableObjectsEditor : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
 
+    // TO DO: Custom Inspector works great except when it needs to change other references of scriptable Objects.
     private void DisplaySelectedScriptableObject()
     {
         if (_selectedIndex >= 0 && _selectedIndex < _selectedGuids.Count)
