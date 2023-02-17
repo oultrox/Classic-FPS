@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyWander : MonoBehaviour,IEnemyWalk
+[DisallowMultipleComponent]
+public class EnemyWander : MonoBehaviour, IEnemyWalk
 {
     [SerializeField] private LayerMask raycastMask;
     [SerializeField] private float wanderSpeed = 5;
@@ -40,6 +40,7 @@ public class EnemyWander : MonoBehaviour,IEnemyWalk
         }
     }
 
+    // Can actually grab the IEnemyLook component and search more proficiently here if the enemy is not seeing the target.
     private void Wander()
     {
         waypointTimer = 0;

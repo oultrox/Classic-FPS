@@ -1,7 +1,5 @@
-﻿using UnityEngine.AI;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-using System.Collections;
 
 public class EnemyController : MonoBehaviour 
 {
@@ -12,9 +10,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int scoreValue = 10;
     [SerializeField] private GameObject corpse;
 
-    // TODO: move to a look component I guess.
-    [Header("Enemy Sight")]
-    [SerializeField] private float sightDistance = 10f;
 
     [Header("Transitions (0 it's infinite)")]
     [SerializeField] private float idleDuration = 1.5f;
@@ -22,11 +17,12 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float searchDuration = 10f;
     
     private Transform playerTransform;
+    private IEnemyLook look;
     private IEnemyAttack attack;
     private IEnemyPatrol patrol;
     private IEnemyWalk walk;
     private IEnemyChase chase;
-    
+    private IEnemySearch search;
 
     private  void Awake()
     {
@@ -36,31 +32,42 @@ public class EnemyController : MonoBehaviour
         patrol = GetComponent<IEnemyPatrol>();
         walk = GetComponent<IEnemyWalk>();
         chase = GetComponent<IEnemyChase>();
+        look = GetComponent<IEnemyLook>();
+        look?.SetTarget(playerTransform);
+        search = GetComponent<IEnemySearch>();
     }
 
-    internal void InitChase()
+    public void InitChase()
     {
         chase?.Init();
     }
 
-    internal void InitWalk()
+    public void InitWalk()
     {
         walk?.Init();
     }
 
-    internal void InitAttack()
+    public void InitAttack()
     {
         attack?.Init();
     }
 
-    internal void InitPatrol()
+    public void InitPatrol()
     {
         patrol?.Init();
     }
-
-    public  bool IsLooking()
+    public void InitSearch()
     {
-        return (playerTransform.position - transform.position).sqrMagnitude < sightDistance * sightDistance;
+        search?.Init();
+    }
+
+
+    public bool IsLooking()
+    {
+        if (look == null)
+            return false;
+
+        return look.IsLooking();
     }
 
     public  void Walk()
@@ -78,6 +85,11 @@ public class EnemyController : MonoBehaviour
         patrol?.Tick();
     }
 
+    public void Search()
+    {
+        search?.Tick();
+    }
+
     public  void Attack()
     {
         attack?.Tick();
@@ -92,15 +104,8 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Alert());
+           look?.AlertSight();
         }
-    }
-
-    private IEnumerator Alert()
-    {
-        sightDistance *= 4;
-        yield return new WaitForSeconds(0.1f);
-        sightDistance /= 4;
     }
 
     public void Die()
@@ -111,7 +116,6 @@ public class EnemyController : MonoBehaviour
         }
         Destroy(gameObject);
     }
-
 
     #region Properties
     public int ScoreValue

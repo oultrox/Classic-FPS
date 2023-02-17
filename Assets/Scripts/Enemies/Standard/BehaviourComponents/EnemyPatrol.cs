@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+[DisallowMultipleComponent]
 public class EnemyPatrol : MonoBehaviour, IEnemyPatrol
 {
     [SerializeField] private float patrolSpeed = 5;
@@ -15,15 +16,9 @@ public class EnemyPatrol : MonoBehaviour, IEnemyPatrol
     {
         navMesh = GetComponent<NavMeshAgent>();
     }
-
-    private void Start()
-    {
-        navMesh.speed = patrolSpeed;
-    }
-
     public void Init()
     {
-
+        navMesh.speed = patrolSpeed;
     }
 
     public void Tick()

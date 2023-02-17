@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-public class EnemyRangedAttack : MonoBehaviour,IEnemyAttack
+[DisallowMultipleComponent]
+public class EnemyRangedAttack : MonoBehaviour, IEnemyAttack
 {
     [Header("Attack")]
     [SerializeField] private float attackRate = 1;

@@ -1,7 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-//Uses the enemy class to set the states via the Plugglable IA with ScriptableObjects.
+//Uses the controller to set the states via the Plugglable IA with ScriptableObjects.
+[RequireComponent (typeof(EnemyController))]
 public class EnemyStateMachine : MonoBehaviour {
 
     [SerializeField] private State currentState;

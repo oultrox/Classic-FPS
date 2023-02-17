@@ -34,7 +34,7 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         _customLabelStyle.fontSize = 25;
         _customLabelStyle.alignment = TextAnchor.UpperCenter;
-        GUILayout.Label("Scriptable Objects Editor", _customLabelStyle);
+        GUILayout.Label("Scriptable Objects Organizer", _customLabelStyle);
 
         EditorGUILayout.BeginHorizontal();
         // Left side of the window
@@ -138,19 +138,13 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         if (GUILayout.Button("Open Object", GUILayout.Height(30)))
         {
-            int index = 0;
-            foreach (string guid in _objectsGuids)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                ScriptableObject obj = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
-                bool selected = index == _selectedIndex;
-                selected = EditorGUILayout.ToggleLeft(obj.name, selected);
-                if (selected)
-                {
-                    EditorGUIUtility.PingObject(obj);
-                }
-                index++;
-            }
+            bool selected = _selectedIndex != -1;
+            if (!selected)
+                return;
+
+            string assetPath = AssetDatabase.GUIDToAssetPath(_selectedGuids[_selectedIndex]);
+            ScriptableObject obj = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
+            EditorGUIUtility.PingObject(obj);
         }
     }
 

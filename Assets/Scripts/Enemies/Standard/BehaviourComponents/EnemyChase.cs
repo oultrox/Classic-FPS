@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
+[DisallowMultipleComponent]
 public class EnemyChase : MonoBehaviour,IEnemyChase
 {
     [SerializeField] private float chaseSpeed = 5;
@@ -15,14 +15,9 @@ public class EnemyChase : MonoBehaviour,IEnemyChase
         playerTransform = PlayerHealth.instance.GetComponent<Transform>();
     }
 
-    private void Start()
-    {
-        navMesh.speed = chaseSpeed;
-    }
-
     public void Init()
     {
-
+        navMesh.speed = chaseSpeed;
     }
 
     public void Tick()
