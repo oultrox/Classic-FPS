@@ -7,7 +7,8 @@ public class ManagerShake : MonoBehaviour
     public static ManagerShake instance;
     [Header("Shake properties")]
     [SerializeField] private float speed = 20f;
-    [SerializeField] private AnimationCurve damper = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.9f, .33f, -2f, -2f), new Keyframe(1f, 0f, -5.65f, -5.65f));
+    [SerializeField] private AnimationCurve damper = new 
+        AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.9f, .33f, -2f, -2f), new Keyframe(1f, 0f, -5.65f, -5.65f));
 
     [Header("Zooming juice")]
     [SerializeField] private float zoomSpeed = 20f;

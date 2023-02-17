@@ -4,7 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-public class ScriptableObjectsEditor : EditorWindow
+public class ScriptableObjectsOrganizer : EditorWindow
 {
     private GUIStyle _customLabelStyle = new GUIStyle(EditorStyles.label);
     private Vector2 _scrollPos;
@@ -28,7 +28,7 @@ public class ScriptableObjectsEditor : EditorWindow
     [MenuItem("Window/Scriptable Object Organizer")]
     private static void Init()
     {
-        ScriptableObjectsEditor window = (ScriptableObjectsEditor)EditorWindow.GetWindow(typeof(ScriptableObjectsEditor));
+        ScriptableObjectsOrganizer window = (ScriptableObjectsOrganizer)EditorWindow.GetWindow(typeof(ScriptableObjectsOrganizer));
         window.Show();
     }
 
