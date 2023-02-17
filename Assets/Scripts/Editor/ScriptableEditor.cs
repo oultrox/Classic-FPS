@@ -4,6 +4,8 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+
+// TO DO: Make it reload on recompile properly.
 public class ScriptableObjectsOrganizer : EditorWindow
 {
     private GUIStyle _customLabelStyle = new GUIStyle(EditorStyles.label);
