@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float playerRunningSpeed = 15f;
     [SerializeField] private float jumpStrength = 20f;
     
-    
     private CharacterController controller;
     private float forwardMovement;
     private float sideAwaysMovement;
@@ -27,10 +26,17 @@ public class PlayerMovement : MonoBehaviour {
     private void Update()
     {
         if (ManagerScreen.instance.IsPaused()) return;
+        ApplyGravity();
+        CheckInputs();
         ApplyMovement();
     }
 
-    private void ApplyMovement()
+    private void ApplyGravity()
+    {
+        verticalVelocity += Physics.gravity.y * Time.deltaTime;
+    }
+
+    private void CheckInputs()
     {
         // Calculating the movement based on input
         if (Input.GetKey(KeyCode.LeftShift))
@@ -44,15 +50,15 @@ public class PlayerMovement : MonoBehaviour {
             sideAwaysMovement = Input.GetAxis("Horizontal") * playerWalkingSpeed;
         }
 
-        // Gravity
-        verticalVelocity += Physics.gravity.y * Time.deltaTime;
         // Jump
         if (Input.GetButton("Jump") && controller.isGrounded)
         {
             verticalVelocity = jumpStrength;
         }
+    }
 
-        // Applying the movement
+    private void ApplyMovement()
+    {
         playerMovement.x = sideAwaysMovement;
         playerMovement.y = verticalVelocity;
         playerMovement.z = forwardMovement;
