@@ -9,8 +9,8 @@ public class PlayerMovement : MonoBehaviour {
     
     private CharacterController controller;
     private float forwardMovement;
-    private float sideAwaysMovement;
-    private Vector3 playerMovement;
+    private float sideAwayMovement;
+    private Vector3 movementDirection;
     private float verticalVelocity;
 
     private void Awake ()
@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Start()
     {
-        playerMovement = Vector3.zero;
+        movementDirection = Vector3.zero;
     }
 
     private void Update()
@@ -38,30 +38,30 @@ public class PlayerMovement : MonoBehaviour {
 
     private void CheckInputs()
     {
-        // Calculating the movement based on input
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            forwardMovement = Input.GetAxis("Vertical") * playerRunningSpeed;
-            sideAwaysMovement = Input.GetAxis("Horizontal") * playerRunningSpeed;
+            sideAwayMovement = Input.GetAxisRaw("Horizontal") * playerRunningSpeed;
+            forwardMovement = Input.GetAxisRaw("Vertical") * playerRunningSpeed;
         }
         else
         {
-            forwardMovement = Input.GetAxis("Vertical") * playerWalkingSpeed;
-            sideAwaysMovement = Input.GetAxis("Horizontal") * playerWalkingSpeed;
+            sideAwayMovement = Input.GetAxisRaw("Horizontal") * playerWalkingSpeed;
+            forwardMovement = Input.GetAxisRaw("Vertical") * playerWalkingSpeed;
         }
-
-        // Jump
+        
         if (Input.GetButton("Jump") && controller.isGrounded)
         {
             verticalVelocity = jumpStrength;
         }
     }
-
+    
     private void ApplyMovement()
     {
-        playerMovement.x = sideAwaysMovement;
-        playerMovement.y = verticalVelocity;
-        playerMovement.z = forwardMovement;
-        controller.Move(transform.rotation * playerMovement * Time.deltaTime);
+        movementDirection.x = sideAwayMovement;
+        movementDirection.z = forwardMovement;
+        movementDirection.y = verticalVelocity;
+
+        controller.Move(transform.rotation * movementDirection  * Time.deltaTime);
     }
 }
+  

@@ -3,14 +3,12 @@ using System;
 
 public class EnemyController : MonoBehaviour 
 {
-    // TODO: Move to the health component.
+    // TODO:  Move health properties and behaviour to a Health Component that can be used by player and enemy alike.
     [Header("Enemy Health")]
     [SerializeField] private int enemyHP = 100;
-    [SerializeField] private int maxEnemyHP = 150;
     [SerializeField] private int scoreValue = 10;
     [SerializeField] private GameObject corpse;
-
-
+    
     [Header("Transitions (0 it's infinite)")]
     [SerializeField] private float idleDuration = 1.5f;
     [SerializeField] private float walkDuration = 4;
@@ -56,18 +54,15 @@ public class EnemyController : MonoBehaviour
     {
         patrol?.Init();
     }
+    
     public void InitSearch()
     {
         search?.Init();
     }
-
-
+    
     public bool IsLooking()
     {
-        if (look == null)
-            return false;
-
-        return look.IsLooking();
+        return look != null && look.IsLooking();
     }
 
     public  void Walk()
@@ -112,7 +107,7 @@ public class EnemyController : MonoBehaviour
     {
         if (corpse)
         {
-            Instantiate(corpse, transform.position, transform.rotation);
+            Instantiate(corpse, transform.position,Quaternion.identity);
         }
         Destroy(gameObject);
     }

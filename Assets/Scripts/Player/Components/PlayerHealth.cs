@@ -19,8 +19,7 @@ public class PlayerHealth : MonoBehaviour {
     {
         instance = null; 	
     } 
-
-	// Use this for initialization
+    
 	void Start () 
 	{
 		currentHealth = startingHealth;
