@@ -2,7 +2,7 @@
 
 This project demonstrates a modular AI system using a **Pluggable ScriptableObject-based Finite State Machine (FSM)** in Unity, along with a **Weapon System** and a **2.5D/2.5 FPS Engine Controller**.
 
----
+Watch the demo here: [YouTube Video](https://www.youtube.com/watch?v=Z07Y1964oMY)
 
 ## Features
 
@@ -71,3 +71,7 @@ public class ChaseAction : SM_Action
 - Expand weapon system with status effects and ammo management.
 - Add more pluggable AI states like `Flee`, `Patrol`, `Search`, etc.
 - Maybe more parkour and maps? hehe.
+
+### Unity Version
+
+- Updated to `2021.3.16f1`.
