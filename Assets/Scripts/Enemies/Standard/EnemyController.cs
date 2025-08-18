@@ -48,17 +48,12 @@ public class EnemyController : MonoBehaviour
         }
         return behavior;
     }
-
-    private T GetBehavior<T>() where T : class
-    {
-        behaviors.TryGetValue(typeof(T), out var behavior);
-        return behavior as T;
-    }
-
+    
     public void Init<T>() where T : class, IEnemyBehaviour
     {
         GetBehavior<T>()?.Init();
     }
+    
     public void Tick<T>() where T : class, IEnemyBehaviour
     {
         GetBehavior<T>()?.Tick();
@@ -68,14 +63,20 @@ public class EnemyController : MonoBehaviour
     {
         return GetBehavior<IEnemyLook>()?.IsLooking() ?? false;
     }
-
+    
+    private T GetBehavior<T>() where T : class
+    {
+        behaviors.TryGetValue(typeof(T), out var behavior);
+        return behavior as T;
+    }
+    
     public void TakeDamage(int damage)
     {
         enemyHP -= damage;
         if (enemyHP <= 0) Die();
         else GetBehavior<IEnemyLook>()?.AlertSight();
     }
-
+    
     private void Die()
     {
         if (corpse) Instantiate(corpse, transform.position, Quaternion.identity);
