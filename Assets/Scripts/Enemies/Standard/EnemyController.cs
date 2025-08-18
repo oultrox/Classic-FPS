@@ -1,169 +1,84 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
+/// <summary>
+/// Modularized generic Enemy controller where we can slap behaviors at our will based on composition.
+/// </summary>
 public class EnemyController : MonoBehaviour 
 {
-    // TODO:  Move health properties and behaviour to a Health Component that can be used by player and enemy alike.
+    // TODO: Move health components out of here.
     [Header("Enemy Health")]
     [SerializeField] private int enemyHP = 100;
     [SerializeField] private int scoreValue = 10;
     [SerializeField] private GameObject corpse;
-    
-    [Header("Transitions (0 it's infinite)")]
+
+    [Header("Transitions (0 = infinite)")]
     [SerializeField] private float idleDuration = 1.5f;
     [SerializeField] private float walkDuration = 4;
     [SerializeField] private float searchDuration = 10f;
-    
-    private Transform playerTransform;
-    private IEnemyLook look;
-    private IEnemyAttack attack;
-    private IEnemyPatrol patrol;
-    private IEnemyWalk walk;
-    private IEnemyChase chase;
-    private IEnemySearch search;
 
-    private  void Awake()
+    private Transform playerTransform;
+    private Dictionary<Type, object> behaviors = new();
+
+    #region Properties
+    public int ScoreValue { get => scoreValue; set => scoreValue = value; }
+    public float IdleDuration { get => idleDuration; set => idleDuration = value; }
+    public float WalkDuration { get => walkDuration; set => walkDuration = value; }
+    public float SearchDuration { get => searchDuration; set => searchDuration = value; }
+    #endregion
+
+    private void Awake()
     {
         playerTransform = PlayerHealth.instance.GetComponent<Transform>();
-        
-        attack = GetComponent<IEnemyAttack>();
-        patrol = GetComponent<IEnemyPatrol>();
-        walk = GetComponent<IEnemyWalk>();
-        chase = GetComponent<IEnemyChase>();
-        look = GetComponent<IEnemyLook>();
-        look?.SetTarget(playerTransform);
-        search = GetComponent<IEnemySearch>();
+        CacheBehavior<IEnemyAttack>();
+        CacheBehavior<IEnemyPatrol>();
+        CacheBehavior<IEnemyWalk>();
+        CacheBehavior<IEnemyChase>();
+        CacheBehavior<IEnemyLook>()?.SetTarget(playerTransform);
+        CacheBehavior<IEnemySearch>();
     }
 
-    public void InitChase()
+    private T CacheBehavior<T>() where T : class
     {
-        chase?.Init();
+        var behavior = GetComponent<T>();
+        if (behavior != null)
+        {
+            behaviors[typeof(T)] = behavior;
+        }
+        return behavior;
     }
 
-    public void InitWalk()
+    private T GetBehavior<T>() where T : class
     {
-        walk?.Init();
+        behaviors.TryGetValue(typeof(T), out var behavior);
+        return behavior as T;
     }
 
-    public void InitAttack()
+    public void Init<T>() where T : class, IEnemyBehaviour
     {
-        attack?.Init();
+        GetBehavior<T>()?.Init();
+    }
+    public void Tick<T>() where T : class, IEnemyBehaviour
+    {
+        GetBehavior<T>()?.Tick();
     }
 
-    public void InitPatrol()
-    {
-        patrol?.Init();
-    }
-    
-    public void InitSearch()
-    {
-        search?.Init();
-    }
-    
     public bool IsLooking()
     {
-        return look != null && look.IsLooking();
-    }
-
-    public  void Walk()
-    {
-        walk?.Tick();
-    }
-
-    public  void Chase()
-    {
-        chase?.Tick();
-    }
-
-    public  void Patrol()
-    {
-        patrol?.Tick();
-    }
-
-    public void Search()
-    {
-        search?.Tick();
-    }
-
-    public  void Attack()
-    {
-        attack?.Tick();
+        return GetBehavior<IEnemyLook>()?.IsLooking() ?? false;
     }
 
     public void TakeDamage(int damage)
     {
         enemyHP -= damage;
-        if (enemyHP <= 0)
-        {
-            Die();
-        }
-        else
-        {
-           look?.AlertSight();
-        }
+        if (enemyHP <= 0) Die();
+        else GetBehavior<IEnemyLook>()?.AlertSight();
     }
 
-    public void Die()
+    private void Die()
     {
-        if (corpse)
-        {
-            Instantiate(corpse, transform.position,Quaternion.identity);
-        }
+        if (corpse) Instantiate(corpse, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
-
-    #region Properties
-    public int ScoreValue
-    {
-        get
-        {
-            return scoreValue;
-        }
-
-        set
-        {
-            scoreValue = value;
-        }
-    }
-
-    public float IdleDuration
-    {
-        get
-        {
-            return idleDuration;
-        }
-
-        set
-        {
-            idleDuration = value;
-        }
-    }
-
-    public float WalkDuration
-    {
-        get
-        {
-            return walkDuration;
-        }
-
-        set
-        {
-            walkDuration = value;
-        }
-    }
-
-    public float SearchDuration
-    {
-        get
-        {
-            return searchDuration;
-        }
-
-        set
-        {
-            searchDuration = value;
-        }
-    }
-    #endregion
-
 }

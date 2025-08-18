@@ -30,4 +30,11 @@ public class EnemySight : MonoBehaviour, IEnemyLook
         sightDistance /= 4;
     }
 
+    public void Init()
+    {
+    }
+
+    public void Tick()
+    {
+    }
 }

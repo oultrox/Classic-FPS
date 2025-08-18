@@ -1,7 +1,4 @@
 ﻿
-// Component Contracts
-public interface IEnemyAttack
+public interface IEnemyAttack: IEnemyBehaviour
 {
-    public void Init();
-    public void Tick();
 }

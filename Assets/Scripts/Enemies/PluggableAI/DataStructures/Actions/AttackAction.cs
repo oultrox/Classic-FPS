@@ -8,13 +8,11 @@ public class AttackAction : SM_Action
 {
     public override void Initialize(EnemyStateMachine stateController)
     {
-        stateController.Enemy.InitAttack();
+        stateController.Enemy.Init<IEnemyAttack>();
     }
 
     public override void Act(EnemyStateMachine stateController)
     {
-        stateController.Enemy.Attack();
+        stateController.Enemy.Tick<IEnemyAttack>();
     }
-
-    
 }

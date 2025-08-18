@@ -8,11 +8,11 @@ public class PatrolAction : SM_Action
 {
     public override void Initialize(EnemyStateMachine stateController)
     {
-        stateController.Enemy.InitPatrol();
+        stateController.Enemy.Init<IEnemyPatrol>();
     }
 
     public override void Act(EnemyStateMachine stateController)
     {
-        stateController.Enemy.Patrol();
+        stateController.Enemy.Tick<IEnemyPatrol>();
     }
 }

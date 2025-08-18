@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-
-// Component Contracts
-public interface IEnemyLook 
+public interface IEnemyLook : IEnemyBehaviour
 {
     public void SetTarget(Transform transform);
-    public abstract bool IsLooking();
+    public bool IsLooking();
     public void AlertSight();
 }

@@ -5,11 +5,11 @@ public class SearchAction : SM_Action
 {
     public override void Act(EnemyStateMachine stateController)
     {
-        stateController.Enemy.Search();
+        stateController.Enemy.Init<IEnemySearch>();
     }
 
     public override void Initialize(EnemyStateMachine stateController)
     {
-        stateController.Enemy.InitSearch();
+        stateController.Enemy.Tick<IEnemySearch>();
     }
 }

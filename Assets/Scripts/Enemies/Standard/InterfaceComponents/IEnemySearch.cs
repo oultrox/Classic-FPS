@@ -1,7 +1,4 @@
 ﻿
-// Component Contracts
-public interface IEnemySearch
+public interface IEnemySearch: IEnemyBehaviour
 {
-    public void Init();
-    public void Tick();
 }

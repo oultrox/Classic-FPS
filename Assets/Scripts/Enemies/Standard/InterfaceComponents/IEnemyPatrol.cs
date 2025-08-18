@@ -1,10 +1,3 @@
-﻿
-
-// Component Contracts
-using UnityEngine;
-
-public interface IEnemyPatrol
+﻿public interface IEnemyPatrol: IEnemyBehaviour
 {
-    public abstract void Init();
-    public abstract void Tick();
 }

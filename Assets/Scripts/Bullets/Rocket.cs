@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Rocket : MonoBehaviour {
-
+public class Rocket : MonoBehaviour 
+{
     [SerializeField] private float shakeDuration = 0.1f;
     [SerializeField] private float shakeMagnitude = 5f;
     private GameObject explosionPrefab;
@@ -14,9 +11,9 @@ public class Rocket : MonoBehaviour {
     private float lifeTime = 3f;
     private float lifeCounter;
 
-    void Start () {
+    void Start () 
+    {
         lifeCounter = 0;
-        
     }
 
     public void Init(int _damage, float _radius, LayerMask _explosionLayer, GameObject _explosionPrefab)
@@ -60,7 +57,7 @@ public class Rocket : MonoBehaviour {
         Collider[] hitColliders = Physics.OverlapSphere(contactPoint, radius, layerMask);
         for (int i = 0; i < hitColliders.Length; i++)
         {
-            if (hitColliders[i].gameObject.CompareTag("EnemyController") == true)
+            if (hitColliders[i].gameObject.CompareTag("Enemy")) 
             {
                 hitColliders[i].GetComponent<EnemyController>().TakeDamage(damage);
             }
