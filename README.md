@@ -46,7 +46,61 @@ stateController.Enemy.Tick<IEnemyChase>();
 - **Pluggable Actions**: ScriptableObjects define AI actions (`WalkAction`, `ChaseAction`, `AttackAction`, etc.).
 - **Generics for simplicity**: Generic methods replace repetitive `InitWalk()`, `TickWalk()`, `InitChase()`, etc., while preserving modularity.
 
-### Example Usage
+### Enemy Controller
+```csharp
+    // Enemy Controller bla bla bla...
+    private Transform playerTransform;
+    private Dictionary<Type, object> behaviors = new();
+
+    #region Properties
+    public int ScoreValue { get => scoreValue; set => scoreValue = value; }
+    public float IdleDuration { get => idleDuration; set => idleDuration = value; }
+    public float WalkDuration { get => walkDuration; set => walkDuration = value; }
+    public float SearchDuration { get => searchDuration; set => searchDuration = value; }
+    #endregion
+
+    private void Awake()
+    {
+        CacheBehavior<IEnemyAttack>();
+        CacheBehavior<IEnemyPatrol>();
+        CacheBehavior<IEnemyWalk>();
+        CacheBehavior<IEnemyChase>();
+        CacheBehavior<IEnemyLook>()?.SetTarget(playerTransform);
+        CacheBehavior<IEnemySearch>();
+    }
+
+    private T CacheBehavior<T>() where T : class
+    {
+        var behavior = GetComponent<T>();
+        if (behavior != null)
+        {
+            behaviors[typeof(T)] = behavior;
+        }
+        return behavior;
+    }
+    
+    public void Init<T>() where T : class, IEnemyBehaviour
+    {
+        GetBehavior<T>()?.Init();
+    }
+    
+    public void Tick<T>() where T : class, IEnemyBehaviour
+    {
+        GetBehavior<T>()?.Tick();
+    }
+
+    public bool IsLooking()
+    {
+        return GetBehavior<IEnemyLook>()?.IsLooking() ?? false;
+    }
+    
+    private T GetBehavior<T>() where T : class
+    {
+        behaviors.TryGetValue(typeof(T), out var behavior);
+        return behavior as T;
+    }
+```
+### Example Pluggable FSM Action Usage
 
 ```csharp
 // Pluggable FSM Action example
