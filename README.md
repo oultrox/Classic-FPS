@@ -46,7 +46,7 @@ stateController.Enemy.Tick<IEnemyChase>();
 - **Pluggable Actions**: ScriptableObjects define AI actions (`WalkAction`, `ChaseAction`, `AttackAction`, etc.).
 - **Generics for simplicity**: Generic methods replace repetitive `InitWalk()`, `TickWalk()`, `InitChase()`, etc., while preserving modularity.
 
-### Enemy Controller
+### Enemy Controller Used By The FSM Highlight
 ```csharp
     // Enemy Controller bla bla bla...
     private Transform playerTransform;
