@@ -2,7 +2,13 @@
 
 This project demonstrates a modular AI system using a **Pluggable ScriptableObject-based Finite State Machine (FSM)** in Unity, along with a **Weapon System** and a **2.5D/2.5 FPS Engine Controller**.
 
-Watch the demo here: [YouTube Video](https://www.youtube.com/watch?v=Z07Y1964oMY)
+Watch the demos here: 
+
+[Showcase 1](https://www.youtube.com/watch?v=Z07Y1964oMY)
+
+[Showcase 2](https://youtu.be/szbcQCaNNjU)
+
+[Showcase 3](https://youtu.be/3CIl0Lq6StM)
 
 ## Features
 
