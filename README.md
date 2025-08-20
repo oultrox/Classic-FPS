@@ -22,7 +22,7 @@ Watch the demos here:
 
 ```csharp
 // Example: Generic action call
-stateController.Enemy.Init<IEnemyChase>();
+stateController.Enemy.InjectTarget<IEnemyChase>();
 stateController.Enemy.Tick<IEnemyChase>();
 ```
 
@@ -61,30 +61,16 @@ stateController.Enemy.Tick<IEnemyChase>();
 
     private void Awake()
     {
-        CacheBehavior<IEnemyAttack>();
+        CacheBehavior<IEnemySearch>();
         CacheBehavior<IEnemyPatrol>();
         CacheBehavior<IEnemyWalk>();
         CacheBehavior<IEnemyChase>();
-        CacheBehavior<IEnemyLook>()?.SetTarget(playerTransform);
-        CacheBehavior<IEnemySearch>();
-    }
-
-    private T CacheBehavior<T>() where T : class
-    {
-        var behavior = GetComponent<T>();
-        if (behavior != null)
-        {
-            behaviors[typeof(T)] = behavior;
-        }
-        return behavior;
+        CacheBehavior<IEnemyLook>();
+        CacheBehavior<IEnemyAttack>();
+        InjectTargets();
     }
     
-    public void Init<T>() where T : class, IEnemyBehaviour
-    {
-        GetBehavior<T>()?.Init();
-    }
-    
-    public void Tick<T>() where T : class, IEnemyBehaviour
+    public void Tick<T>() where T : class, IEnemyTickable
     {
         GetBehavior<T>()?.Tick();
     }
@@ -92,6 +78,25 @@ stateController.Enemy.Tick<IEnemyChase>();
     public bool IsLooking()
     {
         return GetBehavior<IEnemyLook>()?.IsLooking() ?? false;
+    }
+    
+    private void CacheBehavior<T>() where T : class
+    {
+        var behavior = GetComponent<T>();
+        if (behavior != null)
+        {
+            behaviors[typeof(T)] = behavior;
+        }
+    }
+
+    private void InjectTargets()
+    {
+        List<IEnemyTargetable> targetables = GetComponents<IEnemyTargetable>().ToList();
+
+        foreach (var t in targetables)
+        {
+            t.InjectTarget(playerTransform);
+        }
     }
     
     private T GetBehavior<T>() where T : class
@@ -107,11 +112,6 @@ stateController.Enemy.Tick<IEnemyChase>();
 [CreateAssetMenu(menuName = "PluggableAI/SM_Actions/Chase")]
 public class ChaseAction : SM_Action
 {
-    public override void Initialize(EnemyStateMachine stateController)
-    {
-        stateController.Enemy.Init<IEnemyChase>();
-    }
-
     public override void Act(EnemyStateMachine stateController)
     {
         stateController.Enemy.Tick<IEnemyChase>();
