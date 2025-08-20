@@ -1,4 +1,5 @@
 ﻿using Enemies.PluggableAI.DataStructures;
+using Enemies.Standard.InterfaceComponents;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "PluggableAI/SM_Actions/Attack")]

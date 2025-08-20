@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Enemies.Standard.InterfaceComponents;
+using UnityEngine;
 
 [DisallowMultipleComponent]
 public class EnemyRangedAttack : MonoBehaviour, IEnemyAttack
@@ -15,10 +16,6 @@ public class EnemyRangedAttack : MonoBehaviour, IEnemyAttack
     private Transform playerTransform;
     private float attackTimer;
     
-    public void Init()
-    {
-    }
-
     public void Tick()
     {
         attackTimer += Time.deltaTime;

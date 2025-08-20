@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Enemies.Standard.InterfaceComponents;
 
 /// <summary>
 /// Modularized generic Enemy controller where we can slap behaviors at our will based on composition.
@@ -49,24 +51,23 @@ public class EnemyController : MonoBehaviour
     {
         return GetBehavior<IEnemyLook>()?.IsLooking() ?? false;
     }
-
-    private void InjectTargets()
-    {
-        foreach (var behavior in behaviors.Values)
-        {
-            if (behavior is IEnemyTargetable targetable)
-            {
-                targetable.InjectTarget(playerTransform);
-            }
-        }
-    }
-
+    
     private void CacheBehavior<T>() where T : class
     {
         var behavior = GetComponent<T>();
         if (behavior != null)
         {
             behaviors[typeof(T)] = behavior;
+        }
+    }
+
+    private void InjectTargets()
+    {
+        List<IEnemyTargetable> targetables = GetComponents<IEnemyTargetable>().ToList();
+
+        foreach (var t in targetables)
+        {
+            t.InjectTarget(playerTransform);
         }
     }
     

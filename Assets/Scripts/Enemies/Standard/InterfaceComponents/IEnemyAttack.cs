@@ -1,7 +1,8 @@
 ﻿
-using UnityEngine;
-
-public interface IEnemyAttack: IEnemyTickable,IEnemyTargetable
+namespace Enemies.Standard.InterfaceComponents
 {
+    public interface IEnemyAttack: IEnemyTickable,IEnemyTargetable
+    {
     
+    }
 }

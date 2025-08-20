@@ -1,9 +1,4 @@
-using UnityEngine;
-
-public interface IEnemyTickable
-{
-    void Tick();
-}
+﻿using UnityEngine;
 
 public interface IEnemyTargetable
 {
