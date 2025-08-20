@@ -45,6 +45,7 @@ stateController.Enemy.Tick<IEnemyChase>();
 - **Behavior Interfaces**: Minimal, focused interfaces allow clear segregation of responsibilities.
 - **Pluggable Actions**: ScriptableObjects define AI actions (`WalkAction`, `ChaseAction`, `AttackAction`, etc.).
 - **Generics for simplicity**: Generic methods replace repetitive `InitWalk()`, `TickWalk()`, `InitChase()`, etc., while preserving modularity.
+- **Polymorphic behavior calls**: EnemyController interacts with any behavior via its interface (e.g., IEnemyTickable, IEnemyTargetable) without needing to know the concrete implementation. Each component implements the interface in its own way, allowing generic Tick<T>() and InjectTarget<T>() calls to operate polymorphically.
 
 ### Enemy Controller Used By The FSM Highlight
 ```csharp
@@ -114,6 +115,7 @@ public class ChaseAction : SM_Action
 {
     public override void Act(EnemyStateMachine stateController)
     {
+        // Polymorphic call: Enemy ticks the IEnemyChase behavior without knowing the concrete class
         stateController.Enemy.Tick<IEnemyChase>();
     }
 }
