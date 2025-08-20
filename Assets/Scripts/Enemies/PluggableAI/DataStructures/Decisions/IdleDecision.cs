@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using Enemies.PluggableAI.DataStructures;
+using Enemies.PluggableAI.DataStructures.Decisions;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "PluggableAI/Decisions/Idle")]
-public class IdleDecision : Decision
+public class IdleDecision : SM_Decision
 {
+    
     public override bool Decide(EnemyStateMachine stateController)
     {
-        return stateController.CheckIfCountDownElapsed(stateController.Enemy.IdleDuration);
+        return stateController.HasStateElapsed(stateController.Enemy.IdleDuration);
     }
 }

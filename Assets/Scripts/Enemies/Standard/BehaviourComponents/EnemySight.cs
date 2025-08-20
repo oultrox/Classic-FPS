@@ -8,16 +8,16 @@ public class EnemySight : MonoBehaviour, IEnemyLook
     [SerializeField] private float sightDistance = 10f;
     private Transform targetTransform;
 
+    public void InjectTarget(Transform target)
+    {
+        targetTransform = target;
+    }
+    
     public bool IsLooking()
     {
         return (targetTransform.position - transform.position).sqrMagnitude < sightDistance * sightDistance;
     }
-
-    public void SetTarget(Transform target)
-    {
-        targetTransform = target;
-    }
-
+    
     public void AlertSight()
     {
         StartCoroutine(Alert());
@@ -28,13 +28,5 @@ public class EnemySight : MonoBehaviour, IEnemyLook
         sightDistance *= 4;
         yield return new WaitForSeconds(0.1f);
         sightDistance /= 4;
-    }
-
-    public void Init()
-    {
-    }
-
-    public void Tick()
-    {
     }
 }

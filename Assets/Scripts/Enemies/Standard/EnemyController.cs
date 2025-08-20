@@ -31,30 +31,16 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         playerTransform = PlayerHealth.instance.GetComponent<Transform>();
-        CacheBehavior<IEnemyAttack>();
+        CacheBehavior<IEnemySearch>();
         CacheBehavior<IEnemyPatrol>();
         CacheBehavior<IEnemyWalk>();
         CacheBehavior<IEnemyChase>();
-        CacheBehavior<IEnemyLook>()?.SetTarget(playerTransform);
-        CacheBehavior<IEnemySearch>();
-    }
-
-    private T CacheBehavior<T>() where T : class
-    {
-        var behavior = GetComponent<T>();
-        if (behavior != null)
-        {
-            behaviors[typeof(T)] = behavior;
-        }
-        return behavior;
+        CacheBehavior<IEnemyLook>();
+        CacheBehavior<IEnemyAttack>();
+        InjectTargets();
     }
     
-    public void Init<T>() where T : class, IEnemyBehaviour
-    {
-        GetBehavior<T>()?.Init();
-    }
-    
-    public void Tick<T>() where T : class, IEnemyBehaviour
+    public void Tick<T>() where T : class, IEnemyTickable
     {
         GetBehavior<T>()?.Tick();
     }
@@ -62,6 +48,26 @@ public class EnemyController : MonoBehaviour
     public bool IsLooking()
     {
         return GetBehavior<IEnemyLook>()?.IsLooking() ?? false;
+    }
+
+    private void InjectTargets()
+    {
+        foreach (var behavior in behaviors.Values)
+        {
+            if (behavior is IEnemyTargetable targetable)
+            {
+                targetable.InjectTarget(playerTransform);
+            }
+        }
+    }
+
+    private void CacheBehavior<T>() where T : class
+    {
+        var behavior = GetComponent<T>();
+        if (behavior != null)
+        {
+            behaviors[typeof(T)] = behavior;
+        }
     }
     
     private T GetBehavior<T>() where T : class

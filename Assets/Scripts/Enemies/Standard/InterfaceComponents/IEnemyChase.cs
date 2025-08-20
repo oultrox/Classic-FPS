@@ -1,4 +1,4 @@
 ﻿
-public interface IEnemyChase: IEnemyBehaviour
+public interface IEnemyChase: IEnemyTickable, IEnemyTargetable
 {
 }

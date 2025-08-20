@@ -1,109 +1,69 @@
-﻿using System;
+﻿using Enemies.PluggableAI.DataStructures.States;
 using UnityEngine;
 
-//Uses the controller to set the states via the Plugglable IA with ScriptableObjects.
-[RequireComponent (typeof(EnemyController))]
-public class EnemyStateMachine : MonoBehaviour {
-
-    [SerializeField] private State currentState;
-    [SerializeField] private State remainState;
-    private EnemyController enemy;
-    private float stateTimeElapsed;
-
-    private void Awake()
+namespace Enemies.PluggableAI.DataStructures
+{
+    /// <summary>
+    /// Uses the controller to set the states via the Plugglable IA with ScriptableObjects.
+    /// </summary>
+    [RequireComponent (typeof(EnemyController))]
+    public class EnemyStateMachine : MonoBehaviour 
     {
-        enemy = GetComponent<EnemyController>();
-        stateTimeElapsed = 0;
-    }
-
-    private void Start()
-    {
-        currentState.StartState(this);
-    }
-
-    void Update()
-    {
-        currentState.UpdateState(this);
-    }
-
-    void FixedUpdate()
-    {
-        currentState.FixedUpdateState(this);
-    }
-
-    public void TransitionToState(State nextState)
-    {
-        if (nextState != remainState)
+        [SerializeField] private SM_State currentState;
+        [SerializeField] private SM_State remainState;
+        private float stateTimeElapsed;
+        
+        public EnemyController Enemy { get; set; }
+        public SM_State CurrentState { get => currentState; set => currentState = value; }
+        public SM_State RemainState { get => remainState; set => remainState = value; }
+        
+        
+        private void Awake()
         {
-            currentState = nextState;
-            currentState.StartState(this);
+            Enemy = GetComponent<EnemyController>();
             stateTimeElapsed = 0;
         }
+    
+        void Update()
+        {
+            currentState.UpdateState(this);
+        }
+
+        void FixedUpdate()
+        {
+            currentState.FixedUpdateState(this);
+        }
+
+        public void TransitionToState(SM_State nextState)
+        {
+            if (nextState != remainState)
+            {
+                currentState = nextState;
+                stateTimeElapsed = 0;
+            }
+        }
+
+        public bool HasStateElapsed(float duration)
+        {
+            if (duration <= 0)
+            {
+                return false;
+            }
+
+            stateTimeElapsed += Time.deltaTime;
+            bool isCountDownElapsed = stateTimeElapsed >= duration;
+            return isCountDownElapsed;
+        }
+
+        #if UNITY_EDITOR
+        void OnDrawGizmos()
+        {
+            if (currentState != null)
+            {
+                Gizmos.color = currentState.sceneGizmoColor;
+                Gizmos.DrawWireSphere(transform.position, 1f);
+            }
+        }
+        #endif
     }
-
-    public bool CheckIfCountDownElapsed(float duration)
-    {
-        if (duration <= 0)
-        {
-            return false;
-        }
-
-        stateTimeElapsed += Time.deltaTime;
-        bool isCountDownElapsed = stateTimeElapsed >= duration;
-        return isCountDownElapsed;
-    }
-
-    #if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-        if (currentState != null)
-        {
-            Gizmos.color = currentState.sceneGizmoColor;
-            Gizmos.DrawWireSphere(transform.position, 1f);
-        }
-    }
-    #endif
-
-
-    #region Properties
-    public EnemyController Enemy
-    {
-        get
-        {
-            return enemy;
-        }
-
-        set
-        {
-            enemy = value;
-        }
-    }
-
-    public State CurrentState
-    {
-        get
-        {
-            return currentState;
-        }
-
-        set
-        {
-            currentState = value;
-        }
-    }
-
-    public State RemainState
-    {
-        get
-        {
-            return remainState;
-        }
-
-        set
-        {
-            remainState = value;
-        }
-    }
-    #endregion
-
 }

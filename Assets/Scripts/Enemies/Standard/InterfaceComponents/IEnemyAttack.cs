@@ -1,4 +1,7 @@
 ﻿
-public interface IEnemyAttack: IEnemyBehaviour
+using UnityEngine;
+
+public interface IEnemyAttack: IEnemyTickable,IEnemyTargetable
 {
+    
 }

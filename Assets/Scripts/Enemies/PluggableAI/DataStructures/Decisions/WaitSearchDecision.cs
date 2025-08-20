@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "PluggableAI/Decisions/Search(Wait)")]
-public class WaitSearchDecision : Decision
+namespace Enemies.PluggableAI.DataStructures.Decisions
 {
-    public override bool Decide(EnemyStateMachine stateController)
+    [CreateAssetMenu(menuName = "PluggableAI/Decisions/Search(Wait)")]
+    public class WaitSearchDecision : SM_Decision
     {
-        return stateController.CheckIfCountDownElapsed(stateController.Enemy.SearchDuration);
+        public override bool Decide(EnemyStateMachine stateController)
+        {
+            return stateController.HasStateElapsed(stateController.Enemy.SearchDuration);
+        }
     }
 }

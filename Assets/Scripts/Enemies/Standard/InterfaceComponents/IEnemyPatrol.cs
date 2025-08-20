@@ -1,3 +1,3 @@
-﻿public interface IEnemyPatrol: IEnemyBehaviour
+﻿public interface IEnemyPatrol: IEnemyTickable, IEnemyTargetable
 {
 }

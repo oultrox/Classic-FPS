@@ -1,3 +1,3 @@
-﻿public interface IEnemyWalk: IEnemyBehaviour
+﻿public interface IEnemyWalk: IEnemyTickable
 {
 }

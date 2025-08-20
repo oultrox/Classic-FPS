@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-public interface IEnemyLook : IEnemyBehaviour
+public interface IEnemyLook: IEnemyTargetable
 {
-    public void SetTarget(Transform transform);
     public bool IsLooking();
     public void AlertSight();
 }

@@ -11,17 +11,13 @@ public class EnemyRangedAttack : MonoBehaviour, IEnemyAttack
     [SerializeField] private int bulletDamage = 20;
     [SerializeField] private float bulletSpeed = 10;
     
-
     private GameObject bulletObj;
     private Transform playerTransform;
     private float attackTimer;
-
-    private void Awake()
+    
+    public void Init()
     {
-        playerTransform = PlayerHealth.instance.GetComponent<Transform>();
     }
-
-    public void Init(){}
 
     public void Tick()
     {
@@ -33,7 +29,15 @@ public class EnemyRangedAttack : MonoBehaviour, IEnemyAttack
         Shoot(0);
     }
 
-    // Enemy just instantiates a prefat directly to player.
+    public void InjectTarget(Transform target)
+    {
+        playerTransform = target;
+    }
+
+    /// <summary>
+    /// Enemy just instantiates a prefab directly to the target.
+    /// </summary>
+    /// <param name="anguloDisparo"></param>
     private void Shoot(float anguloDisparo)
     {
         Vector3 direction = playerTransform.position - transform.position;
@@ -41,9 +45,7 @@ public class EnemyRangedAttack : MonoBehaviour, IEnemyAttack
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         direction = direction.normalized;
 
-        bulletObj = Instantiate(bulletPrefab, transform.position, Quaternion.AngleAxis(angle, Vector3.forward)) as GameObject;
+        bulletObj = Instantiate(bulletPrefab, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
         bulletObj.GetComponent<BulletEnemy>().Init(bulletDamage, direction, bulletSpeed);
     }
-
- 
 }

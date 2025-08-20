@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "PluggableAI/Decisions/Walk")]
-public class WalkDecision : Decision
+namespace Enemies.PluggableAI.DataStructures.Decisions
 {
-    public override bool Decide(EnemyStateMachine stateController)
+    [CreateAssetMenu(menuName = "PluggableAI/Decisions/Walk")]
+    public class WalkDecision : SM_Decision
     {
-        return stateController.CheckIfCountDownElapsed(stateController.Enemy.WalkDuration);
+        public override bool Decide(EnemyStateMachine stateController)
+        {
+            return stateController.HasStateElapsed(stateController.Enemy.WalkDuration);
+        }
     }
 }

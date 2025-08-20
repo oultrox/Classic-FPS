@@ -1,9 +1,11 @@
+using UnityEngine;
 
-/// <summary>
-/// Used by marker interfaces for type name semantic meaning.
-/// </summary>
-public interface IEnemyBehaviour
+public interface IEnemyTickable
 {
-    public void Init();
-    public void Tick();
+    void Tick();
+}
+
+public interface IEnemyTargetable
+{
+    void InjectTarget(Transform target);
 }

@@ -1,16 +1,11 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-public class EnemySearcher : MonoBehaviour, IEnemySearch
+namespace Enemies.Standard.BehaviourComponents
 {
-    public void Init()
+    public class EnemySearcher : MonoBehaviour, IEnemySearch
     {
-        throw new System.NotImplementedException();
-    }
-
-    public void Tick()
-    {
-        throw new System.NotImplementedException();
+        public void Tick()
+        {
+        }
     }
 }

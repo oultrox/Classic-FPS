@@ -1,4 +1,4 @@
 ﻿
-public interface IEnemySearch: IEnemyBehaviour
+public interface IEnemySearch: IEnemyTickable
 {
 }

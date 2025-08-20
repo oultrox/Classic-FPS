@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 [DisallowMultipleComponent]
 public class EnemyPatrol : MonoBehaviour, IEnemyPatrol
@@ -8,16 +9,12 @@ public class EnemyPatrol : MonoBehaviour, IEnemyPatrol
     [SerializeField] private float patrolSpeed = 5;
     [Header("Patrol Waypoints")]
     [SerializeField] private Transform[] patrolWayPoints;
-    
     private NavMeshAgent navMesh;
     private int nextWaypoint = 0;
-
-    private void Awake()
+    
+    public void InjectTarget(Transform target)
     {
         navMesh = GetComponent<NavMeshAgent>();
-    }
-    public void Init()
-    {
         navMesh.speed = patrolSpeed;
     }
 

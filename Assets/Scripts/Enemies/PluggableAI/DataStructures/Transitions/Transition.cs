@@ -1,8 +1,11 @@
 ﻿
+using Enemies.PluggableAI.DataStructures.Decisions;
+using Enemies.PluggableAI.DataStructures.States;
+
 [System.Serializable]
 public class Transition
 {
-    public Decision decision;
-    public State trueState;
-    public State falseState;
+    public SM_Decision decision;
+    public SM_State trueState;
+    public SM_State falseState;
 }

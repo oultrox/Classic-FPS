@@ -17,13 +17,9 @@ public class EnemyWander : MonoBehaviour, IEnemyWalk
     private void Awake()
     {
         navMesh = GetComponent<NavMeshAgent>();
-    }
-
-    public void Init()
-    {
         navMesh.speed = wanderSpeed;
     }
-
+    
     public void Tick()
     {
         waypointTimer += Time.deltaTime;

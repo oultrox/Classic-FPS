@@ -9,17 +9,13 @@ public class EnemyChase : MonoBehaviour,IEnemyChase
     private NavMeshAgent navMesh;
     private Transform playerTransform;
 
-    private void Awake()
+    public void InjectTarget(Transform target)
     {
         navMesh = GetComponent<NavMeshAgent>();
         playerTransform = PlayerHealth.instance.GetComponent<Transform>();
-    }
-
-    public void Init()
-    {
         navMesh.speed = chaseSpeed;
     }
-
+    
     public void Tick()
     {
         if (!navMesh.pathPending && (playerTransform.position - transform.position).sqrMagnitude > minDistanceChase * minDistanceChase)
