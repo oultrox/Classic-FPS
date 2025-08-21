@@ -2,38 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DumbInjector.Internal;
 using UnityEngine;
 
 namespace DumbInjector
 {
-    [DefaultExecutionOrder(-1000)]
-    public class Injector: MonoBehaviour
+    /// <summary>
+    /// Global injector: handles global services/singletons, global scoped scenes.
+    /// </summary>
+    [DefaultExecutionOrder(int.MinValue + 100)]
+    public class GlobalInjector: Singleton<GlobalInjector>
     {
-        const BindingFlags k_bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        const BindingFlags BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         readonly Dictionary<Type, object> registry =  new();
-
-        void Awake()
-        {
-            //Find all modules using reflection
-            var providers = FindMonoBehaviors().OfType<IDependencyProvider>();
-            foreach (var provider in providers)
-            {
-                RegistryProvider(provider);
-            }
-            
-            //Find all injectable objects and inject their dependencies
-            var injectables = FindMonoBehaviors().Where(IsInjectable);
-            foreach (var injectable in injectables)
-            {
-                Inject(injectable);
-            }
-        }
-
-        void Inject(object instance)
+        
+        public void Inject(object instance)
         {
             var type = instance.GetType();
+            InjectFields(instance, type);
+            InjectMethods(instance, type);
+            InjectProperties(instance, type);
+        }
 
-            var injectableFields = type.GetFields(k_bindingFlags)
+        void InjectFields(object instance, Type type)
+        {
+            var injectableFields = type.GetFields(BINDING_FLAGS)
                 .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
 
             foreach (var injectable in injectableFields)
@@ -48,8 +41,11 @@ namespace DumbInjector
                 injectable.SetValue(instance, resolvedInstance);
                 Debug.Log($"Field Injected {fieldType.Name} for {type.Name}");
             }
+        }
 
-            var injectableMethods = type.GetMethods(k_bindingFlags)
+        void InjectMethods(object instance, Type type)
+        {
+            var injectableMethods = type.GetMethods(BINDING_FLAGS)
                 .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
 
             foreach (var method in injectableMethods)
@@ -64,10 +60,13 @@ namespace DumbInjector
                 method.Invoke(instance, resolvedInstances);
                 Debug.Log($"Method Injected {type.Name}.{method.Name}");
             }
-            
-            var injectableProperties = type.GetProperties(k_bindingFlags)
+        }
+
+        void InjectProperties(object instance, Type type)
+        {
+            var injectableProperties = type.GetProperties(BINDING_FLAGS)
                 .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
-            
+
             foreach (var propertyInfo in injectableProperties)
             {
                 var propertyType = propertyInfo.PropertyType;
@@ -94,13 +93,13 @@ namespace DumbInjector
         
         static bool IsInjectable(MonoBehaviour obj)
         {
-            var members = obj.GetType().GetMembers(k_bindingFlags);
+            var members = obj.GetType().GetMembers(BINDING_FLAGS);
             return members.Any(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
         }
         
         void RegistryProvider(IDependencyProvider provider)
         {
-            var methods = provider.GetType().GetMethods(k_bindingFlags);
+            var methods = provider.GetType().GetMethods(BINDING_FLAGS);
 
             foreach (var method in methods)
             {
@@ -119,11 +118,6 @@ namespace DumbInjector
                     throw new Exception($"Provider {provider.GetType().Name} returned null for { returnType.Name}"); 
                 }
             }
-        }
-
-        static MonoBehaviour[] FindMonoBehaviors()
-        {
-            return FindObjectsOfType<MonoBehaviour>();
         }
     }
 

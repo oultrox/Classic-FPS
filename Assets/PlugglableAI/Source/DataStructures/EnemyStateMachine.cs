@@ -1,4 +1,5 @@
 ﻿using Enemies.PluggableAI.DataStructures.States;
+using FPS.Scripts.Enemies.Standard;
 using UnityEngine;
 
 namespace Enemies.PluggableAI.DataStructures

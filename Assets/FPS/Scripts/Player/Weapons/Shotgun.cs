@@ -63,7 +63,10 @@ public class Shotgun : Weapon
         {
             if (hit.collider.CompareTag("Enemy"))
             {
-                hit.collider.GetComponent<IHasHealth>().TakeDamage(Damage);
+                if (hit.collider.GetComponent<IHasHealth>() != null)
+                {
+                    hit.collider.GetComponent<IHasHealth>().TakeDamage(Damage);
+                }
             }
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.03f;
