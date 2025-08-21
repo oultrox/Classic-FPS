@@ -1,3 +1,5 @@
-﻿public interface IEnemyPatrol: IEnemyTickable, IEnemyTargetable
+﻿using Enemies.Standard.InterfaceComponents;
+
+public interface IEnemyPatrol: IEnemyTickable, IEnemyTargetable
 {
 }

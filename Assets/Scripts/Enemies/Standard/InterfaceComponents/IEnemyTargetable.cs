@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public interface IEnemyTargetable
+namespace Enemies.Standard.InterfaceComponents
 {
-    void InjectTarget(Transform target);
+    public interface IEnemyTargetable
+    {
+        void InjectTarget(Transform target);
+    }
 }

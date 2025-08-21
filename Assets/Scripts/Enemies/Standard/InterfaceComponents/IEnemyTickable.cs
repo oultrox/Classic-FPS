@@ -1,4 +1,7 @@
-public interface IEnemyTickable
+namespace Enemies.Standard.InterfaceComponents
 {
-    void Tick();
+    public interface IEnemyTickable
+    {
+        void Tick();
+    }
 }
