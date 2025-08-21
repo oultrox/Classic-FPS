@@ -7,11 +7,12 @@ using UnityEngine;
 
 namespace DumbInjector
 {
+
     /// <summary>
-    /// Global injector: handles global services/singletons, global scoped scenes.
+    /// Global injector container.
     /// </summary>
     [DefaultExecutionOrder(int.MinValue + 100)]
-    public class GlobalInjector: Singleton<GlobalInjector>
+    public class Injector: Singleton<Injector>
     {
         const BindingFlags BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         readonly Dictionary<Type, object> registry =  new();
@@ -23,7 +24,42 @@ namespace DumbInjector
             InjectMethods(instance, type);
             InjectProperties(instance, type);
         }
+        
+        public object Resolve(Type type)
+        {
+            registry.TryGetValue(type, out var resolvedInstance);
+            return resolvedInstance;
+        }
+        
+        public void RegisterProvider(IDependencyProvider provider)
+        {
+            var methods = provider.GetType().GetMethods(BINDING_FLAGS);
 
+            foreach (var method in methods)
+            {
+                bool isAttributeNotDefined = !Attribute.IsDefined(method, typeof(ProvideAttribute));
+                if (isAttributeNotDefined) continue; 
+                
+                var returnType = method.ReturnType;
+                if (registry.ContainsKey(returnType))
+                {
+                    Debug.LogWarning($"Provider for {returnType.Name} already registered. Ignoring duplicate.");
+                    continue;
+                }
+                
+                var providedInstance = method.Invoke(provider, null);
+                if (providedInstance != null)
+                {
+                    registry.Add(returnType, providedInstance);
+                    Debug.Log($"Injected {returnType.Name} from {provider.GetType().Name}");
+                }
+                else
+                {
+                    throw new Exception($"Provider {provider.GetType().Name} returned null for { returnType.Name}"); 
+                }
+            }
+        }
+        
         void InjectFields(object instance, Type type)
         {
             var injectableFields = type.GetFields(BINDING_FLAGS)
@@ -82,41 +118,6 @@ namespace DumbInjector
                 
                 propertyInfo.SetValue(instance, resolvedInstance);
                 Debug.Log($"Property Injected {type.Name}.{propertyInfo.Name}");
-            }
-        }
-
-        object Resolve(Type type)
-        {
-            registry.TryGetValue(type, out var resolvedInstance);
-            return resolvedInstance;
-        }
-        
-        static bool IsInjectable(MonoBehaviour obj)
-        {
-            var members = obj.GetType().GetMembers(BINDING_FLAGS);
-            return members.Any(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
-        }
-        
-        void RegistryProvider(IDependencyProvider provider)
-        {
-            var methods = provider.GetType().GetMethods(BINDING_FLAGS);
-
-            foreach (var method in methods)
-            {
-                bool isAttributeNotDefined = !Attribute.IsDefined(method, typeof(ProvideAttribute));
-                if (isAttributeNotDefined) continue; 
-                
-                var returnType = method.ReturnType;
-                var providedInstance = method.Invoke(provider, null);
-                if (providedInstance != null)
-                {
-                    registry.Add(returnType, providedInstance);
-                    Debug.Log($"Injected {returnType.Name} from {provider.GetType().Name}");
-                }
-                else
-                {
-                    throw new Exception($"Provider {provider.GetType().Name} returned null for { returnType.Name}"); 
-                }
             }
         }
     }

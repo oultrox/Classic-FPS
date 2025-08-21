@@ -65,8 +65,11 @@ namespace DumbInjector
                     foreach (var iface in type.GetInterfaces())
                         _sceneRegistry.TryAdd(iface, mb);
 
-                    // Inject dependencies into this instance
-                    InjectInstance(mb);
+                    if (IsInjectable(mb))
+                    {
+                        InjectInstance(mb);
+                    }
+                    
                 }
             }
         }
@@ -79,9 +82,9 @@ namespace DumbInjector
                 if (!Attribute.IsDefined(method, typeof(ProvideAttribute))) continue;
                 var returnType = method.ReturnType;
                 var providedInstance = method.Invoke(provider, null);
-                if (providedInstance != null && !_sceneRegistry.ContainsKey(returnType))
+                if (providedInstance != null)
                 {
-                    _sceneRegistry[returnType] = providedInstance;
+                    _sceneRegistry.TryAdd(returnType, providedInstance);
                 }
             }
         }
@@ -94,9 +97,10 @@ namespace DumbInjector
             // Inject fields
             foreach (var field in type.GetFields(flags).Where(f => Attribute.IsDefined(f, typeof(InjectAttribute))))
             {
-                if (!Resolve(field.FieldType).Equals(null))
+                var resolved = Resolve(field.FieldType);
+                if (resolved != null)
                 {
-                    field.SetValue(instance, Resolve(field.FieldType));
+                    field.SetValue(instance, resolved);
                 }
             }
 
@@ -104,9 +108,10 @@ namespace DumbInjector
             foreach (var prop in type.GetProperties(flags).Where(p => Attribute.IsDefined(p, typeof(InjectAttribute))))
             {
                 if (!prop.CanWrite) continue;
-                if (!Resolve(prop.PropertyType).Equals(null))
+                var resolved = Resolve(prop.PropertyType);
+                if (resolved != null) // works for regular C# objects
                 {
-                    prop.SetValue(instance, Resolve(prop.PropertyType));
+                    prop.SetValue(instance, resolved);
                 }
             }
 
@@ -125,10 +130,15 @@ namespace DumbInjector
             // Check scene-local container first
             _sceneRegistry.TryGetValue(t, out var instance);
 
-            // Could optionally fallback to global container:
-            // if (instance == null) instance = GlobalInjector.Resolve(t);
+            // Check Global optionally.
+            if (instance == null) instance = Injector.Instance.Resolve(t);
 
             return instance;
+        }
+        
+        bool IsInjectable(MonoBehaviour obj)
+        {
+            return  _injectableTypes.Contains(obj.GetType());
         }
     }
 }

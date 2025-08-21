@@ -8,7 +8,7 @@ public class PlayerInstaller : MonoBehaviour, IDependencyProvider
     [SerializeField] PlayerHealth playerHealth;
 
     [Provide]
-    IHasHealth ProvidePlayerHealth()
+    public  IHasHealth ProvidePlayerHealth()
     {
         return playerHealth;
     }

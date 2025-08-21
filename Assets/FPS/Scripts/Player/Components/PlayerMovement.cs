@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DumbInjector;
+using FPS.Scripts.DI;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour {
@@ -12,7 +14,8 @@ public class PlayerMovement : MonoBehaviour {
     private float sideAwayMovement;
     private Vector3 movementDirection;
     private float verticalVelocity;
-
+    
+    
     private void Awake ()
     {
         controller = this.GetComponent<CharacterController>();
@@ -39,6 +42,7 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            
             sideAwayMovement = Input.GetAxisRaw("Horizontal") * playerRunningSpeed;
             forwardMovement = Input.GetAxisRaw("Vertical") * playerRunningSpeed;
         }

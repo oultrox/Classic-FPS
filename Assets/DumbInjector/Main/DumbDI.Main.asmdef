@@ -1,0 +1,16 @@
+{
+    "name": "DumbDI.Main",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e4dd2fc2224c4b843908fe099bbb488b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

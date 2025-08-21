@@ -21,7 +21,7 @@ namespace DumbInjector
 
         private void Awake()
         {
-            var injector = GlobalInjector.Instance;
+            var injector = Injector.Instance;
             if (injector == null) return;
 
             switch (mode)
