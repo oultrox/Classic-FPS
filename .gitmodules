@@ -1,0 +1,3 @@
+[submodule "Assets/DumbInjector"]
+	path = Assets/DumbInjector
+	url = git@github.com:oultrox/DumbInjector.git
