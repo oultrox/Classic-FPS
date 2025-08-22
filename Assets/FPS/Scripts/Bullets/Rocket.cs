@@ -45,7 +45,7 @@ public class Rocket : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("EnemyController"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
             Explode(other.transform.position);
         }
