@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using DumbInjector;
 using UnityEngine;
 
 public class RocketLauncher : Weapon {
@@ -13,7 +15,8 @@ public class RocketLauncher : Weapon {
     [SerializeField] private float rocketForce;
     [SerializeField] private float explosionRadius;
     [SerializeField] LayerMask explosionLayer;
-    
+
+    [Inject] private CameraShaker playerCameraShaker;
     private bool isCharged;
     private bool isShot;
 
@@ -75,7 +78,7 @@ public class RocketLauncher : Weapon {
         rocketRbody.AddForce(Camera.main.transform.forward * rocketForce, ForceMode.Impulse);
 
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
-        CameraShaker.instance.StartShakeRotating(ShakeDuration, ShakeMagnitude);
+        playerCameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
         WeaponShake.instance.StartShake(ShakeDuration, 0.1f);
 
         //Check after in order to reload automatic if there's enough projectiles.

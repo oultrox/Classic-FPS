@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using DumbInjector;
 using UnityEngine;
 
 public class Pistol : Weapon {
@@ -10,6 +11,7 @@ public class Pistol : Weapon {
     [SerializeField] private float range = 100;
     [SerializeField] private GameObject bulletHolePrefab;
     
+    [Inject] CameraShaker playerCameraShaker;
     private SpriteRenderer spriteRenderer;
     private Vector3 firePosition;
 
@@ -76,7 +78,7 @@ public class Pistol : Weapon {
             }
         }
         DynamicCrosshair.instance.ExpansionTimer = 0.02f;
-        CameraShaker.instance.StartShakeRotating(ShakeDuration, ShakeMagnitude);
+        playerCameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
         WeaponShake.instance.StartShake(ShakeDuration, 0.1f);
 
         //Check after in order to reload automatic if there's enough projectiles.

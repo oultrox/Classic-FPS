@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Runtime.InteropServices;
+using DumbInjector;
 using UnityEngine;
 
 public class Shotgun : Weapon 
@@ -8,6 +10,9 @@ public class Shotgun : Weapon
     [SerializeField] private float maxFireDistance = 100f;
     [SerializeField] private float fireRadius = 10f;
     [SerializeField] private LayerMask shootLayer;
+    [Inject] CameraShaker _cameraShaker;
+    [Inject] WeaponShake _weaponShaker;
+    [Inject] DynamicCrosshair _crosshair;
 
     private Transform camTransform;
     private Animator anim;
@@ -69,10 +74,10 @@ public class Shotgun : Weapon
                 }
             }
         }
-        DynamicCrosshair.instance.ExpansionTimer = 0.03f;
-        CameraShaker.instance.StartShakeRotating(ShakeDuration, ShakeMagnitude);
-        CameraShaker.instance.StartZoomEffect();
-        WeaponShake.instance.StartShake(ShakeDuration, 0.1f);
+        _crosshair.ExpansionTimer = 0.03f;
+        _cameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
+        _cameraShaker.StartZoomEffect();
+        _weaponShaker.StartShake(ShakeDuration, 0.1f);
         
         //Check after in order to reload automatic if there's enough projectiles.
         if (AmmoClipLeft <= 0)

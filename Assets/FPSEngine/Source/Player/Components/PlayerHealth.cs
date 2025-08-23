@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using DumbInjector;
+﻿using DumbInjector;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IHasHealth
 {
 	[SerializeField] private int startingHealth;
+    [Inject] CameraShaker playerCameraShaker;
+    
 	private int currentHealth;
     private static bool isDead;
     
@@ -23,7 +22,7 @@ public class PlayerHealth : MonoBehaviour, IHasHealth
         {
             Dead();
         }
-        CameraShaker.instance.StartShakeRotating(0.09f, 5f);
+        playerCameraShaker.StartShakeRotating(0.09f, 5f);
         ManagerGUI.instance.HurtBlink();
     }
 
@@ -35,7 +34,7 @@ public class PlayerHealth : MonoBehaviour, IHasHealth
     private void Dead()
     {
         isDead = true;
-        this.GetComponent<PlayerMovement>().enabled = false;
-        this.GetComponentInChildren<SpriteRenderer>().enabled = false;
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponentInChildren<SpriteRenderer>().enabled = false;
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 // based on http://unitytipsandtricks.blogspot.com/2013/05/camera-shake.html
 public class CameraShaker : MonoBehaviour
 {
-    public static CameraShaker instance;
     [Header("Shake properties")]
     [SerializeField] private float speed = 20f;
     [SerializeField] private AnimationCurve damper = new 
@@ -22,7 +21,6 @@ public class CameraShaker : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
         originalTransform = this.transform;
         cameraSelf = this.GetComponent<Camera>();
         originalFOV = cameraSelf.fieldOfView;

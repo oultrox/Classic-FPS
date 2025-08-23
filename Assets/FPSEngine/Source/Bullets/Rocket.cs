@@ -1,16 +1,20 @@
-﻿using UnityEngine;
+﻿using DumbInjector;
+using UnityEngine;
 
 public class Rocket : MonoBehaviour 
 {
     [SerializeField] private float shakeDuration = 0.1f;
     [SerializeField] private float shakeMagnitude = 5f;
+    [Inject] CameraShaker _cameraShaker;
+    
     private GameObject explosionPrefab;
     private LayerMask layerMask;
     private float radius;
     private int damage;
     private float lifeTime = 3f;
     private float lifeCounter;
-
+    
+    
     void Start () 
     {
         lifeCounter = 0;
@@ -64,7 +68,7 @@ public class Rocket : MonoBehaviour
         }
 
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        Destroy(this.gameObject);
-        CameraShaker.instance.StartShakeRotating(shakeDuration, shakeMagnitude);
+        Destroy(gameObject);
+        _cameraShaker.StartShakeRotating(shakeDuration, shakeMagnitude);
     }
 }
