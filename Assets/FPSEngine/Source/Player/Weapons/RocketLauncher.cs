@@ -16,7 +16,9 @@ public class RocketLauncher : Weapon {
     [SerializeField] private float explosionRadius;
     [SerializeField] LayerMask explosionLayer;
 
-    [Inject] private CameraShaker playerCameraShaker;
+    [Inject] CameraShaker playerCameraShaker;
+    [Inject] WeaponShake _weaponShaker;
+    [Inject] DynamicCrosshair _crosshair;
     private bool isCharged;
     private bool isShot;
 
@@ -77,9 +79,9 @@ public class RocketLauncher : Weapon {
         Rigidbody rocketRbody = rocketInstantiated.GetComponent<Rigidbody>();
         rocketRbody.AddForce(Camera.main.transform.forward * rocketForce, ForceMode.Impulse);
 
-        DynamicCrosshair.instance.ExpansionTimer = 0.02f;
+        _crosshair.ExpansionTimer = 0.02f;
         playerCameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
-        WeaponShake.instance.StartShake(ShakeDuration, 0.1f);
+        _weaponShaker.StartShake(ShakeDuration, 0.1f);
 
         //Check after in order to reload automatic if there's enough projectiles.
         if (AmmoClipLeft <= 0)

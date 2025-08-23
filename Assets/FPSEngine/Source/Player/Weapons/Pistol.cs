@@ -10,16 +10,14 @@ public class Pistol : Weapon {
     [SerializeField] private Sprite shotPistol;
     [SerializeField] private float range = 100;
     [SerializeField] private GameObject bulletHolePrefab;
-    
     [Inject] CameraShaker playerCameraShaker;
+    [Inject] WeaponShake _weaponShaker;
+    [Inject] DynamicCrosshair _crosshair;
+    
     private SpriteRenderer spriteRenderer;
     private Vector3 firePosition;
 
     
-    // ------------------------------------------------------
-    // API Methods
-    // ------------------------------------------------------
-
     private void Awake()
     {
         spriteRenderer = this.GetComponent<SpriteRenderer>();
@@ -45,16 +43,10 @@ public class Pistol : Weapon {
             Reload();
         }
     }
-
-    // ------------------------------------------------------
-    // Custom methods
-    // ------------------------------------------------------
-
+    
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
     private void Shoot()
     {
-        
-
         if (AmmoClipLeft <= 0)
         {
             Reload();
@@ -77,9 +69,9 @@ public class Pistol : Weapon {
                 Instantiate(bulletHolePrefab, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)).transform.parent = hit.transform;
             }
         }
-        DynamicCrosshair.instance.ExpansionTimer = 0.02f;
+        _crosshair.ExpansionTimer = 0.02f;
         playerCameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
-        WeaponShake.instance.StartShake(ShakeDuration, 0.1f);
+        _weaponShaker.StartShake(ShakeDuration, 0.1f);
 
         //Check after in order to reload automatic if there's enough projectiles.
         if (AmmoClipLeft <= 0)

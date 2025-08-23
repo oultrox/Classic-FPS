@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponShake : MonoBehaviour {
-
-    public static WeaponShake instance;
+    
     [SerializeField] private float speed = 20f;
-    [SerializeField] private AnimationCurve damper = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.9f, .33f, -2f, -2f), new Keyframe(1f, 0f, -5.65f, -5.65f));
+    [SerializeField] private AnimationCurve damper = new AnimationCurve(new Keyframe(0f, 1f), 
+        new Keyframe(0.9f, .33f, -2f, -2f), 
+        new Keyframe(1f, 0f, -5.65f, -5.65f));
 
     private Transform originalTransform;
     private Vector3 originalPos;
 
-    private void Awake()
+    void Awake()
     {
-        instance = this;
-        originalTransform = this.transform;
+        originalTransform = transform;
     }
 
     /// <summary>
