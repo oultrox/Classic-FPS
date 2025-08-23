@@ -21,10 +21,7 @@ public class RocketLauncher : Weapon {
     [Inject] DynamicCrosshair _crosshair;
     private bool isCharged;
     private bool isShot;
-
-    // ------------------------------------------------------
-    // API Methods
-    // ------------------------------------------------------
+    
 
     private void Awake()
     {
@@ -59,11 +56,7 @@ public class RocketLauncher : Weapon {
     {
         this.spawnPoint.SetActive(false);
     }
-
-    // ------------------------------------------------------
-    // Custom methods
-    // ------------------------------------------------------
-
+    
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
     private void Shoot()
     {
