@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject prefabToSpawn; // Enemy, object, etc.
-    [SerializeField] private float spawnInterval = 2f; // seconds between spawns
-    [SerializeField] private GameObject sceneContext;   // assign the GameObject holding SceneContextInjector
+    [SerializeField] private GameObject prefabToSpawn; 
+    [SerializeField] private float spawnInterval = 2f; 
+    [SerializeField] private GameObject sceneContext;
 
     private IInjector _injector;
 
@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour
         if (sceneContext != null)
         {
             // Grab the IInjector from the scene context
-            _injector = sceneContext.GetComponent<DumbInjector.IInjector>();
+            _injector = sceneContext.GetComponent<IInjector>();
         }
     }
 
@@ -32,7 +32,11 @@ public class EnemySpawner : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(spawnInterval);
-            Instantiate(prefabToSpawn);
+            var instance = Instantiate(prefabToSpawn);
+            foreach (var mb in instance.GetComponents<MonoBehaviour>())
+            {
+                _injector.Inject(mb);
+            }
         }
     }
 }

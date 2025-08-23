@@ -27,7 +27,7 @@ namespace FPS.Scripts.Enemies.Standard
         public float SearchDuration { get => searchDuration; set => searchDuration = value; }
         #endregion
     
-        private void Awake()
+        private void Start()
         {
             playerTransform = playerHealth.GetTransform();
             CacheBehavior<IEnemySearch>();
