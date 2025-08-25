@@ -51,12 +51,10 @@ namespace Enemies.PluggableAI.DataStructures.States
                 if (decisionSucceeded && transitions[i].trueState != null)
                 {
                     stateController.TransitionToState(transitions[i].trueState);
-                    break; 
                 }
                 else if (!decisionSucceeded && transitions[i].falseState != null)
                 {
                     stateController.TransitionToState(transitions[i].falseState);
-                    break; 
                 }
             }
         }
