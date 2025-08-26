@@ -27,10 +27,11 @@ stateController.Enemy.Tick<IEnemyChase>();
 ```
 
 ### Weapon System
+Honestly it's a very humble and simplistic weapon system for fun.
 
-- **Component-based**: Weapons are managed as separate components that can be attached to player or enemy entities.
-- **Flexible firing mechanics**: Supports hitscan, projectiles, or melee depending on weapon component.
-- **Pluggable**: Weapons can be swapped or extended without modifying the core character controller.**
+- **Component-based**: Weapons are managed as separate components that can be attached to player.
+- **Flexible firing mechanics**: Supports hitscan or projectiles.
+- **Modular**: Weapons can be swapped or extended without modifying the core character controller.**
 
 ### 2.5D Engine Controller
 
