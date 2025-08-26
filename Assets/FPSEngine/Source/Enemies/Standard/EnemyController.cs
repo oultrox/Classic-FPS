@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using DumbInjector;
+using Enemies.PluggableAI.DataStructures;
+using Enemies.PluggableAI.DataStructures.States;
 using Enemies.Standard.InterfaceComponents;
 using UnityEngine;
 
@@ -16,15 +18,21 @@ namespace FPS.Scripts.Enemies.Standard
         [SerializeField] private float idleDuration = 1.5f;
         [SerializeField] private float walkDuration = 4;
         [SerializeField] private float searchDuration = 10f;
+        [SerializeField] private SM_State currentState;
+        [SerializeField] private SM_State remainState;
+        
         [Inject] private IHasHealth playerHealth;
     
         private Transform playerTransform;
+        private EnemyStateMachine enemyStateMachine;
         private Dictionary<Type, object> behaviors = new();
 
         #region Properties
         public float IdleDuration { get => idleDuration; set => idleDuration = value; }
         public float WalkDuration { get => walkDuration; set => walkDuration = value; }
         public float SearchDuration { get => searchDuration; set => searchDuration = value; }
+        public SM_State CurrentState => currentState;
+        public SM_State RemainState => remainState;
         #endregion
     
         private void Start()
@@ -37,8 +45,19 @@ namespace FPS.Scripts.Enemies.Standard
             CacheBehavior<IEnemyLook>();
             CacheBehavior<IEnemyAttack>();
             InjectTargets();
+            enemyStateMachine = new EnemyStateMachine(this);
         }
-    
+
+        private void Update()
+        {
+            enemyStateMachine.Tick();
+        }
+
+        private void FixedUpdate()
+        {
+            enemyStateMachine.FixedTick();
+        }
+
         public void Tick<T>() where T : class, IEnemyTickable
         {
             GetBehavior<T>()?.Tick();
@@ -73,5 +92,16 @@ namespace FPS.Scripts.Enemies.Standard
             behaviors.TryGetValue(typeof(T), out var behavior);
             return behavior as T;
         }
+        
+#if UNITY_EDITOR
+        void OnDrawGizmos()
+        {
+            if (CurrentState != null)
+            {
+                Gizmos.color = CurrentState.sceneGizmoColor;
+                Gizmos.DrawWireSphere(transform.position, 1f);
+            }
+        }
+#endif
     }
 }

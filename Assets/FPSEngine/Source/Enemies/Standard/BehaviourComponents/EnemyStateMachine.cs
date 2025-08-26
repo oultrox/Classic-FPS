@@ -7,40 +7,38 @@ namespace Enemies.PluggableAI.DataStructures
     /// <summary>
     /// Uses the controller to set the states via the Plugglable IA with ScriptableObjects.
     /// </summary>
-    [RequireComponent (typeof(EnemyController))]
-    public class EnemyStateMachine : MonoBehaviour 
+    public class EnemyStateMachine 
     {
-        [SerializeField] private SM_State currentState;
-        [SerializeField] private SM_State remainState;
-        private float stateTimeElapsed;
+        private SM_State _currentState;
+        private SM_State _remainState;
+        private float _stateTimeElapsed;
         
-        public EnemyController Enemy { get; set; }
-        public SM_State CurrentState { get => currentState; set => currentState = value; }
-        public SM_State RemainState { get => remainState; set => remainState = value; }
+        public EnemyController Enemy { get; }
         
-        
-        private void Awake()
+        public EnemyStateMachine(EnemyController enemy)
         {
-            Enemy = GetComponent<EnemyController>();
-            stateTimeElapsed = 0;
+            Enemy = enemy;
+            _currentState = Enemy.CurrentState;
+            _remainState = Enemy.RemainState;
+            _stateTimeElapsed = 0;
         }
     
-        void Update()
+        public void Tick()
         {
-            currentState.UpdateState(this);
+            _currentState.UpdateState(this);
         }
 
-        void FixedUpdate()
+        public void FixedTick()
         {
-            currentState.FixedUpdateState(this);
+            _currentState.FixedUpdateState(this);
         }
 
         public void TransitionToState(SM_State nextState)
         {
-            if (nextState != remainState)
+            if (nextState != _remainState)
             {
-                currentState = nextState;
-                stateTimeElapsed = 0;
+                _currentState = nextState;
+                _stateTimeElapsed = 0;
             }
         }
 
@@ -51,20 +49,9 @@ namespace Enemies.PluggableAI.DataStructures
                 return false;
             }
 
-            stateTimeElapsed += Time.deltaTime;
-            bool isCountDownElapsed = stateTimeElapsed >= duration;
+            _stateTimeElapsed += Time.deltaTime;
+            bool isCountDownElapsed = _stateTimeElapsed >= duration;
             return isCountDownElapsed;
         }
-
-        #if UNITY_EDITOR
-        void OnDrawGizmos()
-        {
-            if (currentState != null)
-            {
-                Gizmos.color = currentState.sceneGizmoColor;
-                Gizmos.DrawWireSphere(transform.position, 1f);
-            }
-        }
-        #endif
     }
 }
