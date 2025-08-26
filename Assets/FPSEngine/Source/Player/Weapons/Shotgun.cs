@@ -1,24 +1,20 @@
 ﻿using System.Collections;
-using System.Runtime.InteropServices;
-using DumbInjector;
 using UnityEngine;
 
 public class Shotgun : Weapon 
 {
-    [Header("Shotgun stuff")]
+    [Header("Shotgun Editor Friendly stuff")]
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float maxFireDistance = 100f;
     [SerializeField] private float fireRadius = 10f;
     [SerializeField] private LayerMask shootLayer;
-    [Inject] CameraShaker _cameraShaker;
-    [Inject] WeaponShake _weaponShaker;
-    [Inject] DynamicCrosshair _crosshair;
 
     private Transform camTransform;
     private Animator anim;
     private float shootCooldown = 0f;
     private RaycastHit hit;
 
+    
     private void Awake()
     {
         anim = GetComponent<Animator>();

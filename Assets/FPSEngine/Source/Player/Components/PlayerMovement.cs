@@ -1,5 +1,6 @@
 ﻿using DumbInjector;
 using FPS.Scripts.DI;
+using FPSEngine.Source.DI.Containers;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -14,15 +15,17 @@ public class PlayerMovement : MonoBehaviour {
     private float sideAwayMovement;
     private Vector3 movementDirection;
     private float verticalVelocity;
-    
+    [Inject] WeaponContainer weaponContainer;
     
     private void Awake ()
     {
+        
         controller = this.GetComponent<CharacterController>();
 	}
 
     private void Start()
     {
+        Debug.Log(weaponContainer);
         movementDirection = Vector3.zero;
     }
 

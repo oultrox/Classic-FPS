@@ -1,27 +1,28 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using DumbInjector;
+using FPSEngine.Source.DI.Containers;
 using UnityEngine;
 
-public class RocketLauncher : Weapon {
-
-    [Header("Prefab referencies")]
-    [SerializeField] private GameObject rocketPrefab;
-    [SerializeField] private GameObject explosionPrefab;
-    [SerializeField] private GameObject spawnPoint;
-
-    [Header("Rocket Properties")]
+public class RocketLauncher : Weapon 
+{
+    [Header("Rocket Editor friendly values")]
     [SerializeField] private float rocketForce;
     [SerializeField] private float explosionRadius;
     [SerializeField] LayerMask explosionLayer;
-
-    [Inject] CameraShaker playerCameraShaker;
-    [Inject] WeaponShake _weaponShaker;
-    [Inject] DynamicCrosshair _crosshair;
-    private bool isCharged;
-    private bool isShot;
+    GameObject rocketPrefab;
+    GameObject explosionPrefab; 
+    GameObject spawnPoint;
+    bool isCharged;
+    bool isShot;
     
+    
+    [Inject]
+    public void InjectContainer(WeaponContainer weaponContainer)
+    {
+        rocketPrefab = weaponContainer.RocketPrefab;
+        explosionPrefab = weaponContainer.ExplosionPrefab;
+        spawnPoint = weaponContainer.SpawnPoint;
+    }
 
     private void Awake()
     {
@@ -49,12 +50,12 @@ public class RocketLauncher : Weapon {
 
     private void OnEnable()
     {
-        this.spawnPoint.SetActive(true);
+        spawnPoint.SetActive(true);
     }
 
     private void OnDisable()
     {
-        this.spawnPoint.SetActive(false);
+        spawnPoint.SetActive(false);
     }
     
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
@@ -73,7 +74,7 @@ public class RocketLauncher : Weapon {
         rocketRbody.AddForce(Camera.main.transform.forward * rocketForce, ForceMode.Impulse);
 
         _crosshair.ExpansionTimer = 0.02f;
-        playerCameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
+        _cameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
         _weaponShaker.StartShake(ShakeDuration, 0.1f);
 
         //Check after in order to reload automatic if there's enough projectiles.

@@ -1,37 +1,45 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using DumbInjector;
+using FPSEngine.Source.DI.Containers;
 using UnityEngine;
 
-public class Pistol : Weapon {
-
-    [Header("Animations")]
-    [SerializeField] private Sprite idlePistol;
-    [SerializeField] private Sprite shotPistol;
-    [SerializeField] private float range = 100;
-    [SerializeField] private GameObject bulletHolePrefab;
-    [Inject] CameraShaker playerCameraShaker;
-    [Inject] WeaponShake _weaponShaker;
-    [Inject] DynamicCrosshair _crosshair;
+public class Pistol : Weapon
+{
+    const float RAYCAST_RANGE = 100;
+    Sprite idlePistol;
+    Sprite shotPistol;
+    GameObject bulletHolePrefab;
+    SpriteRenderer spriteRenderer;
+    Vector3 firePosition;
     
-    private SpriteRenderer spriteRenderer;
-    private Vector3 firePosition;
-
+    
+    [Inject]
+    public void InjectContainer(WeaponContainer weaponContainer)
+    {
+        idlePistol = weaponContainer.IdlePistol;
+        shotPistol = weaponContainer.ShotPistol;
+        bulletHolePrefab = weaponContainer.BulletHolePrefab;
+    }
     
     private void Awake()
     {
-        spriteRenderer = this.GetComponent<SpriteRenderer>();
+        InitBehaviors();
+    }
+    
+    private void Update()
+    {
+        HandleShooting();
+    }
+    
+    void InitBehaviors()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         AmmoClipLeft = AmmoClipSize;
         AmmoLeft = AmmoAmount;
         firePosition = new Vector3(Screen.width/2, Screen.height/2, 0);
     }
 
-    private void Update()
-    {
-        HandleShooting();
-    }
-
-    private void HandleShooting()
+    void HandleShooting()
     {
         if (Input.GetButtonDown("Fire1") && IsReloading == false)
         {
@@ -45,7 +53,7 @@ public class Pistol : Weapon {
     }
     
     // If anything goes wrong just put this function in FixedUpdate() and add an variable that conects to the input in Update().
-    private void Shoot()
+    void Shoot()
     {
         if (AmmoClipLeft <= 0)
         {
@@ -58,7 +66,7 @@ public class Pistol : Weapon {
         
         Ray ray = Camera.main.ScreenPointToRay(firePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, range))
+        if (Physics.Raycast(ray, out hit, RAYCAST_RANGE))
         {
             if (hit.collider.CompareTag("Enemy"))
             {
@@ -70,30 +78,29 @@ public class Pistol : Weapon {
             }
         }
         _crosshair.ExpansionTimer = 0.02f;
-        playerCameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
+        _cameraShaker.StartShakeRotating(ShakeDuration, ShakeMagnitude);
         _weaponShaker.StartShake(ShakeDuration, 0.1f);
 
         //Check after in order to reload automatic if there's enough projectiles.
         if (AmmoClipLeft <= 0)
         {
             Reload();
-            return;
         }
     }
 
-    private void Reload()
+    void Reload()
     {
         StartCoroutine(ReloadWeapon());
     }
     
-    private IEnumerator AnimateShot()
+    IEnumerator AnimateShot()
     {
         spriteRenderer.sprite = shotPistol;
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.sprite = idlePistol;
     }
 
-    private IEnumerator ReloadWeapon()
+    IEnumerator ReloadWeapon()
     {
         int bulletsToReload = AmmoClipSize - AmmoClipLeft;
         // If there's something to reload - activate coroutine for the delay. 
