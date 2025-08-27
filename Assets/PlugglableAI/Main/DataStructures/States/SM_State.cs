@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using FPS.Scripts.Enemies.Standard;
+using UnityEngine;
 
 namespace Enemies.PluggableAI.DataStructures.States
 {
@@ -11,27 +12,26 @@ namespace Enemies.PluggableAI.DataStructures.States
 
         private bool decisionSucceeded;
 
-        public void StartState(EnemyStateMachine stateController)
+        public void StartState(IEnemyController stateController)
         {
         }
     
-        public void UpdateState(EnemyStateMachine stateController)
+        public void UpdateState(IEnemyController controller)
         {
-            DoAction(stateController, SM_Action.UpdateType.Update);
-            CheckTransitions(stateController);
+            DoAction(controller, SM_Action.UpdateType.Update);
         }
 
-        public void FixedUpdateState(EnemyStateMachine stateController)
+        public void FixedUpdateState(IEnemyController controller)
         {
-            DoAction(stateController, SM_Action.UpdateType.FixedUpdate);
+            DoAction(controller, SM_Action.UpdateType.FixedUpdate);
         }
 
-        public void LateUpdateState(EnemyStateMachine stateController)
+        public void LateUpdateState(IEnemyController stateController)
         {
             DoAction(stateController, SM_Action.UpdateType.LateUpdate);
         }
 
-        private void DoAction(EnemyStateMachine stateController, SM_Action.UpdateType updateType)
+        private void DoAction(IEnemyController stateController, SM_Action.UpdateType updateType)
         {
             for (int i = 0; i < actions.Length; i++)
             {
@@ -42,11 +42,11 @@ namespace Enemies.PluggableAI.DataStructures.States
             }
         }
 
-        private void CheckTransitions(EnemyStateMachine stateController)
+        public void CheckTransitions(EnemyStateMachine stateController, IEnemyController enemyController)
         {
             for (int i = 0; i < transitions.Length; i++)
             {
-                decisionSucceeded = transitions[i].decision.Decide(stateController);
+                decisionSucceeded = transitions[i].decision.Decide(stateController, enemyController);
 
                 if (decisionSucceeded && transitions[i].trueState != null)
                 {

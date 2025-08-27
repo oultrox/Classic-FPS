@@ -6,8 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PluggableAI/Decisions/Look")]
 public class LookDecision : SM_Decision
 {
-    public override bool Decide(EnemyStateMachine stateController)
+    public override bool Decide(EnemyStateMachine stateMachine, IEnemyController stateController)
     {
-        return stateController.Enemy.IsLooking();
+        return stateController.HasSight();
     }
 }

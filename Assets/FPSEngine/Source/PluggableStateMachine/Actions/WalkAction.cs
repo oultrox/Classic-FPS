@@ -4,8 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PluggableAI/SM_Actions/Walk")]
 public class WalkAction : SM_Action
 {
-    public override void Act(EnemyStateMachine stateController)
+    public override void Act(IEnemyController stateController)
     {
-        stateController.Enemy.Tick<IEnemyWalk>();
+        stateController.TickEnemyComponent<IEnemyWalk>();
     }
 }

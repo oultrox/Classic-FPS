@@ -1,11 +1,9 @@
 ﻿using Enemies.PluggableAI.DataStructures.States;
-using FPS.Scripts.Enemies.Standard;
-using UnityEngine;
 
 namespace Enemies.PluggableAI.DataStructures
 {
     /// <summary>
-    /// Uses the controller to set the states via the Plugglable IA with ScriptableObjects.
+    /// Usesd by the controller to set the states via the Plugglable IA with ScriptableObjects.
     /// </summary>
     public class EnemyStateMachine 
     {
@@ -13,24 +11,23 @@ namespace Enemies.PluggableAI.DataStructures
         private SM_State _remainState;
         private float _stateTimeElapsed;
         
-        public EnemyController Enemy { get; }
-        
-        public EnemyStateMachine(EnemyController enemy)
+        public EnemyStateMachine(SM_State state, SM_State remainState)
         {
-            Enemy = enemy;
-            _currentState = Enemy.CurrentState;
-            _remainState = Enemy.RemainState;
+            _currentState = state;
+            _remainState = remainState;
             _stateTimeElapsed = 0;
         }
     
-        public void Tick()
+        public void Tick(IEnemyController controller, float deltaTime)
         {
-            _currentState.UpdateState(this);
+            _currentState.UpdateState(controller);
+            _currentState.CheckTransitions(this, controller);
+            _stateTimeElapsed += deltaTime;
         }
 
-        public void FixedTick()
+        public void FixedTick(IEnemyController controller)
         {
-            _currentState.FixedUpdateState(this);
+            _currentState.FixedUpdateState(controller);
         }
 
         public void TransitionToState(SM_State nextState)
@@ -48,8 +45,7 @@ namespace Enemies.PluggableAI.DataStructures
             {
                 return false;
             }
-
-            _stateTimeElapsed += Time.deltaTime;
+            
             bool isCountDownElapsed = _stateTimeElapsed >= duration;
             return isCountDownElapsed;
         }

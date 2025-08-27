@@ -8,8 +8,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PluggableAI/SM_Actions/Chase")]
 public class ChaseAction : SM_Action
 {
-    public override void Act(EnemyStateMachine stateController)
+    public override void Act(IEnemyController stateController)
     {
-        stateController.Enemy.Tick<IEnemyChase>();
+        stateController.TickEnemyComponent<IEnemyChase>();
     }
 }

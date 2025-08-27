@@ -6,8 +6,8 @@ using UnityEngine;
 public class IdleDecision : SM_Decision
 {
     
-    public override bool Decide(EnemyStateMachine stateController)
+    public override bool Decide(EnemyStateMachine stateMachine, IEnemyController stateController)
     {
-        return stateController.HasStateElapsed(stateController.Enemy.IdleDuration);
+        return stateMachine.HasStateElapsed(stateController.IdleDuration);
     }
 }

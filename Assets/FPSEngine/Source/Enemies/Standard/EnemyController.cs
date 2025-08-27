@@ -1,106 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DumbInjector;
+﻿using DumbInjector;
 using Enemies.PluggableAI.DataStructures;
 using Enemies.PluggableAI.DataStructures.States;
 using Enemies.Standard.InterfaceComponents;
+using FPS.Scripts.Enemies.Standard;
 using UnityEngine;
 
-namespace FPS.Scripts.Enemies.Standard
+namespace FPSEngine.Source.Enemies.Standard
 {
-    /// <summary>
-    /// Modularized generic Enemy controller where we can slap behaviors at our will based on composition.
-    /// </summary>
-    public class EnemyController : MonoBehaviour 
+    public class EnemyController : MonoBehaviour, IEnemyController
     {
         [Header("Transitions (0 = infinite)")]
         [SerializeField] private float idleDuration = 1.5f;
-        [SerializeField] private float walkDuration = 4;
+        [SerializeField] private float walkDuration = 4f;
         [SerializeField] private float searchDuration = 10f;
         [SerializeField] private SM_State currentState;
         [SerializeField] private SM_State remainState;
-        
         [Inject] private IHasHealth playerHealth;
-    
-        private Transform playerTransform;
-        private EnemyStateMachine enemyStateMachine;
-        private Dictionary<Type, object> behaviors = new();
+
+        private Transform targetTransform;
+        private EnemyStateMachine stateMachine;
+        private BehaviorRegistry registry;
 
         #region Properties
         public float IdleDuration { get => idleDuration; set => idleDuration = value; }
         public float WalkDuration { get => walkDuration; set => walkDuration = value; }
         public float SearchDuration { get => searchDuration; set => searchDuration = value; }
-        public SM_State CurrentState => currentState;
-        public SM_State RemainState => remainState;
         #endregion
-    
+
         private void Start()
         {
-            playerTransform = playerHealth.GetTransform();
-            CacheBehavior<IEnemySearch>();
-            CacheBehavior<IEnemyPatrol>();
-            CacheBehavior<IEnemyWalk>();
-            CacheBehavior<IEnemyChase>();
-            CacheBehavior<IEnemyLook>();
-            CacheBehavior<IEnemyAttack>();
-            InjectTargets();
-            enemyStateMachine = new EnemyStateMachine(this);
+            SetBehavioralComponents();
         }
-
+        
         private void Update()
         {
-            enemyStateMachine.Tick();
+            stateMachine.Tick(this, Time.deltaTime);
         }
 
         private void FixedUpdate()
         {
-            enemyStateMachine.FixedTick();
+            stateMachine.FixedTick(this);
         }
 
-        public void Tick<T>() where T : class, IEnemyTickable
+        public void TickEnemyComponent<T>() where T : class, IEnemyTickable
         {
-            GetBehavior<T>()?.Tick();
+            registry.Get<T>()?.Tick();
         }
 
-        public bool IsLooking()
+        public bool HasSight()
         {
-            return GetBehavior<IEnemyLook>()?.IsLooking() ?? false;
-        }
-    
-        private void CacheBehavior<T>() where T : class
+            return registry.Get<IEnemyLook>()?.IsLooking() ?? false;
+        } 
+
+        private void SetBehavioralComponents()
         {
-            var behavior = GetComponent<T>();
-            if (behavior != null)
+            var possibleBehaviorTypes = new[]
             {
-                behaviors[typeof(T)] = behavior;
+                typeof(IEnemySearch),
+                typeof(IEnemyPatrol),
+                typeof(IEnemyWalk),
+                typeof(IEnemyChase),
+                typeof(IEnemyLook),
+                typeof(IEnemyAttack)
+            };
+            
+            targetTransform = playerHealth.GetTransform();
+            registry = new BehaviorRegistry(gameObject, possibleBehaviorTypes);
+            stateMachine = new EnemyStateMachine(currentState, remainState);
+            
+            foreach (var t in registry.GetAllOfType<IEnemyTargetable>())
+            {
+                t.InjectTarget(targetTransform);
             }
         }
 
-        private void InjectTargets()
-        {
-            List<IEnemyTargetable> targetables = GetComponents<IEnemyTargetable>().ToList();
-
-            foreach (var t in targetables)
-            {
-                t.InjectTarget(playerTransform);
-            }
-        }
-    
-        private T GetBehavior<T>() where T : class
-        {
-            behaviors.TryGetValue(typeof(T), out var behavior);
-            return behavior as T;
-        }
-        
 #if UNITY_EDITOR
-        void OnDrawGizmos()
+        private void OnDrawGizmos()
         {
-            if (CurrentState != null)
-            {
-                Gizmos.color = CurrentState.sceneGizmoColor;
-                Gizmos.DrawWireSphere(transform.position, 1f);
-            }
+            if (currentState == null) return;
+            Gizmos.color = currentState.sceneGizmoColor;
+            Gizmos.DrawWireSphere(transform.position, 1f);
         }
 #endif
     }

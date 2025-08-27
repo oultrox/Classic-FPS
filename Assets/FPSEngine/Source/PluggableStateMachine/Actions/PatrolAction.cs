@@ -7,8 +7,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PluggableAI/SM_Actions/Patrol")]
 public class PatrolAction : SM_Action
 {
-    public override void Act(EnemyStateMachine stateController)
+    public override void Act(IEnemyController stateController)
     {
-        stateController.Enemy.Tick<IEnemyPatrol>();
+        stateController.TickEnemyComponent<IEnemyPatrol>();
     }
 }
